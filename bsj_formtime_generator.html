@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Form Time Generator — BSJ Year 11</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:      #0d2240;
+  --navy-mid:  #163260;
+  --blue:      #0099d6;
+  --blue-light:#33b3e8;
+  --blue-soft: #e8f6fc;
+  --red:       #cc0011;
+  --bg:        #f5f7fa;
+  --white:     #ffffff;
+  --border:    #dde3eb;
+  --text:      #0d2240;
+  --text-dim:  #3d5a7a;
+  --muted:     #8898aa;
+  --green:     #00875a;
+  --green-soft:#e3f9f0;
+  --amber:     #b45309;
+  --amber-soft:#fef3c7;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* HEADER */
+header{background:var(--navy);padding:0;}
+.hdr{max-width:1200px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.hdr-logo{display:flex;align-items:center;gap:14px;}
+.bsj-mark{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.4rem;color:#fff;letter-spacing:-0.02em;line-height:1;position:relative;display:flex;align-items:baseline;}
+.bsj-j-wrap{position:relative;display:inline-block;}
+.bsj-bar{display:block;height:3px;background:var(--red);border-radius:1px;position:absolute;bottom:-3px;left:0;right:0;}
+.hdr-divider{width:1px;height:32px;background:rgba(255,255,255,0.15);}
+.hdr-text h1{font-size:0.92rem;font-weight:700;color:#fff;line-height:1.2;}
+.hdr-text p{font-size:0.68rem;color:rgba(255,255,255,0.45);font-weight:500;text-transform:uppercase;letter-spacing:0.07em;margin-top:2px;}
+.hdr-right{display:flex;gap:8px;align-items:center;margin-left:auto;}
+.btn-ghost{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);padding:7px 14px;border-radius:6px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;letter-spacing:0.02em;}
+.btn-ghost:hover{background:rgba(255,255,255,0.15);color:#fff;}
+
+/* API BAR */
+.api-bar{background:var(--navy-mid);border-top:1px solid rgba(255,255,255,0.08);padding:10px 32px;display:none;}
+.api-bar.open{display:block;}
+.api-inner{max-width:1200px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.api-bar input{flex:1;min-width:200px;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:5px;font-family:'Montserrat',monospace;font-size:0.78rem;color:#fff;outline:none;transition:border-color 0.2s;}
+.api-bar input:focus{border-color:var(--blue);}
+.api-bar input::placeholder{color:rgba(255,255,255,0.25);}
+.btn-blue{padding:8px 18px;background:var(--blue);color:#fff;border:none;border-radius:5px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;white-space:nowrap;letter-spacing:0.02em;}
+.btn-blue:hover{background:#0087bc;}
+.api-note{font-size:0.68rem;color:rgba(255,255,255,0.35);}
+
+/* LAYOUT */
+.app{max-width:1200px;margin:0 auto;padding:28px 32px;display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start;}
+
+/* LEFT PANEL */
+.panel-left{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;position:sticky;top:16px;}
+.panel-header{background:var(--navy);padding:18px 22px;}
+.panel-header h2{font-size:0.82rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.08em;}
+.panel-header p{font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:3px;font-weight:400;}
+.panel-body{padding:20px 22px;}
+
+/* FORM ELEMENTS */
+.form-group{margin-bottom:18px;}
+.form-label{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px;display:block;}
+
+/* THEME CHIPS */
+.theme-grid{display:flex;flex-direction:column;gap:6px;}
+.theme-chip{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;transition:all 0.18s;user-select:none;background:var(--white);}
+.theme-chip:hover{border-color:var(--navy);background:var(--bg);}
+.theme-chip.selected{border-color:var(--navy);background:var(--navy);color:#fff;}
+.theme-chip.selected .theme-label{color:#fff;}
+.theme-chip.selected .theme-icon{filter:none;}
+.theme-icon{font-size:1.1rem;flex-shrink:0;}
+.theme-label{font-size:0.8rem;font-weight:600;color:var(--text);}
+
+/* DURATION */
+.duration-row{display:flex;gap:8px;}
+.dur-btn{flex:1;padding:9px;border:1.5px solid var(--border);border-radius:6px;font-size:0.8rem;font-weight:700;color:var(--muted);cursor:pointer;text-align:center;background:var(--white);transition:all 0.18s;font-family:'Montserrat',sans-serif;}
+.dur-btn:hover{border-color:var(--navy);color:var(--navy);}
+.dur-btn.selected{border-color:var(--navy);background:var(--navy);color:#fff;}
+
+/* CONTEXT */
+.form-textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:6px;font-family:'Montserrat',sans-serif;font-size:0.8rem;color:var(--text);outline:none;resize:vertical;min-height:80px;background:var(--bg);transition:border-color 0.2s;line-height:1.5;font-weight:400;}
+.form-textarea:focus{border-color:var(--blue);}
+.form-textarea::placeholder{color:var(--muted);}
+
+/* TONE */
+.tone-row{display:flex;gap:6px;}
+.tone-btn{flex:1;padding:7px 4px;border:1.5px solid var(--border);border-radius:6px;font-size:0.7rem;font-weight:700;color:var(--muted);cursor:pointer;text-align:center;background:var(--white);transition:all 0.18s;font-family:'Montserrat',sans-serif;letter-spacing:0.02em;}
+.tone-btn:hover{border-color:var(--blue);color:var(--blue);}
+.tone-btn.selected{border-color:var(--blue);background:var(--blue);color:#fff;}
+
+/* GENERATE BUTTON */
+.btn-generate{width:100%;padding:13px;background:var(--navy);color:#fff;border:none;border-radius:7px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;letter-spacing:0.03em;margin-top:4px;}
+.btn-generate:hover:not(:disabled){background:var(--navy-mid);}
+.btn-generate:disabled{opacity:0.45;cursor:not-allowed;}
+.btn-generate.loading{opacity:0.7;cursor:wait;}
+
+/* RIGHT PANEL — OUTPUT */
+.panel-right{display:flex;flex-direction:column;gap:0;}
+.output-empty{background:var(--white);border:1.5px dashed var(--border);border-radius:10px;padding:64px 32px;text-align:center;color:var(--muted);}
+.output-empty .icon{font-size:2.5rem;margin-bottom:14px;opacity:0.4;}
+.output-empty h3{font-size:0.9rem;font-weight:700;color:var(--text-dim);margin-bottom:6px;}
+.output-empty p{font-size:0.78rem;font-weight:400;line-height:1.6;}
+
+/* OUTPUT CARD */
+.output-card{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:none;}
+.output-card.visible{display:block;}
+
+.output-card-header{background:var(--navy);padding:20px 28px;position:relative;overflow:hidden;}
+.output-card-header::after{content:'';position:absolute;bottom:0;right:0;width:35%;height:100%;background:var(--navy-mid);clip-path:polygon(25% 0%,100% 0%,100% 100%,0% 100%);pointer-events:none;}
+.session-theme-tag{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--blue);margin-bottom:6px;position:relative;z-index:2;}
+.session-title{font-size:1.3rem;font-weight:800;color:#fff;line-height:1.2;margin-bottom:8px;position:relative;z-index:2;max-width:580px;}
+.session-meta{display:flex;gap:16px;flex-wrap:wrap;position:relative;z-index:2;}
+.meta-pill{font-size:0.7rem;color:rgba(255,255,255,0.55);font-weight:500;display:flex;align-items:center;gap:5px;}
+
+/* OUTPUT TOOLBAR */
+.output-toolbar{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--bg);}
+.btn-action{padding:7px 16px;border:1.5px solid var(--border);border-radius:5px;font-size:0.72rem;font-weight:700;cursor:pointer;background:var(--white);color:var(--text-dim);font-family:'Montserrat',sans-serif;transition:all 0.2s;letter-spacing:0.02em;}
+.btn-action:hover{border-color:var(--navy);color:var(--navy);}
+.btn-action.primary{background:var(--navy);color:#fff;border-color:var(--navy);}
+.btn-action.primary:hover{background:var(--navy-mid);}
+.regen-note{font-size:0.7rem;color:var(--muted);margin-left:auto;}
+
+/* SESSION SECTIONS */
+.session-body{padding:24px 28px;display:flex;flex-direction:column;gap:20px;}
+.session-section{border-radius:8px;overflow:hidden;border:1px solid var(--border);}
+.section-header{padding:12px 18px;display:flex;align-items:center;gap:12px;}
+.section-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;color:#fff;flex-shrink:0;}
+.section-title{font-size:0.82rem;font-weight:700;color:#fff;flex:1;}
+.section-time{font-size:0.7rem;color:rgba(255,255,255,0.65);font-weight:600;white-space:nowrap;}
+.section-body{padding:16px 18px;background:var(--white);}
+
+/* Section colours */
+.sec-hook   .section-header{background:#7c3aed;}
+.sec-hook   .section-num{background:rgba(255,255,255,0.25);}
+.sec-disc   .section-header{background:var(--blue);}
+.sec-disc   .section-num{background:rgba(255,255,255,0.25);}
+.sec-act    .section-header{background:var(--green);}
+.sec-act    .section-num{background:rgba(255,255,255,0.25);}
+.sec-take   .section-header{background:var(--navy);}
+.sec-take   .section-num{background:rgba(255,255,255,0.25);}
+
+.hook-question{font-size:1rem;font-weight:700;color:var(--navy);line-height:1.4;margin-bottom:10px;font-style:italic;}
+.facilitator-note{font-size:0.76rem;color:var(--text-dim);line-height:1.6;background:var(--bg);border-radius:5px;padding:8px 12px;border-left:3px solid var(--blue);font-weight:400;}
+.facilitator-note strong{color:var(--navy);font-weight:700;}
+
+.disc-prompts{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.disc-prompt{display:flex;gap:10px;align-items:flex-start;}
+.prompt-num{width:22px;height:22px;background:var(--blue-soft);color:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;flex-shrink:0;margin-top:1px;}
+.prompt-text{font-size:0.82rem;color:var(--text-dim);line-height:1.55;font-weight:400;}
+
+.activity-title{font-size:0.88rem;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.activity-instructions{font-size:0.82rem;color:var(--text-dim);line-height:1.6;margin-bottom:10px;font-weight:400;}
+.materials-tag{display:inline-block;padding:4px 10px;background:var(--amber-soft);color:var(--amber);border-radius:4px;font-size:0.7rem;font-weight:700;}
+.materials-tag.none{background:var(--green-soft);color:var(--green);}
+
+.takeaway-task{font-size:0.88rem;font-weight:600;color:var(--navy);line-height:1.5;margin-bottom:10px;}
+.reflection-q{font-size:0.8rem;color:var(--text-dim);line-height:1.55;font-style:italic;border-top:1px solid var(--border);padding-top:10px;margin-top:10px;font-weight:400;}
+
+.tutor-notes-box{background:var(--amber-soft);border:1px solid #fcd34d;border-radius:7px;padding:14px 18px;margin-top:4px;}
+.tutor-notes-box h4{font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--amber);margin-bottom:6px;}
+.tutor-notes-box p{font-size:0.8rem;color:#78350f;line-height:1.6;font-weight:400;}
+
+/* ERROR */
+.error-box{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:14px 18px;margin:0 28px 20px;font-size:0.8rem;color:#dc2626;display:none;font-weight:500;}
+
+/* SPINNER */
+.spinner-wrap{padding:60px;text-align:center;display:none;}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 14px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner-wrap p{font-size:0.82rem;color:var(--muted);font-weight:500;}
+
+/* PRINT STYLES */
+@media print {
+  header,.api-bar,.panel-left,.output-toolbar,.regen-note{display:none!important;}
+  body{background:#fff;}
+  .app{display:block;padding:0;max-width:none;}
+  .panel-right{display:block;}
+  .output-card{display:block!important;border:none;box-shadow:none;}
+  .output-card-header::after{display:none;}
+  .session-body{padding:16px 0;}
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .app{grid-template-columns:1fr;}
+  .panel-left{position:static;}
+  .hdr{padding:14px 16px;}
+  .api-bar{padding:10px 16px;}
+  .app{padding:16px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <div class="hdr-logo">
+      <div class="bsj-mark">
+        BS<span class="bsj-j-wrap">J<span class="bsj-bar"></span></span>
+      </div>
+      <div class="hdr-divider"></div>
+      <div class="hdr-text">
+        <h1>Form Time Generator</h1>
+        <p>Year 11 · British School Jakarta</p>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <button class="btn-ghost" onclick="toggleApi()">⚙ API Key</button>
+    </div>
+  </div>
+  <div class="api-bar" id="api-bar">
+    <div class="api-inner">
+      <input type="password" id="api-key" placeholder="sk-ant-api03-…" autocomplete="off"/>
+      <button class="btn-blue" onclick="saveKey()">Save</button>
+      <span class="api-note">Stored in your browser only</span>
+    </div>
+  </div>
+</header>
+
+<div class="app">
+
+  <!-- LEFT: INPUTS -->
+  <div class="panel-left">
+    <div class="panel-header">
+      <h2>Session Settings</h2>
+      <p>Configure your form time session</p>
+    </div>
+    <div class="panel-body">
+
+      <!-- THEME -->
+      <div class="form-group">
+        <label class="form-label">Theme</label>
+        <div class="theme-grid">
+          <div class="theme-chip" onclick="selectTheme(this,'Exam Pressure & Stress Management')">
+            <span class="theme-icon">🧘</span>
+            <span class="theme-label">Exam Pressure & Stress</span>
+          </div>
+          <div class="theme-chip" onclick="selectTheme(this,'IBDP Preparation & Subject Selection')">
+            <span class="theme-icon">📚</span>
+            <span class="theme-label">IBDP Preparation</span>
+          </div>
+          <div class="theme-chip" onclick="selectTheme(this,'University Awareness & Applications')">
+            <span class="theme-icon">🎓</span>
+            <span class="theme-label">University Awareness</span>
+          </div>
+          <div class="theme-chip" onclick="selectTheme(this,'Digital Wellbeing & Social Media')">
+            <span class="theme-icon">📱</span>
+            <span class="theme-label">Digital Wellbeing</span>
+          </div>
+          <div class="theme-chip" onclick="selectTheme(this,'Study Skills & Habits')">
+            <span class="theme-icon">🧠</span>
+            <span class="theme-label">Study Skills & Habits</span>
+          </div>
+          <div class="theme-chip" onclick="selectTheme(this,'Goal Setting & Motivation')">
+            <span class="theme-icon">🎯</span>
+            <span class="theme-label">Goal Setting & Motivation</span>
+          </div>
+          <div class="theme-chip" onclick="selectTheme(this,'Relationships & Communication')">
+            <span class="theme-icon">💬</span>
+            <span class="theme-label">Relationships & Communication</span>
+          </div>
+          <div class="theme-chip" onclick="selectTheme(this,'Global Citizenship & Current Affairs')">
+            <span class="theme-icon">🌍</span>
+            <span class="theme-label">Global Citizenship</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DURATION -->
+      <div class="form-group">
+        <label class="form-label">Duration</label>
+        <div class="duration-row">
+          <button class="dur-btn selected" onclick="selectDur(this,'10')">10 min</button>
+          <button class="dur-btn" onclick="selectDur(this,'12')">12 min</button>
+          <button class="dur-btn" onclick="selectDur(this,'15')">15 min</button>
+        </div>
+      </div>
+
+      <!-- TONE -->
+      <div class="form-group">
+        <label class="form-label">Tone</label>
+        <div class="tone-row">
+          <button class="tone-btn selected" onclick="selectTone(this,'Reflective')">Reflective</button>
+          <button class="tone-btn" onclick="selectTone(this,'Active')">Active</button>
+          <button class="tone-btn" onclick="selectTone(this,'Challenging')">Challenging</button>
+        </div>
+      </div>
+
+      <!-- CONTEXT -->
+      <div class="form-group">
+        <label class="form-label">Additional Context <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+        <textarea class="form-textarea" id="context-input" placeholder="e.g. Mock exams next week, some students anxious about subject choices, group has been distracted lately…"></textarea>
+      </div>
+
+      <button class="btn-generate" id="gen-btn" onclick="generate()" disabled>
+        Generate Session Plan
+      </button>
+
+    </div>
+  </div>
+
+  <!-- RIGHT: OUTPUT -->
+  <div class="panel-right">
+
+    <div class="output-empty" id="output-empty">
+      <div class="icon">📋</div>
+      <h3>Your session plan will appear here</h3>
+      <p>Select a theme on the left and click Generate.<br/>Each plan includes a hook, discussion, activity, and takeaway — ready to run immediately.</p>
+    </div>
+
+    <div class="spinner-wrap" id="spinner">
+      <div class="spinner"></div>
+      <p>Generating your session plan…</p>
+    </div>
+
+    <div class="output-card" id="output-card">
+
+      <div class="output-card-header">
+        <div class="session-theme-tag" id="out-theme-tag">Theme</div>
+        <div class="session-title" id="out-title">Session Title</div>
+        <div class="session-meta">
+          <span class="meta-pill">⏱ <span id="out-duration">—</span></span>
+          <span class="meta-pill">👥 Year 11 Form Group</span>
+          <span class="meta-pill">🏫 British School Jakarta</span>
+        </div>
+      </div>
+
+      <div class="output-toolbar">
+        <button class="btn-action primary" onclick="window.print()">🖨 Print</button>
+        <button class="btn-action" onclick="copyText()">📋 Copy Text</button>
+        <button class="btn-action" onclick="regenerate()">↺ Regenerate</button>
+        <span class="regen-note">Always verify content before use</span>
+      </div>
+
+      <div class="error-box" id="error-box"></div>
+
+      <div class="session-body" id="session-body">
+        <!-- injected by JS -->
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== STATE =====
+let selectedTheme    = '';
+let selectedDuration = '10';
+let selectedTone     = 'Reflective';
+let lastContext      = '';
+
+// ===== API KEY =====
+window.addEventListener('load', () => {
+  const k = localStorage.getItem('bsj_ft_key');
+  if (k) document.getElementById('api-key').value = k;
+});
+function toggleApi() { document.getElementById('api-bar').classList.toggle('open'); }
+function saveKey() {
+  const k = document.getElementById('api-key').value.trim();
+  if (k) { localStorage.setItem('bsj_ft_key', k); document.getElementById('api-bar').classList.remove('open'); }
+}
+function getKey() { return document.getElementById('api-key').value.trim() || localStorage.getItem('bsj_ft_key') || ''; }
+
+// ===== SELECTORS =====
+function selectTheme(el, theme) {
+  document.querySelectorAll('.theme-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTheme = theme;
+  updateBtn();
+}
+function selectDur(el, dur) {
+  document.querySelectorAll('.dur-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedDuration = dur;
+}
+function selectTone(el, tone) {
+  document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTone = tone;
+}
+function updateBtn() {
+  document.getElementById('gen-btn').disabled = !selectedTheme;
+}
+
+// ===== SYSTEM PROMPT =====
+function buildPrompt() {
+  const ctx = document.getElementById('context-input').value.trim();
+  lastContext = ctx;
+  return `You are an experienced pastoral tutor at British School Jakarta (BSJ), an international school in Indonesia. You are creating form time sessions for a Year 11 tutor group (ages 15-16, MYP5, preparing for the IBDP next year).
+
+Generate a single, complete, ready-to-run form time session with the following specifications:
+- Theme: ${selectedTheme}
+- Duration: ${selectedDuration} minutes
+- Tone: ${selectedTone}
+- Context from tutor: ${ctx || 'No specific context provided.'}
+
+The session must be culturally sensitive and appropriate for an international school context (students are from diverse backgrounds).
+It must be practical — tutor needs NO preparation, NO materials unless clearly specified.
+Tone should be age-appropriate for 15-16 year olds — not condescending, not overly academic.
+
+Return ONLY a valid JSON object with exactly this structure (no markdown fences, no preamble):
+{
+  "title": "Short, engaging session title (5-8 words)",
+  "theme_display": "${selectedTheme}",
+  "duration": "${selectedDuration} minutes",
+  "hook": {
+    "time": "X min",
+    "question": "A single, thought-provoking opening question (not yes/no)",
+    "facilitator_note": "How the tutor should pose this and manage initial responses (2-3 sentences)"
+  },
+  "discussion": {
+    "time": "X min",
+    "prompts": [
+      "First discussion prompt",
+      "Second discussion prompt",
+      "Third discussion prompt"
+    ],
+    "facilitator_note": "How to facilitate the discussion, what to watch for, how to manage quieter students (2-3 sentences)"
+  },
+  "activity": {
+    "time": "X min",
+    "title": "Activity name",
+    "instructions": "Clear step-by-step instructions for students (3-5 sentences)",
+    "materials": "None needed OR specific simple materials required"
+  },
+  "takeaway": {
+    "time": "1 min",
+    "task": "A specific, achievable task students commit to before the next form time",
+    "reflection": "A closing reflection question the tutor reads aloud to end the session"
+  },
+  "tutor_notes": "2-3 sentences of practical advice: what to watch for, how to differentiate, any pastoral follow-up to consider"
+}
+
+Time allocations must add up to exactly ${selectedDuration} minutes. Make the session genuinely useful and engaging — not generic.`;
+}
+
+// ===== GENERATE =====
+async function generate() {
+  if (!selectedTheme) return;
+  if (!getKey()) {
+    alert('Please add your Anthropic API key — click the ⚙ API Key button in the header.');
+    return;
+  }
+  showSpinner();
+  await callApi();
+}
+async function regenerate() { showSpinner(); await callApi(); }
+
+function showSpinner() {
+  document.getElementById('output-empty').style.display = 'none';
+  document.getElementById('output-card').classList.remove('visible');
+  document.getElementById('spinner').style.display = 'block';
+  document.getElementById('error-box').style.display = 'none';
+  document.getElementById('gen-btn').classList.add('loading');
+  document.getElementById('gen-btn').disabled = true;
+}
+
+async function callApi() {
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': getKey(),
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:2000,
+        system: buildPrompt(),
+        messages:[{role:'user',content:'Generate the form time session plan now.'}]
+      })
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(()=>({}));
+      throw new Error(err.error?.message || `API error ${resp.status}`);
+    }
+    const data  = await resp.json();
+    const raw   = data.content.map(b=>b.text||'').join('');
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const plan  = extractJSON(clean);
+    renderPlan(plan);
+  } catch(e) {
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('output-card').classList.add('visible');
+    document.getElementById('error-box').textContent = 'Error: ' + e.message;
+    document.getElementById('error-box').style.display = 'block';
+  } finally {
+    document.getElementById('gen-btn').classList.remove('loading');
+    document.getElementById('gen-btn').disabled = false;
+  }
+}
+
+// ===== RENDER =====
+function esc(s){ return (s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function renderPlan(p) {
+  document.getElementById('spinner').style.display = 'none';
+  document.getElementById('out-theme-tag').textContent  = esc(p.theme_display || selectedTheme);
+  document.getElementById('out-title').textContent      = esc(p.title);
+  document.getElementById('out-duration').textContent   = esc(p.duration);
+
+  const body = document.getElementById('session-body');
+  body.innerHTML = `
+
+    <!-- HOOK -->
+    <div class="session-section sec-hook">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-title">Hook Question</div>
+        <div class="section-time">${esc(p.hook?.time)}</div>
+      </div>
+      <div class="section-body">
+        <div class="hook-question">"${esc(p.hook?.question)}"</div>
+        <div class="facilitator-note"><strong>Tutor guidance:</strong> ${esc(p.hook?.facilitator_note)}</div>
+      </div>
+    </div>
+
+    <!-- DISCUSSION -->
+    <div class="session-section sec-disc">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-title">Discussion</div>
+        <div class="section-time">${esc(p.discussion?.time)}</div>
+      </div>
+      <div class="section-body">
+        <ul class="disc-prompts">
+          ${(p.discussion?.prompts||[]).map((pr,i)=>`
+            <li class="disc-prompt">
+              <div class="prompt-num">${i+1}</div>
+              <div class="prompt-text">${esc(pr)}</div>
+            </li>`).join('')}
+        </ul>
+        <div class="facilitator-note"><strong>Tutor guidance:</strong> ${esc(p.discussion?.facilitator_note)}</div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div class="session-section sec-act">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-title">Activity — ${esc(p.activity?.title)}</div>
+        <div class="section-time">${esc(p.activity?.time)}</div>
+      </div>
+      <div class="section-body">
+        <div class="activity-instructions">${esc(p.activity?.instructions)}</div>
+        <span class="materials-tag ${(!p.activity?.materials || p.activity.materials.toLowerCase().startsWith('none')) ? 'none' : ''}">
+          ${(!p.activity?.materials || p.activity.materials.toLowerCase().startsWith('none')) ? '✓ No materials needed' : '📎 ' + esc(p.activity?.materials)}
+        </span>
+      </div>
+    </div>
+
+    <!-- TAKEAWAY -->
+    <div class="session-section sec-take">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-title">Takeaway Task</div>
+        <div class="section-time">${esc(p.takeaway?.time)}</div>
+      </div>
+      <div class="section-body">
+        <div class="takeaway-task">📌 ${esc(p.takeaway?.task)}</div>
+        <div class="reflection-q">Closing reflection: <em>"${esc(p.takeaway?.reflection)}"</em></div>
+      </div>
+    </div>
+
+    <!-- TUTOR NOTES -->
+    ${p.tutor_notes ? `
+    <div class="tutor-notes-box">
+      <h4>⚠ Tutor Notes</h4>
+      <p>${esc(p.tutor_notes)}</p>
+    </div>` : ''}
+  `;
+
+  document.getElementById('output-card').classList.add('visible');
+  document.getElementById('error-box').style.display = 'none';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ===== JSON EXTRACTION =====
+// Handles extra text before/after JSON, and attempts to repair truncated responses
+function extractJSON(raw) {
+  // 1. Try clean parse first
+  try { return JSON.parse(raw); } catch(e) {}
+
+  // 2. Extract the outermost { ... } block — ignores any text before or after
+  const first = raw.indexOf('{');
+  const last  = raw.lastIndexOf('}');
+  if (first !== -1 && last !== -1 && last > first) {
+    try { return JSON.parse(raw.slice(first, last + 1)); } catch(e) {}
+  }
+
+  // 3. Walk character by character to find the first balanced { } block
+  let depth = 0; let inStr = false; let escape = false; let start = -1;
+  for (let i = 0; i < raw.length; i++) {
+    const c = raw[i];
+    if (escape)          { escape = false; continue; }
+    if (c === '\\' && inStr) { escape = true; continue; }
+    if (c === '"')       { inStr = !inStr; continue; }
+    if (inStr)           continue;
+    if (c === '{')       { if (depth === 0) start = i; depth++; }
+    if (c === '}')       { depth--; if (depth === 0 && start !== -1) {
+      try { return JSON.parse(raw.slice(start, i + 1)); } catch(e) { start = -1; }
+    }}
+  }
+
+  // 4. Nothing worked
+  throw new Error('Could not parse session plan. Please try generating again.');
+}
+
+// ===== COPY =====
+function copyText() {
+  const p = document.getElementById('out-title').textContent;
+  const body = document.getElementById('session-body').innerText;
+  navigator.clipboard.writeText(`${p}\n\n${body}`)
+    .then(() => {
+      const btn = event.target;
+      btn.textContent = '✓ Copied';
+      setTimeout(() => btn.textContent = '📋 Copy Text', 2000);
+    })
+    .catch(() => alert('Copy failed — please select and copy manually.'));
+}
+</script>
+</body>
+</html>

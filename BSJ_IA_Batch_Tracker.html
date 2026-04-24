@@ -782,18 +782,10 @@ let isRunning = false;
 function checkKey() {
   const k = document.getElementById('api-key').value.trim();
   const st = document.getElementById('key-status');
+  const btn = document.getElementById('grade-btn');
   const valid = k.startsWith('sk-ant') && k.length > 20;
   st.className = 'key-status' + (valid ? ' ok' : '');
-  if (valid) localStorage.setItem('bsj_anthropic_key', k);
   updateGradeBtn();
-}
-
-function loadSavedKey() {
-  const saved = localStorage.getItem('bsj_anthropic_key');
-  if (saved) {
-    document.getElementById('api-key').value = saved;
-    checkKey();
-  }
 }
 
 function getKey() {
@@ -1135,6 +1127,5 @@ function exportCSV() {
   URL.revokeObjectURL(url);
 }
 </script>
-<script>loadSavedKey();</script>
 </body>
 </html>
