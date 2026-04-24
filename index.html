@@ -609,7 +609,38 @@
       <span class="quick-link-dot" style="background:#0d2240"></span>
       ManageBac
     </a>
+    <a class="quick-link" href="https://github.com/TMetters/bsj-tools/compare" target="_blank">
+      <span class="quick-link-dot" style="background:#16a34a"></span>
+      Deploy update
+    </a>
 
+  </div>
+
+  <!-- DEPLOY WORKFLOW -->
+  <div class="section-label">Deploy to bsj-tools.vercel.app</div>
+  <div class="terminal-card" style="margin-bottom: 36px;">
+    <div class="terminal-header">
+      <div class="terminal-dots">
+        <span class="dot-red"></span>
+        <span class="dot-amber"></span>
+        <span class="dot-green"></span>
+      </div>
+      <div class="terminal-title">Deploy to bsj-tools.vercel.app</div>
+    </div>
+    <div class="terminal-body">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div><span class="t-prompt">~ </span><span class="t-cmd" id="deploy-cmd-1">cd ~/Desktop/bsj-tools</span></div>
+        <button class="copy-btn" onclick="copyDeployCmd(1, this)">Copy</button>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
+        <div><span class="t-prompt">~ </span><span class="t-cmd" id="deploy-cmd-2">git add .</span></div>
+        <button class="copy-btn" onclick="copyDeployCmd(2, this)">Copy</button>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
+        <div><span class="t-prompt">~ </span><span class="t-cmd" id="deploy-cmd-3">git commit -m "your message" && git push</span></div>
+        <button class="copy-btn" onclick="copyDeployCmd(3, this)">Copy</button>
+      </div>
+    </div>
   </div>
 
   <!-- NEXT STEPS -->
@@ -656,6 +687,14 @@
       const btn = document.querySelector('.copy-btn');
       btn.textContent = 'Copied!';
       setTimeout(() => btn.textContent = 'Copy command', 2000);
+    });
+  }
+
+  function copyDeployCmd(n, btn) {
+    const cmd = document.getElementById('deploy-cmd-' + n).textContent;
+    navigator.clipboard.writeText(cmd).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
     });
   }
 </script>
