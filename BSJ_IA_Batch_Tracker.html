@@ -3,87 +3,58 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>DP Biology IA Batch Tracker — BSJ</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet"/>
+<title>DP Biology IA Batch Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --navy: #0d2240;
-  --navy-mid: #162e52;
-  --navy-light: #1e3d6b;
-  --blue: #0099d6;
-  --blue-dim: rgba(0,153,214,0.12);
-  --red: #cc0011;
-  --gold: #c8952a;
-  --gold-light: #e8c060;
-  --cream: #f5f1e8;
-  --cream-dark: #e8e2d4;
-  --text: #1a1a2e;
-  --muted: #6b7280;
-  --white: #ffffff;
-  --green: #166534;
-  --green-bg: #dcfce7;
-  --amber: #92400e;
-  --amber-bg: #fef3c7;
-  --danger: #991b1b;
-  --danger-bg: #fee2e2;
-  --border: rgba(13,34,64,0.12);
-  --shadow: 0 4px 32px rgba(13,34,64,0.10);
-}
-
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  font-family: 'Source Serif 4', Georgia, serif;
-  background: var(--cream);
-  color: var(--text);
+  font-family: 'Nunito Sans', sans-serif;
+  background: #ffffff;
+  color: #1a1a1a;
   min-height: 100vh;
+  border-left: 4px solid #0099d6;
 }
 
-/* HEADER */
+/* ── HEADER ── */
 header {
-  background: var(--navy);
-  padding: 0;
+  background: #ffffff;
+  border-bottom: 1px solid #eeeeee;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
 }
 
 .header-inner {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 16px 32px;
+  padding: 14px 32px 14px 28px;
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
 }
 
-.bsj-mark {
-  width: 44px; height: 44px;
-  background: var(--blue);
+.logo-mark {
+  width: 40px; height: 40px;
+  background: #0099d6;
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Playfair Display', serif;
-  font-size: 18px; font-weight: 700;
-  color: white;
   flex-shrink: 0;
-  letter-spacing: -0.5px;
 }
 
+.logo-mark svg { width: 22px; height: 22px; }
+
 .header-text h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.15rem;
-  color: white;
-  font-weight: 600;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #1a1a1a;
   line-height: 1.2;
 }
 
 .header-text p {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--gold);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 0.7rem;
+  color: #6b7280;
+  font-weight: 500;
   margin-top: 2px;
 }
 
@@ -91,24 +62,26 @@ header {
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
 .api-input-wrap {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: #ffffff;
+  border: 1px solid #eeeeee;
   border-radius: 8px;
-  padding: 6px 12px;
+  padding: 7px 12px;
+  transition: border-color 0.2s;
 }
+
+.api-input-wrap:focus-within { border-color: #0099d6; }
 
 .api-input-wrap label {
   font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--gold);
-  letter-spacing: 0.08em;
+  font-size: 0.58rem;
+  color: #6b7280;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -117,92 +90,86 @@ header {
   background: transparent;
   border: none;
   outline: none;
-  color: white;
+  color: #1a1a1a;
   font-family: 'DM Mono', monospace;
   font-size: 0.75rem;
   width: 220px;
 }
 
-#api-key::placeholder { color: rgba(255,255,255,0.3); }
+#api-key::placeholder { color: #d1d5db; }
 
 .key-status {
   width: 7px; height: 7px;
   border-radius: 50%;
-  background: #ef4444;
+  background: #d1d5db;
   flex-shrink: 0;
 }
 
 .key-status.ok { background: #22c55e; }
 
-/* MAIN */
+/* ── MAIN ── */
 main {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 36px 32px 80px;
+  padding: 36px 32px 80px 28px;
 }
 
-/* DROP ZONE */
+/* ── DROP ZONE ── */
 .drop-zone {
-  border: 2px dashed var(--border);
-  border-radius: 16px;
-  background: white;
-  padding: 48px 32px;
+  border: 2px dashed #eeeeee;
+  border-radius: 20px;
+  background: #ffffff;
+  padding: 52px 32px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s;
-  margin-bottom: 28px;
-  position: relative;
+  transition: border-color 0.2s;
+  margin-bottom: 32px;
 }
 
-.drop-zone:hover, .drop-zone.dragover {
-  border-color: var(--blue);
-  background: var(--blue-dim);
-}
+.drop-zone:hover, .drop-zone.dragover { border-color: #0099d6; }
 
 .drop-icon {
   width: 56px; height: 56px;
-  background: var(--navy);
-  border-radius: 12px;
+  border: 2px solid #0099d6;
+  border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
+  margin: 0 auto 18px;
 }
 
-.drop-icon svg { width: 28px; height: 28px; }
+.drop-icon svg { width: 26px; height: 26px; }
 
 .drop-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--navy);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a1a;
   margin-bottom: 6px;
 }
 
 .drop-sub {
   font-size: 0.85rem;
-  color: var(--muted);
-  margin-bottom: 20px;
-  font-style: italic;
+  color: #6b7280;
+  margin-bottom: 22px;
 }
 
 .drop-btn {
-  background: var(--navy);
-  color: white;
+  background: #0099d6;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
-  padding: 10px 24px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.78rem;
-  letter-spacing: 0.05em;
+  padding: 10px 26px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
 }
 
-.drop-btn:hover { background: var(--navy-light); }
+.drop-btn:hover { background: #0085b8; }
 
 #file-input { display: none; }
 
-/* QUEUE */
-.queue-section { margin-bottom: 28px; }
+/* ── QUEUE ── */
+.queue-section { margin-bottom: 32px; }
 
 .section-header {
   display: flex;
@@ -211,64 +178,65 @@ main {
   margin-bottom: 14px;
 }
 
-.section-title {
-  font-family: 'Playfair Display', serif;
+.queue-title {
   font-size: 1rem;
-  font-weight: 600;
-  color: var(--navy);
+  font-weight: 700;
+  color: #1a1a1a;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.count-badge {
-  background: var(--navy);
-  color: white;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  padding: 2px 8px;
+.count-pill {
+  background: #0099d6;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 9px;
   border-radius: 99px;
 }
 
+.btn-group { display: flex; gap: 8px; align-items: center; }
+
 .btn-primary {
-  background: var(--blue);
-  color: white;
+  background: #0099d6;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
-  padding: 10px 22px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
+  padding: 9px 20px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background 0.15s;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
 }
 
 .btn-primary:hover { background: #0085b8; }
 .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .btn-secondary {
-  background: transparent;
-  color: var(--navy);
-  border: 1px solid var(--border);
+  background: #ffffff;
+  color: #6b7280;
+  border: 1px solid #eeeeee;
   border-radius: 8px;
   padding: 8px 16px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: border-color 0.15s, color 0.15s;
 }
 
-.btn-secondary:hover { background: var(--cream-dark); }
+.btn-secondary:hover { border-color: #0099d6; color: #1a1a1a; }
 
-/* FILE QUEUE LIST */
+/* ── FILE LIST ── */
 .file-list {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid var(--border);
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #eeeeee;
   overflow: hidden;
 }
 
@@ -276,17 +244,17 @@ main {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border);
-  transition: background 0.15s;
+  padding: 13px 20px;
+  border-bottom: 1px solid #eeeeee;
+  transition: background 0.1s;
 }
 
 .file-item:last-child { border-bottom: none; }
-.file-item:hover { background: var(--cream); }
+.file-item:hover { background: #fafafa; }
 
 .file-icon {
-  width: 32px; height: 32px;
-  background: var(--blue-dim);
+  width: 30px; height: 30px;
+  border: 1px solid #eeeeee;
   border-radius: 6px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
@@ -297,106 +265,156 @@ main {
   flex: 1;
   background: transparent;
   border: none;
-  border-bottom: 1px dashed var(--border);
+  border-bottom: 1px solid transparent;
   outline: none;
-  font-family: 'Source Serif 4', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.88rem;
-  color: var(--text);
+  font-weight: 600;
+  color: #1a1a1a;
   padding: 2px 4px;
   transition: border-color 0.2s;
 }
 
-.file-name-input:focus { border-bottom-color: var(--blue); }
+.file-name-input:focus { border-bottom-color: #0099d6; }
+.file-name-input:disabled { color: #6b7280; }
 
 .file-size {
   font-family: 'DM Mono', monospace;
   font-size: 0.65rem;
-  color: var(--muted);
+  color: #6b7280;
   white-space: nowrap;
 }
 
 .file-status {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  padding: 3px 10px;
-  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 700;
   white-space: nowrap;
 }
 
-.status-queued  { background: var(--cream-dark); color: var(--muted); }
-.status-running { background: var(--blue-dim); color: var(--blue); }
-.status-done    { background: var(--green-bg); color: var(--green); }
-.status-error   { background: var(--danger-bg); color: var(--danger); }
+.status-queued  { color: #6b7280; }
+.status-running { color: #0099d6; }
+.status-done    { color: #16a34a; }
+.status-error   { color: #dc2626; }
 
 .file-remove {
   background: none;
   border: none;
-  color: var(--muted);
+  color: #6b7280;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1;
-  padding: 2px 4px;
+  padding: 2px 5px;
   border-radius: 4px;
-  transition: all 0.15s;
+  transition: color 0.15s;
 }
 
-.file-remove:hover { background: var(--danger-bg); color: var(--danger); }
+.file-remove:hover { color: #dc2626; }
 
-/* RESULTS */
-.results-section { margin-top: 36px; }
+/* ── PROGRESS ── */
+.progress-wrap { margin: 20px 0 32px; }
 
-/* SUMMARY TABLE */
-.summary-table-wrap {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid var(--border);
+.progress-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.progress-bar-outer {
+  background: #eeeeee;
+  border-radius: 99px;
+  height: 5px;
   overflow: hidden;
-  margin-bottom: 28px;
-  box-shadow: var(--shadow);
 }
 
-.summary-table-header {
-  background: var(--navy);
-  padding: 14px 20px;
+.progress-bar {
+  height: 100%;
+  background: #0099d6;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+/* ── RESULTS ── */
+.results-section { margin-top: 40px; }
+
+.export-bar {
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 20px;
+  padding: 20px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 24px;
 }
 
-.summary-table-header span {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
+.export-bar-text {
   font-size: 0.85rem;
+  color: #6b7280;
+  font-weight: 500;
 }
+
+.export-bar-text strong { color: #1a1a1a; font-weight: 800; }
+
+.btn-export {
+  background: #0099d6;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.btn-export:hover { background: #0085b8; }
+
+/* ── SUMMARY TABLE ── */
+.summary-table-wrap {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #eeeeee;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.summary-table-header {
+  padding: 18px 24px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.tbl-title { font-size: 0.9rem; font-weight: 700; color: #1a1a1a; }
+.tbl-avg   { font-size: 0.82rem; font-weight: 700; color: #0099d6; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
 
 th {
-  background: var(--cream);
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 10px 14px;
+  background: #fafafa;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #6b7280;
+  padding: 10px 16px;
   text-align: left;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #eeeeee;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 td {
-  padding: 11px 14px;
-  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  border-bottom: 1px solid #eeeeee;
   vertical-align: middle;
 }
 
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: var(--cream); }
+tr:hover td { background: #fafafa; }
 
 .score-pill {
   display: inline-block;
@@ -409,260 +427,166 @@ tr:hover td { background: var(--cream); }
   text-align: center;
 }
 
-.score-high   { background: var(--green-bg);  color: var(--green); }
-.score-mid    { background: var(--amber-bg);  color: var(--amber); }
-.score-low    { background: var(--danger-bg); color: var(--danger); }
+.score-high { background: #dcfce7; color: #166534; }
+.score-mid  { background: #fef3c7; color: #92400e; }
+.score-low  { background: #fee2e2; color: #991b1b; }
 
-.total-score {
-  font-family: 'Playfair Display', serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--navy);
-}
+.total-score { font-size: 0.95rem; font-weight: 800; color: #1a1a1a; }
+.flag-count  { font-size: 0.78rem; font-weight: 700; color: #dc2626; }
 
-.flag-count {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--red);
-}
-
-/* INDIVIDUAL RESULT CARD */
+/* ── RESULT CARDS ── */
 .result-card {
-  background: white;
-  border-radius: 14px;
-  border: 1px solid var(--border);
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #eeeeee;
   margin-bottom: 20px;
   overflow: hidden;
-  box-shadow: var(--shadow);
+  transition: border-color 0.2s;
 }
 
+.result-card:hover { border-color: #0099d6; }
+
 .result-card-header {
-  background: var(--navy);
-  padding: 16px 22px;
+  padding: 18px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid #eeeeee;
 }
 
-.result-student {
-  font-family: 'Playfair Display', serif;
-  font-size: 1rem;
-  color: white;
-  font-weight: 600;
-}
+.result-student { font-size: 1rem; font-weight: 800; color: #1a1a1a; }
+.result-total   { font-size: 0.88rem; font-weight: 700; color: #0099d6; }
 
-.result-total {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.85rem;
-  color: var(--gold);
-}
-
-.result-body { padding: 20px 22px; }
+.result-body { padding: 24px 28px; }
 
 .criteria-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 18px;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .criterion-box {
-  background: var(--cream);
-  border-radius: 10px;
-  padding: 12px 14px;
-  border-left: 3px solid var(--blue);
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-left: 3px solid #0099d6;
+  border-radius: 12px;
+  padding: 14px 16px;
 }
 
 .criterion-tag {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 4px;
+  color: #6b7280;
+  margin-bottom: 8px;
 }
 
 .criterion-score {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--navy);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #0099d6;
   line-height: 1;
   margin-bottom: 4px;
 }
 
-.criterion-label {
-  font-size: 0.72rem;
-  color: var(--muted);
-  font-style: italic;
-}
+.criterion-score span { font-size: 0.85rem; color: #6b7280; font-weight: 500; }
 
-.result-block {
-  margin-bottom: 16px;
-}
+.criterion-label { font-size: 0.72rem; color: #6b7280; font-weight: 500; }
+
+.result-block { margin-bottom: 20px; }
 
 .result-block-title {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--blue);
-  margin-bottom: 8px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid var(--border);
+  color: #0099d6;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #eeeeee;
 }
 
-.result-text {
-  font-size: 0.85rem;
-  line-height: 1.7;
-  color: var(--text);
-}
+.result-text { font-size: 0.88rem; line-height: 1.75; color: #1a1a1a; }
 
-.flags-list {
-  list-style: none;
-}
+.flags-list { list-style: none; }
 
 .flag-item {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  padding: 6px 0;
-  font-size: 0.82rem;
-  color: var(--danger);
-  border-bottom: 1px solid var(--border);
+  padding: 7px 0;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #dc2626;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .flag-item:last-child { border-bottom: none; }
 
 .flag-dot {
-  width: 6px; height: 6px;
+  width: 5px; height: 5px;
   border-radius: 50%;
-  background: var(--red);
-  margin-top: 6px;
+  background: #dc2626;
+  margin-top: 7px;
   flex-shrink: 0;
 }
 
+/* ── MANAGEBAC BOX ── */
 .managebac-box {
-  background: var(--navy);
-  border-radius: 10px;
-  padding: 16px 18px;
-  margin-top: 14px;
+  background: #f8fbfd;
+  border: 1px solid #eeeeee;
+  border-left: 3px solid #0099d6;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 16px;
 }
 
 .managebac-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
+  font-size: 0.62rem;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 8px;
+  color: #0099d6;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .copy-btn {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: #ffffff;
+  border: 1px solid #eeeeee;
   border-radius: 6px;
-  color: white;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  padding: 3px 10px;
+  color: #6b7280;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 12px;
   cursor: pointer;
-  transition: all 0.15s;
-  letter-spacing: 0.05em;
+  transition: border-color 0.15s, color 0.15s;
 }
 
-.copy-btn:hover { background: rgba(255,255,255,0.2); }
+.copy-btn:hover { border-color: #0099d6; color: #1a1a1a; }
 
-.managebac-text {
-  font-size: 0.82rem;
-  line-height: 1.7;
-  color: rgba(255,255,255,0.85);
-  font-style: italic;
-}
+.managebac-text { font-size: 0.88rem; line-height: 1.75; color: #1a1a1a; }
 
-/* PROGRESS */
-.progress-bar-wrap {
-  background: var(--cream-dark);
-  border-radius: 99px;
-  height: 6px;
-  margin: 16px 0;
-  overflow: hidden;
-}
-
-.progress-bar {
-  height: 100%;
-  background: var(--blue);
-  border-radius: 99px;
-  transition: width 0.4s ease;
-}
-
-.progress-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  color: var(--muted);
-  text-align: center;
-  margin-bottom: 8px;
-}
-
-/* EMPTY STATE */
-.empty-state {
-  text-align: center;
-  padding: 48px 32px;
-  color: var(--muted);
-  font-style: italic;
-  font-size: 0.9rem;
-}
-
-/* EXPORT BAR */
-.export-bar {
-  background: var(--navy);
-  border-radius: 12px;
-  padding: 16px 22px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-}
-
-.export-bar-text {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.6);
-}
-
-.export-bar-text strong { color: var(--gold); }
-
-.btn-export {
-  background: var(--gold);
-  color: var(--navy);
-  border: none;
-  border-radius: 8px;
-  padding: 9px 20px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.btn-export:hover { background: var(--gold-light); }
-
+/* ── ANIMATION ── */
 @keyframes fadeUp {
-  from { opacity:0; transform:translateY(12px); }
+  from { opacity:0; transform:translateY(10px); }
   to   { opacity:1; transform:translateY(0); }
 }
 
 .result-card { animation: fadeUp 0.3s ease both; }
 
+/* ── RESPONSIVE ── */
 @media (max-width: 700px) {
-  main { padding: 20px 16px 60px; }
-  .criteria-row { grid-template-columns: repeat(2,1fr); }
-  .header-inner { padding: 12px 16px; }
+  main { padding: 20px 20px 60px; }
+  .criteria-row { grid-template-columns: repeat(2, 1fr); }
+  .header-inner { padding: 12px 20px 12px 16px; }
   #api-key { width: 130px; }
+  .btn-group { flex-wrap: wrap; }
 }
 </style>
 </head>
@@ -670,10 +594,15 @@ tr:hover td { background: var(--cream); }
 
 <header>
   <div class="header-inner">
-    <div class="bsj-mark">BSJ</div>
+    <div class="logo-mark">
+      <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11 3v11M6 9l5-6 5 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 16v1.5A1.5 1.5 0 003.5 19h15a1.5 1.5 0 001.5-1.5V16" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
     <div class="header-text">
       <h1>DP Biology IA Batch Tracker</h1>
-      <p>British School Jakarta · 2025 Syllabus · RD · DA · C · E</p>
+      <p>2025 Syllabus · RD · DA · C · E</p>
     </div>
     <div class="header-right">
       <div class="api-input-wrap">
@@ -693,11 +622,11 @@ tr:hover td { background: var(--cream); }
     <div class="drop-icon">
       <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M14 4v14M8 12l6-8 6 8" stroke="#0099d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M4 20v2a2 2 0 002 2h16a2 2 0 002-2v-2" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M4 20v2a2 2 0 002 2h16a2 2 0 002-2v-2" stroke="#0099d6" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
       </svg>
     </div>
     <div class="drop-title">Drop student IA PDFs here</div>
-    <div class="drop-sub">Or click to select files — multiple PDFs accepted</div>
+    <div class="drop-sub">Or click to select — multiple PDFs accepted</div>
     <button class="drop-btn" onclick="event.stopPropagation(); document.getElementById('file-input').click()">
       Select PDF Files
     </button>
@@ -707,12 +636,13 @@ tr:hover td { background: var(--cream); }
   <!-- QUEUE -->
   <div class="queue-section" id="queue-section" style="display:none">
     <div class="section-header">
-      <div class="section-title">
+      <div class="queue-title">
         Upload Queue
-        <span class="count-badge" id="queue-count">0</span>
+        <span class="count-pill" id="queue-count">0</span>
       </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn-secondary" onclick="clearQueue()">Clear all</button>
+      <div class="btn-group">
+        <button class="btn-secondary" onclick="clearCompleted()">Clear completed</button>
+        <button class="btn-secondary" onclick="clearAll()">Clear all</button>
         <button class="btn-primary" id="grade-btn" onclick="startBatch()" disabled>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M2 7h10M7 2l5 5-5 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -726,9 +656,11 @@ tr:hover td { background: var(--cream); }
 
   <!-- PROGRESS -->
   <div id="progress-section" style="display:none">
-    <div class="progress-label" id="progress-label">Grading 1 of 3...</div>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+    <div class="progress-wrap">
+      <div class="progress-label" id="progress-label">Grading...</div>
+      <div class="progress-bar-outer">
+        <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+      </div>
     </div>
   </div>
 
@@ -737,16 +669,15 @@ tr:hover td { background: var(--cream); }
 
     <div class="export-bar">
       <div class="export-bar-text">
-        <strong id="results-count">0</strong> IAs graded · All scores are first-pass AI estimates — always apply professional judgement before entering in ManageBac
+        <strong id="results-count">0</strong> IAs graded · Scores are first-pass AI estimates — apply professional judgement before entering in ManageBac
       </div>
       <button class="btn-export" onclick="exportCSV()">↓ Export CSV</button>
     </div>
 
-    <!-- SUMMARY TABLE -->
     <div class="summary-table-wrap">
       <div class="summary-table-header">
-        <span>Summary — All Students</span>
-        <span id="avg-total" style="color:white"></span>
+        <span class="tbl-title">Summary — All Students</span>
+        <span class="tbl-avg" id="avg-total"></span>
       </div>
       <div style="overflow-x:auto">
         <table id="summary-table">
@@ -766,7 +697,6 @@ tr:hover td { background: var(--cream); }
       </div>
     </div>
 
-    <!-- INDIVIDUAL CARDS -->
     <div id="cards-container"></div>
 
   </div>
@@ -778,11 +708,34 @@ let files = [];
 let results = [];
 let isRunning = false;
 
-// ── Key check ──────────────────────────────────────────────────────────────────
+// ── Helpers ────────────────────────────────────────────────────────────────────
+function safeHtml(str) {
+  return String(str == null ? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function csvField(val) {
+  return '"' + String(val == null ? '').replace(/"/g, '""') + '"';
+}
+
+// ── API Key — localStorage ─────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('anthropic_api_key');
+  if (saved) {
+    document.getElementById('api-key').value = saved;
+    checkKey();
+  }
+});
+
 function checkKey() {
   const k = document.getElementById('api-key').value.trim();
+  if (k) localStorage.setItem('anthropic_api_key', k);
+  else localStorage.removeItem('anthropic_api_key');
   const st = document.getElementById('key-status');
-  const btn = document.getElementById('grade-btn');
   const valid = k.startsWith('sk-ant') && k.length > 20;
   st.className = 'key-status' + (valid ? ' ok' : '');
   updateGradeBtn();
@@ -819,7 +772,8 @@ function addFiles(newFiles) {
   const arr = Array.isArray(newFiles) ? newFiles : [...newFiles];
   arr.forEach(f => {
     if (!files.find(x => x.file.name === f.name)) {
-      const studentName = f.name.replace(/\.pdf$/i,'').replace(/[-_]/g,' ').replace(/\s+/g,' ').trim();
+      const rawName = f.name.replace(/\.pdf$/i, '').replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
+      const studentName = rawName.replace(/<[^>]*>/g, '');
       files.push({ file: f, name: studentName, status: 'queued' });
     }
   });
@@ -839,12 +793,12 @@ function renderQueue() {
   list.innerHTML = files.map((f, i) => `
     <div class="file-item" id="file-item-${i}">
       <div class="file-icon">📄</div>
-      <input class="file-name-input" type="text" value="${f.name}"
+      <input class="file-name-input" type="text" value="${safeHtml(f.name)}"
              onchange="files[${i}].name = this.value"
              placeholder="Student name..." ${f.status !== 'queued' ? 'disabled' : ''}/>
-      <span class="file-size">${(f.file.size/1024).toFixed(0)} KB</span>
+      <span class="file-size">${(f.file.size / 1024).toFixed(0)} KB</span>
       <span class="file-status status-${f.status}">${f.status}</span>
-      ${f.status === 'queued' ? `<button class="file-remove" onclick="removeFile(${i})">×</button>` : '<span style="width:24px"></span>'}
+      ${f.status === 'queued' ? `<button class="file-remove" onclick="removeFile(${i})" title="Remove">×</button>` : '<span style="width:24px"></span>'}
     </div>
   `).join('');
 }
@@ -855,8 +809,14 @@ function removeFile(i) {
   updateGradeBtn();
 }
 
-function clearQueue() {
-  files = files.filter(f => f.status !== 'queued');
+function clearAll() {
+  files = [];
+  renderQueue();
+  updateGradeBtn();
+}
+
+function clearCompleted() {
+  files = files.filter(f => f.status !== 'done' && f.status !== 'error');
   renderQueue();
   updateGradeBtn();
 }
@@ -889,7 +849,7 @@ async function startBatch() {
 
     const pct = Math.round((i / toGrade.length) * 100);
     document.getElementById('progress-bar').style.width = pct + '%';
-    document.getElementById('progress-label').textContent = `Grading ${i+1} of ${toGrade.length}: ${f.name}...`;
+    document.getElementById('progress-label').textContent = `Grading ${i + 1} of ${toGrade.length}: ${f.name}...`;
 
     try {
       const b64 = await toBase64(f.file);
@@ -990,25 +950,26 @@ You MUST respond with ONLY valid JSON matching this exact structure:
 }
 
 // ── Render ─────────────────────────────────────────────────────────────────────
-function scorePill(score, max=6) {
-  const pct = score/max;
+function scorePill(score, max = 6) {
+  const pct = score / max;
   const cls = pct >= 0.75 ? 'score-high' : pct >= 0.5 ? 'score-mid' : 'score-low';
   return `<span class="score-pill ${cls}">${score}/${max}</span>`;
 }
 
-function scoreClass(score, max=6) {
-  const pct = score/max;
-  return pct >= 0.75 ? 'score-high' : pct >= 0.5 ? 'score-mid' : 'score-low';
+function criterionLabel(score) {
+  if (score >= 5) return 'Proficient';
+  if (score >= 3) return 'Achieving';
+  if (score >= 1) return 'Developing';
+  return '--';
 }
 
 function renderResults() {
   document.getElementById('results-count').textContent = results.length;
 
-  // Summary table
   const tbody = document.getElementById('summary-tbody');
   tbody.innerHTML = results.map(r => `
     <tr>
-      <td><strong>${r.studentName}</strong></td>
+      <td><strong>${safeHtml(r.studentName)}</strong></td>
       <td>${scorePill(r.rd)}</td>
       <td>${scorePill(r.da)}</td>
       <td>${scorePill(r.c)}</td>
@@ -1018,41 +979,41 @@ function renderResults() {
     </tr>
   `).join('');
 
-  // Average
   if (results.length > 0) {
-    const avg = (results.reduce((s,r) => s + r.total, 0) / results.length).toFixed(1);
-    document.getElementById('avg-total').textContent = `Class average: ${avg}/24`;
+    const avg = (results.reduce((s, r) => s + r.total, 0) / results.length).toFixed(1);
+    document.getElementById('avg-total').textContent = `Class avg: ${avg}/24`;
   }
 
-  // Individual cards
   const container = document.getElementById('cards-container');
   container.innerHTML = results.map((r, idx) => `
     <div class="result-card">
       <div class="result-card-header">
-        <div class="result-student">${r.studentName}</div>
+        <div class="result-student">${safeHtml(r.studentName)}</div>
         <div class="result-total">Total: ${r.total}/24</div>
       </div>
       <div class="result-body">
-        ${r.error ? `<div style="color:var(--danger);font-family:'DM Mono',monospace;font-size:0.8rem;padding:12px 0">Error: ${r.error}</div>` : `
+        ${r.error
+          ? `<div style="color:#dc2626;font-family:'DM Mono',monospace;font-size:0.82rem;padding:12px 0">Error: ${safeHtml(r.error)}</div>`
+          : `
         <div class="criteria-row">
           <div class="criterion-box">
             <div class="criterion-tag">RD — Research Design</div>
-            <div class="criterion-score">${r.rd}<span style="font-size:0.8rem;color:var(--muted)">/6</span></div>
+            <div class="criterion-score">${r.rd}<span>/6</span></div>
             <div class="criterion-label">${criterionLabel(r.rd)}</div>
           </div>
           <div class="criterion-box">
             <div class="criterion-tag">DA — Data Analysis</div>
-            <div class="criterion-score">${r.da}<span style="font-size:0.8rem;color:var(--muted)">/6</span></div>
+            <div class="criterion-score">${r.da}<span>/6</span></div>
             <div class="criterion-label">${criterionLabel(r.da)}</div>
           </div>
           <div class="criterion-box">
             <div class="criterion-tag">C — Conclusion</div>
-            <div class="criterion-score">${r.c}<span style="font-size:0.8rem;color:var(--muted)">/6</span></div>
+            <div class="criterion-score">${r.c}<span>/6</span></div>
             <div class="criterion-label">${criterionLabel(r.c)}</div>
           </div>
           <div class="criterion-box">
             <div class="criterion-tag">E — Evaluation</div>
-            <div class="criterion-score">${r.e}<span style="font-size:0.8rem;color:var(--muted)">/6</span></div>
+            <div class="criterion-score">${r.e}<span>/6</span></div>
             <div class="criterion-label">${criterionLabel(r.e)}</div>
           </div>
         </div>
@@ -1060,10 +1021,10 @@ function renderResults() {
         <div class="result-block">
           <div class="result-block-title">Criterion Justifications</div>
           <div class="result-text">
-            <p style="margin-bottom:8px"><strong>[RD]</strong> ${r.justifications?.rd || ''}</p>
-            <p style="margin-bottom:8px"><strong>[DA]</strong> ${r.justifications?.da || ''}</p>
-            <p style="margin-bottom:8px"><strong>[C]</strong> ${r.justifications?.c || ''}</p>
-            <p><strong>[E]</strong> ${r.justifications?.e || ''}</p>
+            <p style="margin-bottom:8px"><strong>[RD]</strong> ${safeHtml(r.justifications?.rd || '')}</p>
+            <p style="margin-bottom:8px"><strong>[DA]</strong> ${safeHtml(r.justifications?.da || '')}</p>
+            <p style="margin-bottom:8px"><strong>[C]</strong> ${safeHtml(r.justifications?.c || '')}</p>
+            <p><strong>[E]</strong> ${safeHtml(r.justifications?.e || '')}</p>
           </div>
         </div>
 
@@ -1071,7 +1032,7 @@ function renderResults() {
         <div class="result-block">
           <div class="result-block-title">⚑ Flags — Review Before ManageBac Entry</div>
           <ul class="flags-list">
-            ${r.flags.map(f => `<li class="flag-item"><span class="flag-dot"></span>${f}</li>`).join('')}
+            ${r.flags.map(f => `<li class="flag-item"><span class="flag-dot"></span>${safeHtml(f)}</li>`).join('')}
           </ul>
         </div>` : ''}
 
@@ -1080,19 +1041,12 @@ function renderResults() {
             ManageBac Comment (~150 words)
             <button class="copy-btn" onclick="copyText('mb-${idx}', this)">Copy</button>
           </div>
-          <div class="managebac-text" id="mb-${idx}">${r.managebac}</div>
+          <div class="managebac-text" id="mb-${idx}">${safeHtml(r.managebac)}</div>
         </div>
         `}
       </div>
     </div>
   `).join('');
-}
-
-function criterionLabel(score) {
-  if (score >= 5) return 'Proficient';
-  if (score >= 3) return 'Achieving';
-  if (score >= 1) return 'Developing';
-  return '--';
 }
 
 function copyText(id, btn) {
@@ -1106,19 +1060,20 @@ function copyText(id, btn) {
 // ── CSV Export ─────────────────────────────────────────────────────────────────
 function exportCSV() {
   if (results.length === 0) return;
-  const rows = [
-    ['Student','RD','DA','C','E','Total','Flags','ManageBac Comment']
-  ];
-  results.forEach(r => {
-    rows.push([
-      r.studentName,
-      r.rd, r.da, r.c, r.e, r.total,
-      (r.flags||[]).join(' | '),
-      '"' + (r.managebac||'').replace(/"/g,"'") + '"'
-    ]);
-  });
-  const csv = rows.map(r => r.join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv'});
+  const header = ['Student', 'RD', 'DA', 'C', 'E', 'Total', 'Flags', 'ManageBac Comment']
+    .map(csvField).join(',');
+  const rows = results.map(r => [
+    csvField(r.studentName),
+    csvField(r.rd),
+    csvField(r.da),
+    csvField(r.c),
+    csvField(r.e),
+    csvField(r.total),
+    csvField((r.flags || []).join(' | ')),
+    csvField(r.managebac || '')
+  ].join(','));
+  const csv = [header, ...rows].join('\n');
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;

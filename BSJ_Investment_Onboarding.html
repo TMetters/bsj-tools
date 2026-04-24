@@ -3,50 +3,71 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Invest Smarter — BSJ Financial Onboarding</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<title>Invest Smarter — Financial Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --navy: #0d2240;
-  --navy-mid: #142d52;
-  --navy-light: #1e3d6b;
-  --blue: #0099d6;
-  --blue-dim: rgba(0,153,214,0.15);
-  --red: #cc0011;
-  --gold: #c8952a;
-  --gold-light: #e8c060;
-  --cream: #f5f1e8;
-  --text: #1a1a2e;
-  --muted: #6b7280;
-  --white: #ffffff;
-  --green: #15803d;
-  --green-bg: rgba(21,128,61,0.1);
-  --amber: #b45309;
-  --amber-bg: rgba(180,83,9,0.1);
-  --danger: #991b1b;
-  --danger-bg: rgba(153,27,27,0.1);
-  --border: rgba(13,34,64,0.1);
-}
-
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--navy);
-  color: var(--white);
+  font-family: 'Nunito Sans', sans-serif;
+  background: #ffffff;
+  color: #1a1a1a;
   min-height: 100vh;
 }
 
-/* SIDEBAR NAV */
+/* ── MOBILE HEADER ── */
+.mobile-header {
+  display: none;
+  background: #ffffff;
+  border-bottom: 1px solid #eeeeee;
+  border-left: 4px solid #0099d6;
+  padding: 14px 20px;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+.hamburger-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  color: #1a1a1a;
+}
+
+.mobile-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+/* ── OVERLAY ── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.2);
+  z-index: 299;
+}
+
+.sidebar-overlay.open { display: block; }
+
+/* ── LAYOUT ── */
 .layout {
   display: flex;
   min-height: 100vh;
 }
 
+/* ── SIDEBAR ── */
 .sidebar {
   width: 260px;
-  background: rgba(0,0,0,0.3);
-  border-right: 1px solid rgba(255,255,255,0.07);
+  background: #ffffff;
+  border-left: 4px solid #0099d6;
+  border-right: 1px solid #eeeeee;
   position: fixed;
   top: 0; left: 0; bottom: 0;
   display: flex;
@@ -56,54 +77,52 @@ body {
 }
 
 .sidebar-logo {
-  padding: 28px 24px 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  padding: 24px 20px 18px;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .logo-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 4px;
 }
 
 .logo-mark {
-  width: 38px; height: 38px;
-  background: var(--blue);
+  width: 36px; height: 36px;
+  background: #0099d6;
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 16px; font-weight: 700;
-  color: white;
   flex-shrink: 0;
 }
 
+.logo-mark svg { width: 18px; height: 18px; }
+
 .logo-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: white;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #1a1a1a;
   line-height: 1.2;
 }
 
 .logo-sub {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--gold);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin-top: 2px;
+  padding-left: 46px;
 }
 
 .progress-wrap {
-  padding: 16px 24px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  padding: 14px 20px;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .progress-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  color: rgba(255,255,255,0.4);
-  letter-spacing: 0.08em;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-bottom: 8px;
   display: flex;
@@ -111,7 +130,7 @@ body {
 }
 
 .progress-bar-outer {
-  background: rgba(255,255,255,0.08);
+  background: #eeeeee;
   border-radius: 99px;
   height: 4px;
   overflow: hidden;
@@ -119,69 +138,74 @@ body {
 
 .progress-bar-inner {
   height: 100%;
-  background: var(--gold);
+  background: #0099d6;
   border-radius: 99px;
   transition: width 0.4s ease;
 }
 
 .nav-section {
-  padding: 16px 0;
+  padding: 12px 0;
   flex: 1;
 }
 
 .nav-section-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.58rem;
+  font-size: 0.6rem;
+  font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.25);
-  padding: 0 24px;
-  margin-bottom: 6px;
+  color: #6b7280;
+  padding: 0 20px;
+  margin-bottom: 4px;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 9px 24px;
+  padding: 9px 20px;
   cursor: pointer;
   transition: all 0.15s;
   font-size: 0.84rem;
-  color: rgba(255,255,255,0.5);
+  font-weight: 600;
+  color: #6b7280;
   border-left: 2px solid transparent;
+  margin-left: -1px;
 }
 
-.nav-item:hover { color: white; background: rgba(255,255,255,0.04); }
+.nav-item:hover { color: #1a1a1a; background: #fafafa; }
 
 .nav-item.active {
-  color: white;
-  background: rgba(0,153,214,0.12);
-  border-left-color: var(--blue);
+  color: #0099d6;
+  background: #f0f9ff;
+  border-left-color: #0099d6;
 }
 
-.nav-item.completed { color: rgba(255,255,255,0.7); }
+.nav-item.completed { color: #1a1a1a; }
 
 .nav-check {
   width: 18px; height: 18px;
   border-radius: 50%;
-  border: 1.5px solid rgba(255,255,255,0.2);
+  border: 1.5px solid #eeeeee;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
   font-size: 10px;
+  color: transparent;
   transition: all 0.2s;
 }
 
 .nav-item.completed .nav-check {
-  background: var(--green);
-  border-color: var(--green);
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
 }
 
 .nav-item.active .nav-check {
-  border-color: var(--blue);
-  background: var(--blue-dim);
+  border-color: #0099d6;
+  background: #e0f2fe;
+  color: #0099d6;
 }
 
-/* MAIN CONTENT */
+/* ── CONTENT ── */
 .content {
   margin-left: 260px;
   flex: 1;
@@ -195,69 +219,61 @@ body {
 
 .section-page.active { display: block; }
 
-/* HERO */
+/* ── HERO ── */
 .hero {
-  background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-light) 100%);
-  padding: 60px 64px 48px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -60px; right: -60px;
-  width: 300px; height: 300px;
-  border-radius: 50%;
-  background: rgba(0,153,214,0.08);
+  background: #ffffff;
+  padding: 52px 56px 40px;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .section-num {
-  font-family: 'DM Mono', monospace;
   font-size: 0.65rem;
+  font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: #0099d6;
   margin-bottom: 12px;
 }
 
 .section-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 2.4rem;
-  font-weight: 600;
-  color: white;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a1a1a;
   line-height: 1.15;
   margin-bottom: 12px;
+  letter-spacing: -0.02em;
 }
 
 .section-subtitle {
   font-size: 0.95rem;
-  color: rgba(255,255,255,0.55);
+  font-weight: 500;
+  color: #6b7280;
   max-width: 560px;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
-/* CONTENT BODY */
+/* ── CONTENT BODY ── */
 .content-body {
-  padding: 48px 64px;
+  padding: 40px 56px;
   max-width: 820px;
 }
 
-/* CARDS */
+/* ── CARDS ── */
 .card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 20px;
   padding: 24px 28px;
   margin-bottom: 20px;
+  transition: border-color 0.2s;
 }
 
+.card:hover { border-color: #0099d6; }
+
 .card-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: white;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1a1a1a;
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -267,65 +283,76 @@ body {
 .card-body {
   font-size: 0.88rem;
   line-height: 1.75;
-  color: rgba(255,255,255,0.65);
+  color: #6b7280;
 }
 
-.card-body strong { color: white; font-weight: 500; }
+.card-body strong { color: #1a1a1a; font-weight: 700; }
 
-/* HIGHLIGHT BOXES */
+/* ── HIGHLIGHT BOXES ── */
 .highlight {
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 16px 20px;
   margin-bottom: 16px;
   font-size: 0.86rem;
   line-height: 1.65;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  color: #6b7280;
 }
 
-.highlight-blue { background: var(--blue-dim); border-left: 3px solid var(--blue); color: rgba(255,255,255,0.8); }
-.highlight-gold { background: rgba(200,149,42,0.12); border-left: 3px solid var(--gold); color: rgba(255,255,255,0.8); }
-.highlight-green { background: var(--green-bg); border-left: 3px solid #22c55e; color: rgba(255,255,255,0.8); }
-.highlight-red { background: var(--danger-bg); border-left: 3px solid #ef4444; color: rgba(255,255,255,0.8); }
+.highlight-blue  { border-left: 3px solid #0099d6; }
+.highlight-gold  { border-left: 3px solid #d97706; }
+.highlight-green { border-left: 3px solid #16a34a; }
+.highlight-red   { border-left: 3px solid #dc2626; }
 
-.highlight strong { color: white; }
+.highlight strong { color: #1a1a1a; font-weight: 700; }
 
-/* COMPARISON TABLE */
+/* ── COMPARISON TABLE ── */
+.table-wrap {
+  border: 1px solid #eeeeee;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
 .compare-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.84rem;
-  margin-bottom: 20px;
 }
 
 .compare-table th {
-  background: rgba(255,255,255,0.06);
+  background: #fafafa;
   padding: 10px 14px;
   text-align: left;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  color: #6b7280;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .compare-table td {
   padding: 11px 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.7);
+  border-bottom: 1px solid #eeeeee;
+  color: #6b7280;
   vertical-align: top;
+  font-size: 0.84rem;
 }
 
 .compare-table tr:last-child td { border-bottom: none; }
-.compare-table td:first-child { color: white; font-weight: 500; }
+.compare-table tr:hover td { background: #fafafa; }
+.compare-table td:first-child { color: #1a1a1a; font-weight: 600; }
 
-/* STEP BOXES */
+/* ── STEP LIST ── */
 .step-list { list-style: none; }
 
 .step-item {
   display: flex;
   gap: 16px;
   padding: 16px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid #eeeeee;
 }
 
 .step-item:last-child { border-bottom: none; }
@@ -333,12 +360,11 @@ body {
 .step-num {
   width: 28px; height: 28px;
   border-radius: 50%;
-  background: var(--blue);
+  background: #0099d6;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: white;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffffff;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -347,33 +373,32 @@ body {
 
 .step-title {
   font-size: 0.9rem;
-  font-weight: 500;
-  color: white;
+  font-weight: 700;
+  color: #1a1a1a;
   margin-bottom: 4px;
 }
 
 .step-desc {
-  font-size: 0.82rem;
-  color: rgba(255,255,255,0.55);
-  line-height: 1.6;
+  font-size: 0.83rem;
+  color: #6b7280;
+  line-height: 1.65;
 }
 
-/* QUIZ */
+/* ── QUIZ ── */
 .quiz-card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 28px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 20px;
+  padding: 24px 28px;
   margin-bottom: 20px;
 }
 
 .quiz-q {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: white;
-  margin-bottom: 20px;
-  line-height: 1.4;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 18px;
+  line-height: 1.45;
 }
 
 .quiz-options {
@@ -387,29 +412,31 @@ body {
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  border: 1px solid #eeeeee;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: border-color 0.15s;
   font-size: 0.86rem;
-  color: rgba(255,255,255,0.7);
+  font-weight: 500;
+  color: #6b7280;
 }
 
-.quiz-option:hover { border-color: var(--blue); color: white; background: var(--blue-dim); }
-.quiz-option.correct { border-color: #22c55e; background: var(--green-bg); color: #86efac; }
-.quiz-option.wrong { border-color: #ef4444; background: var(--danger-bg); color: #fca5a5; }
-.quiz-option.disabled { pointer-events: none; opacity: 0.5; }
-.quiz-option.disabled.correct { opacity: 1; }
+.quiz-option:hover { border-color: #0099d6; color: #1a1a1a; }
+.quiz-option.correct { border-color: #16a34a; background: #f0fdf4; color: #166534; }
+.quiz-option.wrong   { border-color: #dc2626; background: #fef2f2; color: #991b1b; }
+.quiz-option.disabled { pointer-events: none; opacity: 0.55; }
+.quiz-option.disabled.correct,
+.quiz-option.disabled.wrong   { opacity: 1; }
 
 .quiz-radio {
   width: 16px; height: 16px;
   border-radius: 50%;
-  border: 1.5px solid rgba(255,255,255,0.3);
+  border: 1.5px solid #eeeeee;
   flex-shrink: 0;
 }
 
 .quiz-feedback {
-  margin-top: 14px;
+  margin-top: 12px;
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 0.84rem;
@@ -417,64 +444,64 @@ body {
   display: none;
 }
 
-.quiz-feedback.show { display: block; }
-.quiz-feedback.correct { background: var(--green-bg); color: #86efac; border: 1px solid rgba(34,197,94,0.2); }
-.quiz-feedback.wrong { background: var(--danger-bg); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); }
+.quiz-feedback.show    { display: block; }
+.quiz-feedback.correct { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+.quiz-feedback.wrong   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 
-/* BOTTOM NAV */
+/* ── BOTTOM NAV ── */
 .bottom-nav {
-  padding: 32px 64px 48px;
+  padding: 28px 56px 44px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  margin-top: 20px;
+  border-top: 1px solid #eeeeee;
+  margin-top: 16px;
 }
 
 .btn-nav {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 11px 22px;
   border-radius: 10px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
   border: none;
 }
 
 .btn-back {
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.6);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: #ffffff;
+  color: #6b7280;
+  border: 1px solid #eeeeee;
 }
 
-.btn-back:hover { background: rgba(255,255,255,0.1); color: white; }
+.btn-back:hover { border-color: #0099d6; color: #1a1a1a; }
 
 .btn-next {
-  background: var(--blue);
-  color: white;
+  background: #0099d6;
+  color: #ffffff;
 }
 
 .btn-next:hover { background: #0085b8; }
 
 .btn-complete {
-  background: var(--gold);
-  color: var(--navy);
-  font-weight: 500;
+  background: #0099d6;
+  color: #ffffff;
 }
 
-.btn-complete:hover { background: var(--gold-light); }
+.btn-complete:hover { background: #0085b8; }
+.btn-complete:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .page-indicator {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  color: rgba(255,255,255,0.3);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6b7280;
 }
 
-/* COMPLETION */
+/* ── COMPLETION ── */
 .completion-screen {
   display: flex;
   flex-direction: column;
@@ -487,73 +514,105 @@ body {
 
 .completion-icon {
   width: 80px; height: 80px;
-  background: var(--green-bg);
+  background: #f0fdf4;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 36px;
-  margin-bottom: 28px;
-  border: 2px solid rgba(34,197,94,0.3);
+  margin-bottom: 24px;
+  border: 2px solid #bbf7d0;
 }
 
 .completion-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 2.2rem;
-  font-weight: 600;
-  color: white;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a1a1a;
   margin-bottom: 12px;
+  letter-spacing: -0.02em;
 }
 
 .completion-sub {
   font-size: 0.9rem;
-  color: rgba(255,255,255,0.5);
+  font-weight: 500;
+  color: #6b7280;
   max-width: 440px;
   line-height: 1.7;
-  margin-bottom: 36px;
+  margin-bottom: 32px;
 }
 
 .score-display {
-  font-family: 'Cormorant Garamond', serif;
   font-size: 3.5rem;
-  font-weight: 700;
-  color: var(--gold);
-  margin-bottom: 8px;
+  font-weight: 800;
+  color: #0099d6;
+  margin-bottom: 6px;
+  letter-spacing: -0.04em;
 }
 
 .score-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  color: rgba(255,255,255,0.3);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #6b7280;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
+/* ── ANIMATIONS ── */
 @keyframes fadeUp {
-  from { opacity:0; transform:translateY(16px); }
+  from { opacity:0; transform:translateY(12px); }
   to   { opacity:1; transform:translateY(0); }
 }
 
-.section-page.active .hero { animation: fadeUp 0.3s ease both; }
-.section-page.active .content-body { animation: fadeUp 0.35s ease 0.05s both; }
+.section-page.active .hero         { animation: fadeUp 0.3s ease both; }
+.section-page.active .content-body { animation: fadeUp 0.35s ease 0.04s both; }
 
+/* ── RESPONSIVE ── */
 @media (max-width: 800px) {
-  .sidebar { display: none; }
+  .sidebar {
+    transform: translateX(-260px);
+    transition: transform 0.25s ease;
+    position: fixed;
+    top: 0;
+    z-index: 300;
+  }
+  .sidebar.open { transform: translateX(0); }
+  .mobile-header { display: flex; }
   .content { margin-left: 0; }
-  .hero, .content-body, .bottom-nav { padding-left: 24px; padding-right: 24px; }
+  .hero { padding: 32px 24px 28px; }
+  .content-body { padding: 28px 24px; }
+  .bottom-nav { padding: 24px; }
+  .section-title { font-size: 1.6rem; }
 }
 </style>
 </head>
 <body>
 
+<!-- MOBILE HEADER -->
+<div class="mobile-header" id="mobile-header">
+  <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="Open menu">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <path d="M3 6h16M3 11h16M3 16h16" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+  <span class="mobile-title">Invest Smarter</span>
+  <span style="width:26px"></span>
+</div>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
 <div class="layout">
 
 <!-- SIDEBAR -->
-<nav class="sidebar">
+<nav class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <div class="logo-row">
-      <div class="logo-mark">BSJ</div>
+      <div class="logo-mark">
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 13l4-5 3 3 5-7" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
       <div class="logo-name">Invest Smarter</div>
     </div>
-    <div class="logo-sub">BSJ Financial Onboarding</div>
+    <div class="logo-sub">Financial Onboarding</div>
   </div>
 
   <div class="progress-wrap">
@@ -607,7 +666,7 @@ body {
     <div class="hero">
       <div class="section-num">Module 01 of 07</div>
       <div class="section-title">Why Should You Invest?</div>
-      <div class="section-subtitle">Your BSJ salary is a starting point, not a destination. Here's why sitting on cash is the riskiest thing you can do.</div>
+      <div class="section-subtitle">Your salary is a starting point, not a destination. Here's why sitting on cash is the riskiest thing you can do.</div>
     </div>
     <div class="content-body">
       <div class="highlight highlight-red">
@@ -624,7 +683,7 @@ body {
       <div class="card">
         <div class="card-title">📊 BSJ Context — Where You Actually Are</div>
         <div class="card-body">
-          On a BSJ salary of ~$7,000–7,300/month, most teachers have enough to invest meaningfully after living costs. The question isn't whether you can afford to invest — it's whether you can afford not to. Jakarta's low cost of living relative to salary is a genuine advantage most expats underuse.
+          On your monthly salary, most teachers have enough to invest meaningfully after living costs. The question isn't whether you can afford to invest — it's whether you can afford not to. Jakarta's low cost of living relative to salary is a genuine advantage most expats underuse.
         </div>
       </div>
 
@@ -653,19 +712,21 @@ body {
       <div class="section-subtitle">Not all investments are the same. Here's what exists, what it does, and where it fits in your portfolio.</div>
     </div>
     <div class="content-body">
-      <table class="compare-table">
-        <thead>
-          <tr><th>Asset</th><th>Risk</th><th>Potential Return</th><th>BSJ Relevance</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Cash / Savings</td><td>Very Low</td><td>1–3% p.a.</td><td>Emergency fund only</td></tr>
-          <tr><td>Bonds / Fixed Income</td><td>Low–Medium</td><td>3–7% p.a.</td><td>IDR gov bonds available via Indodax</td></tr>
-          <tr><td>Stocks / Equities</td><td>Medium–High</td><td>7–15% p.a.</td><td>MSTR, ETFs via Saxo/IBKR</td></tr>
-          <tr><td>ETFs</td><td>Medium</td><td>7–12% p.a.</td><td>MSTY (yield-focused), index ETFs</td></tr>
-          <tr><td>Cryptocurrency</td><td>Very High</td><td>-90% to +1000%</td><td>BTC, ETH, SOL via Binance/Indodax</td></tr>
-          <tr><td>Angel Investment</td><td>Extreme</td><td>0x to 100x</td><td>High conviction only — illiquid</td></tr>
-        </tbody>
-      </table>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr><th>Asset</th><th>Risk</th><th>Potential Return</th><th>BSJ Relevance</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Cash / Savings</td><td>Very Low</td><td>1–3% p.a.</td><td>Emergency fund only</td></tr>
+            <tr><td>Bonds / Fixed Income</td><td>Low–Medium</td><td>3–7% p.a.</td><td>IDR gov bonds available via Indodax</td></tr>
+            <tr><td>Stocks / Equities</td><td>Medium–High</td><td>7–15% p.a.</td><td>MSTR, ETFs via Saxo/IBKR</td></tr>
+            <tr><td>ETFs</td><td>Medium</td><td>7–12% p.a.</td><td>MSTY (yield-focused), index ETFs</td></tr>
+            <tr><td>Cryptocurrency</td><td>Very High</td><td>-90% to +1000%</td><td>BTC, ETH, SOL via Binance/Indodax</td></tr>
+            <tr><td>Angel Investment</td><td>Extreme</td><td>0x to 100x</td><td>High conviction only — illiquid</td></tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="card">
         <div class="card-title">₿ Crypto — The BSJ Teacher Advantage</div>
@@ -714,15 +775,17 @@ body {
         <strong>BSJ Teacher Profile (typical):</strong> Stable income, low living costs, 10–20 year horizon, moderate-to-high risk tolerance. This profile suits a portfolio weighted toward growth assets (crypto, equities) with some yield generation (MSTY, staking).
       </div>
 
-      <table class="compare-table">
-        <thead><tr><th>Profile</th><th>Suggested Allocation</th><th>Expected Volatility</th></tr></thead>
-        <tbody>
-          <tr><td>Conservative</td><td>60% bonds/cash, 30% stocks, 10% crypto</td><td>Low — may trail inflation</td></tr>
-          <tr><td>Moderate</td><td>40% stocks/ETFs, 30% crypto, 20% bonds, 10% cash</td><td>Medium — steady growth</td></tr>
-          <tr><td>Aggressive</td><td>50% crypto, 30% stocks, 20% yield assets</td><td>High — significant swings</td></tr>
-          <tr><td>Very Aggressive</td><td>70%+ crypto, 20% high-growth stocks, 10% cash</td><td>Very high — not for everyone</td></tr>
-        </tbody>
-      </table>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead><tr><th>Profile</th><th>Suggested Allocation</th><th>Expected Volatility</th></tr></thead>
+          <tbody>
+            <tr><td>Conservative</td><td>60% bonds/cash, 30% stocks, 10% crypto</td><td>Low — may trail inflation</td></tr>
+            <tr><td>Moderate</td><td>40% stocks/ETFs, 30% crypto, 20% bonds, 10% cash</td><td>Medium — steady growth</td></tr>
+            <tr><td>Aggressive</td><td>50% crypto, 30% stocks, 20% yield assets</td><td>High — significant swings</td></tr>
+            <tr><td>Very Aggressive</td><td>70%+ crypto, 20% high-growth stocks, 10% cash</td><td>Very high — not for everyone</td></tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="highlight highlight-blue">
         <strong>Important:</strong> Your risk profile is not fixed. It changes as your wealth grows, your income changes, and your goals shift. Review it annually.
@@ -744,7 +807,7 @@ body {
     </div>
     <div class="content-body">
       <div class="highlight highlight-gold">
-        <strong>Note:</strong> Binance is not officially available in Indonesia but is widely used by expats via VPN. Use a reputable VPN (NordVPN, ExpressVPN) and connect to a Singapore or UK server before accessing Binance.
+        <strong>Note:</strong> Access to some platforms may require additional steps depending on your location. Check local regulations and platform availability before signing up.
       </div>
 
       <ul class="step-list">
@@ -752,7 +815,7 @@ body {
           <div class="step-num">1</div>
           <div class="step-content">
             <div class="step-title">Create your account</div>
-            <div class="step-desc">Go to binance.com (via VPN). Click Register. Use your personal email — not your BSJ email. Choose a strong, unique password and store it in a password manager.</div>
+            <div class="step-desc">Go to binance.com. Click Register. Use your personal email — not your BSJ email. Choose a strong, unique password and store it in a password manager.</div>
           </div>
         </li>
         <li class="step-item">
@@ -1013,11 +1076,11 @@ body {
     <div class="completion-screen">
       <div class="completion-icon">🎓</div>
       <div class="completion-title">Course Complete</div>
-      <div class="completion-sub">You've completed the BSJ Investment Onboarding. You now have the foundations to start investing confidently. Remember: start small, stay consistent, and never invest money you can't afford to lose.</div>
+      <div class="completion-sub">You've completed the Financial Onboarding. You now have the foundations to start investing confidently. Remember: start small, stay consistent, and never invest money you can't afford to lose.</div>
       <div class="score-display" id="final-score">—</div>
       <div class="score-label">Quiz Score</div>
       <br/><br/>
-      <button class="btn-nav btn-next" onclick="goTo(0)" style="margin-top:16px">← Start Over</button>
+      <button class="btn-nav btn-next" onclick="restartCourse()" style="margin-top:16px">← Start Over</button>
     </div>
   </div>
 
@@ -1029,29 +1092,42 @@ let currentPage = 0;
 const totalPages = 7;
 const completed = new Array(totalPages).fill(false);
 const quizAnswers = new Array(5).fill(null);
+const quizData = new Array(5).fill(null);
 let quizCorrect = 0;
 
+// ── Mobile sidebar ─────────────────────────────────────────────────────────────
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+
+// ── Navigation ─────────────────────────────────────────────────────────────────
 function goTo(page) {
   document.querySelectorAll('.section-page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
   if (page === 'complete') {
     document.getElementById('page-complete').classList.add('active');
+    saveProgress('complete');
     return;
   }
 
   document.getElementById('page-' + page).classList.add('active');
-  document.getElementById('nav-' + page).classList.add('active');
+  const navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
   currentPage = page;
   window.scrollTo(0, 0);
+
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+
+  saveProgress(page);
 }
 
 function next() {
   completed[currentPage] = true;
   updateProgress();
-  if (currentPage < totalPages - 1) {
-    goTo(currentPage + 1);
-  }
+  if (currentPage < totalPages - 1) goTo(currentPage + 1);
 }
 
 function back() {
@@ -1065,46 +1141,107 @@ function complete() {
   goTo('complete');
 }
 
+function restartCourse() {
+  completed.fill(false);
+  quizAnswers.fill(null);
+  quizData.fill(null);
+  quizCorrect = 0;
+  try {
+    localStorage.removeItem('invest_completed');
+    localStorage.removeItem('invest_quiz_data');
+    localStorage.removeItem('invest_quiz_correct');
+    localStorage.removeItem('invest_page');
+  } catch(e) {}
+  document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('correct','wrong','disabled'));
+  document.querySelectorAll('.quiz-feedback').forEach(f => { f.className = 'quiz-feedback'; f.textContent = ''; });
+  document.getElementById('complete-btn').disabled = true;
+  updateProgress();
+  goTo(0);
+}
+
 function updateProgress() {
   const done = completed.filter(Boolean).length;
   const pct = Math.round((done / totalPages) * 100);
   document.getElementById('progress-bar').style.width = pct + '%';
   document.getElementById('progress-pct').textContent = pct + '%';
-
   completed.forEach((c, i) => {
     const nav = document.getElementById('nav-' + i);
     const check = document.getElementById('check-' + i);
-    if (c) {
+    if (c && nav && check) {
       nav.classList.add('completed');
       check.textContent = '✓';
     }
   });
 }
 
+// ── Quiz ───────────────────────────────────────────────────────────────────────
 function answer(qIndex, optIndex, isCorrect, feedback) {
-  if (quizAnswers[qIndex] !== null) return;
+  if (quizData[qIndex] !== null) return;
+  quizData[qIndex] = { optIndex, isCorrect, feedback };
   quizAnswers[qIndex] = optIndex;
   if (isCorrect) quizCorrect++;
-
-  const card = document.querySelectorAll('.quiz-card')[qIndex];
-  const options = card.querySelectorAll('.quiz-option');
-  options.forEach((opt, i) => {
-    opt.classList.add('disabled');
-    if (i === optIndex) {
-      opt.classList.add(isCorrect ? 'correct' : 'wrong');
-    }
-  });
-
-  const fb = document.getElementById('qf-' + qIndex);
-  fb.textContent = feedback;
-  fb.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'wrong');
-
-  // Enable complete button when all answered
-  const allAnswered = quizAnswers.every(a => a !== null);
-  if (allAnswered) {
-    document.getElementById('complete-btn').disabled = false;
-  }
+  applyQuizAnswer(qIndex);
+  saveProgress(currentPage);
+  if (quizData.every(a => a !== null)) document.getElementById('complete-btn').disabled = false;
 }
+
+function applyQuizAnswer(qIndex) {
+  const data = quizData[qIndex];
+  if (!data) return;
+  const cards = document.querySelectorAll('.quiz-card');
+  if (!cards[qIndex]) return;
+  cards[qIndex].querySelectorAll('.quiz-option').forEach((opt, i) => {
+    opt.classList.add('disabled');
+    if (i === data.optIndex) opt.classList.add(data.isCorrect ? 'correct' : 'wrong');
+  });
+  const fb = document.getElementById('qf-' + qIndex);
+  if (fb) { fb.textContent = data.feedback; fb.className = 'quiz-feedback show ' + (data.isCorrect ? 'correct' : 'wrong'); }
+}
+
+function restoreQuizState() {
+  quizData.forEach((data, i) => { if (data) applyQuizAnswer(i); });
+  if (quizData.every(a => a !== null)) document.getElementById('complete-btn').disabled = false;
+}
+
+// ── localStorage ───────────────────────────────────────────────────────────────
+function saveProgress(page) {
+  try {
+    localStorage.setItem('invest_completed', JSON.stringify(completed));
+    localStorage.setItem('invest_quiz_data', JSON.stringify(quizData));
+    localStorage.setItem('invest_quiz_correct', String(quizCorrect));
+    localStorage.setItem('invest_page', String(page));
+  } catch(e) {}
+}
+
+function loadProgress() {
+  try {
+    const c = localStorage.getItem('invest_completed');
+    if (c) JSON.parse(c).forEach((v, i) => { if (i < completed.length) completed[i] = v; });
+
+    const q = localStorage.getItem('invest_quiz_data');
+    if (q) JSON.parse(q).forEach((v, i) => {
+      if (i < quizData.length) { quizData[i] = v; if (v) quizAnswers[i] = v.optIndex; }
+    });
+
+    const qc = localStorage.getItem('invest_quiz_correct');
+    if (qc) quizCorrect = parseInt(qc) || 0;
+
+    updateProgress();
+    restoreQuizState();
+
+    const savedPage = localStorage.getItem('invest_page');
+    if (savedPage === 'complete') {
+      document.getElementById('final-score').textContent = quizCorrect + '/5';
+      goTo('complete');
+    } else if (savedPage && savedPage !== '0') {
+      const p = parseInt(savedPage);
+      if (!isNaN(p) && p > 0 && p < totalPages) goTo(p);
+    }
+  } catch(e) {}
+}
+
+window.addEventListener('load', loadProgress);
 </script>
+
 </body>
 </html>
