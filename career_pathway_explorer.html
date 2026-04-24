@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>What Could I Do? — IBDP Career Explorer</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --indigo:     #1e1b4b;
+  --indigo-mid: #312e81;
+  --indigo-soft:#eef2ff;
+  --teal:       #0d9488;
+  --teal-light: #14b8a6;
+  --teal-dim:   #0f766e;
+  --teal-soft:  #f0fdfa;
+  --violet:     #7c3aed;
+  --violet-soft:#f5f3ff;
+  --sky:        #0284c7;
+  --sky-soft:   #f0f9ff;
+  --amber:      #d97706;
+  --amber-soft: #fffbeb;
+  --green:      #059669;
+  --green-soft: #ecfdf5;
+  --pink:       #db2777;
+  --pink-soft:  #fdf2f8;
+  --red:        #dc2626;
+  --bg:         #f8faff;
+  --white:      #ffffff;
+  --border:     #e2e8f0;
+  --text:       #0f172a;
+  --text-dim:   #475569;
+  --muted:      #94a3b8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* HEADER */
+.hdr{background:var(--indigo);position:sticky;top:0;z-index:200;}
+.hdr-inner{max-width:1160px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.hdr-brand{display:flex;align-items:center;gap:12px;}
+.hdr-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--teal),var(--teal-light));display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.hdr-name{font-size:1.05rem;font-weight:800;color:#fff;letter-spacing:-0.01em;}
+.hdr-sub{font-size:0.68rem;color:rgba(255,255,255,0.4);font-weight:400;margin-top:1px;}
+.btn-ghost{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);padding:7px 14px;border-radius:7px;font-size:0.73rem;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;}
+.btn-ghost:hover{background:rgba(255,255,255,0.14);color:#fff;}
+.api-bar{background:var(--indigo-mid);border-top:1px solid rgba(255,255,255,0.08);padding:10px 28px;display:none;}
+.api-bar.open{display:block;}
+.api-inner{max-width:1160px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.api-bar input{flex:1;min-width:200px;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:6px;font-family:'Outfit',monospace;font-size:0.79rem;color:#fff;outline:none;}
+.api-bar input:focus{border-color:var(--teal);}
+.api-bar input::placeholder{color:rgba(255,255,255,0.25);}
+.btn-teal{padding:8px 18px;background:var(--teal);color:#fff;border:none;border-radius:6px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;}
+.btn-teal:hover{background:var(--teal-dim);}
+.api-note{font-size:0.69rem;color:rgba(255,255,255,0.35);}
+
+/* PAGES */
+.page{display:none;}.page.active{display:block;}
+
+/* PAGE 1 */
+.sel{max-width:1160px;margin:0 auto;padding:36px 28px 100px;}
+.sel-hero{text-align:center;margin-bottom:32px;}
+.sel-hero h1{font-size:2.1rem;font-weight:800;color:var(--indigo);line-height:1.1;margin-bottom:10px;letter-spacing:-0.02em;}
+.sel-hero h1 em{font-style:normal;color:var(--teal);}
+.sel-hero p{font-size:0.93rem;color:var(--text-dim);max-width:500px;margin:0 auto;line-height:1.65;font-weight:400;}
+
+/* REGIONS */
+.region-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:28px;}
+.r-chip{padding:8px 18px;border-radius:999px;border:2px solid var(--border);background:var(--white);font-size:0.79rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.18s;user-select:none;}
+.r-chip.on{border-color:var(--indigo);background:var(--indigo);color:#fff;}
+.r-chip:hover:not(.on){border-color:var(--indigo);color:var(--indigo);}
+
+/* SECTION HEADS */
+.sec-head{font-size:0.64rem;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin:24px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.sec-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sec-note{font-size:0.69rem;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;margin-left:auto;}
+
+/* SUBJECT ROWS — HL/SL */
+.subj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px;margin-bottom:4px;}
+.subj-row{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:8px;transition:border-color 0.15s;}
+.subj-row.any-on{border-color:rgba(0,0,0,0.15);}
+.subj-name{flex:1;font-size:0.79rem;font-weight:500;color:var(--text-dim);line-height:1.3;}
+.lvl-btns{display:flex;gap:4px;flex-shrink:0;}
+.lvl-btn{padding:4px 9px;border:1.5px solid var(--border);border-radius:5px;font-size:0.68rem;font-weight:800;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.15s;color:var(--muted);background:var(--white);letter-spacing:0.02em;user-select:none;}
+.lvl-btn:hover{opacity:0.85;}
+.lvl-btn.on{color:#fff;border-color:transparent;}
+.sl-only-tag{font-size:0.62rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:3px 7px;background:var(--bg);border-radius:4px;border:1px solid var(--border);}
+
+/* INTEREST CHIPS */
+.chip-wrap{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:4px;}
+.chip{padding:7px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:0.8rem;font-weight:500;color:var(--text-dim);cursor:pointer;transition:all 0.16s;user-select:none;}
+.chip:hover{border-color:var(--indigo);color:var(--indigo);transform:translateY(-1px);}
+.chip.on{border-color:transparent;color:#fff;font-weight:700;transform:translateY(-1px);box-shadow:0 4px 12px rgba(30,27,75,0.18);background:#6366f1;}
+.chip.core.on{background:var(--indigo);}
+
+/* EE INPUT */
+.ee-input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:'Outfit',sans-serif;font-size:0.84rem;color:var(--text);background:var(--white);outline:none;transition:border-color 0.2s;}
+.ee-input:focus{border-color:var(--teal);}
+.ee-input::placeholder{color:var(--muted);}
+
+/* STICKY ACTION */
+.action-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(248,250,255,0.96);backdrop-filter:blur(14px);border-top:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;z-index:100;}
+.sel-count{font-size:0.84rem;color:var(--text-dim);font-weight:500;}
+.sel-count strong{color:var(--indigo);}
+.btn-go{padding:12px 30px;background:var(--indigo);color:#fff;border:none;border-radius:9px;font-size:0.9rem;font-weight:800;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;letter-spacing:-0.01em;}
+.btn-go:hover:not(:disabled){background:var(--indigo-mid);transform:translateY(-1px);}
+.btn-go:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+
+/* PAGE 2 */
+.res{max-width:1160px;margin:0 auto;padding:28px 28px 60px;}
+.res-hdr{display:flex;align-items:center;gap:12px;margin-bottom:28px;flex-wrap:wrap;}
+.btn-back{padding:8px 16px;background:var(--white);border:1.5px solid var(--border);color:var(--text-dim);border-radius:7px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;}
+.btn-back:hover{border-color:var(--indigo);color:var(--indigo);}
+.res-title{font-size:1.4rem;font-weight:800;color:var(--indigo);letter-spacing:-0.01em;}
+.r-badges{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;}
+.rb{padding:4px 10px;border-radius:5px;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;}
+.rb-uk{background:#dbeafe;color:#1d4ed8;}.rb-au{background:#fef3c7;color:#92400e;}
+.rb-eu{background:#ede9fe;color:#5b21b6;}.rb-us{background:#dcfce7;color:#166534;}
+
+/* SUBJECT BLOCK */
+.subj-block{margin-bottom:44px;}
+.subj-block-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.subj-pill{padding:5px 16px;border-radius:999px;font-size:0.8rem;font-weight:700;color:#fff;}
+.subj-meta{font-size:0.78rem;color:var(--muted);}
+
+/* LOADING */
+.subj-loading{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:28px;display:flex;align-items:center;gap:14px;}
+.mini-spin{width:22px;height:22px;border:3px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.subj-loading p{font-size:0.84rem;color:var(--text-dim);font-weight:500;}
+
+/* CAREERS GRID */
+.careers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;}
+
+/* CAREER CARD */
+.cc{background:var(--white);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;transition:all 0.2s;box-shadow:0 2px 10px rgba(30,27,75,0.05);}
+.cc:hover{box-shadow:0 8px 32px rgba(30,27,75,0.12);transform:translateY(-2px);}
+.cc-top{padding:18px 20px 12px;}
+.cc-badges{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+.badge{padding:3px 9px;border-radius:5px;font-size:0.64rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;}
+.b-excellent{background:var(--green-soft);color:var(--green);}
+.b-good{background:var(--teal-soft);color:var(--teal-dim);}
+.b-moderate{background:var(--amber-soft);color:var(--amber);}
+.b-varies{background:var(--indigo-soft);color:var(--indigo);}
+.b-nodeg{background:var(--amber-soft);color:var(--amber);}
+.b-deg{background:var(--indigo-soft);color:var(--indigo);}
+.cc-title{font-size:1rem;font-weight:800;color:var(--indigo);margin-bottom:6px;line-height:1.2;}
+.cc-desc{font-size:0.79rem;color:var(--text-dim);line-height:1.6;font-weight:400;}
+
+/* CARD TABS */
+.cc-tabs{display:flex;border-top:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.cc-tab{flex:1;min-width:68px;padding:8px 4px;font-size:0.6rem;font-weight:700;text-align:center;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.15s;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;user-select:none;}
+.cc-tab.on{color:var(--indigo);border-bottom-color:var(--indigo);}
+.cc-pan{display:none;padding:14px 18px 16px;}
+.cc-pan.on{display:block;}
+
+/* PANEL CONTENT */
+.deg-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.deg-tag{padding:4px 10px;background:var(--indigo-soft);color:var(--indigo);border-radius:5px;font-size:0.72rem;font-weight:600;}
+.ib-req{font-size:0.76rem;color:var(--text-dim);line-height:1.6;background:var(--bg);border-radius:6px;padding:8px 12px;margin-top:8px;}
+.ib-req strong{color:var(--indigo);font-weight:700;}
+.deg-note{font-size:0.76rem;color:var(--text-dim);line-height:1.6;margin-bottom:8px;}
+
+.regtbl{width:100%;border-collapse:collapse;font-size:0.74rem;}
+.regtbl th{text-align:left;padding:5px 7px;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);border-bottom:1px solid var(--border);}
+.regtbl td{padding:7px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.45;color:var(--text-dim);}
+.regtbl tr:last-child td{border-bottom:none;}
+.emp-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
+.emp-chip{padding:3px 8px;background:var(--bg);border:1px solid var(--border);border-radius:4px;font-size:0.68rem;color:var(--text-dim);}
+
+.sal-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.sal-box{background:var(--bg);border-radius:7px;padding:9px 11px;border:1px solid var(--border);}
+.sal-rgn{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:3px;}
+.sal-e{font-size:0.8rem;font-weight:700;color:var(--text);}
+.sal-m{font-size:0.7rem;color:var(--teal-dim);font-weight:500;margin-top:2px;}
+
+.app-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:6px;font-size:0.73rem;font-weight:700;margin-bottom:8px;}
+.app-yes{background:var(--green-soft);color:var(--green);}
+.app-no{background:var(--border);color:var(--muted);}
+.app-note{font-size:0.76rem;color:var(--text-dim);line-height:1.6;}
+
+.now-items{display:flex;flex-direction:column;gap:8px;}
+.now-item{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;background:var(--bg);border-radius:7px;border:1px solid var(--border);}
+.now-icon{font-size:1rem;flex-shrink:0;margin-top:1px;}
+.now-text{font-size:0.78rem;color:var(--text-dim);line-height:1.55;font-weight:400;}
+.now-text strong{color:var(--indigo);font-weight:700;}
+
+.day-text{font-size:0.8rem;color:var(--text-dim);line-height:1.7;font-weight:400;font-style:italic;border-left:3px solid var(--teal);padding-left:12px;}
+.day-honest{margin-top:12px;font-size:0.76rem;color:var(--text-dim);line-height:1.6;background:var(--amber-soft);border-radius:6px;padding:9px 12px;}
+.day-honest strong{color:var(--amber);display:block;margin-bottom:3px;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.06em;}
+
+.err-box{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:14px 18px;font-size:0.81rem;color:var(--red);font-weight:500;margin-bottom:12px;}
+
+.exp-bar{margin-top:32px;background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.exp-bar p{font-size:0.8rem;color:var(--text-dim);}
+.btn-exp{padding:9px 20px;background:var(--indigo);color:#fff;border:none;border-radius:7px;font-size:0.77rem;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;}
+.btn-exp:hover{background:var(--indigo-mid);}
+
+@media(max-width:640px){
+  .hdr-inner,.sel,.res,.action-bar,.api-bar{padding-left:16px;padding-right:16px;}
+  .sel-hero h1{font-size:1.7rem;}
+  .careers-grid,.subj-grid{grid-template-columns:1fr;}
+  .sal-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <div class="hdr-inner">
+      <div class="hdr-brand">
+        <div class="hdr-icon">🧭</div>
+        <div>
+          <div class="hdr-name">What Could I Do?</div>
+          <div class="hdr-sub">IBDP Career Explorer · UK · Australia · Europe · USA</div>
+        </div>
+      </div>
+      <button class="btn-ghost" onclick="toggleApi()">⚙ API Key</button>
+    </div>
+  </div>
+  <div class="api-bar" id="api-bar">
+    <div class="api-inner">
+      <input type="password" id="api-key" placeholder="sk-ant-api03-…" autocomplete="off"/>
+      <button class="btn-teal" onclick="saveKey()">Save</button>
+      <span class="api-note">Saved in your browser only</span>
+    </div>
+  </div>
+</header>
+
+<!-- PAGE 1: SELECTION -->
+<div class="page active" id="pg-sel">
+<div class="sel">
+
+  <div class="sel-hero">
+    <h1>What could <em>you</em> do?</h1>
+    <p>Select your IB subjects at HL or SL, add your interests, and we'll map out real careers across four countries.</p>
+  </div>
+
+  <!-- REGIONS -->
+  <div class="region-row">
+    <div class="r-chip on" data-r="uk" onclick="toggleR(this)">🇬🇧 UK</div>
+    <div class="r-chip on" data-r="au" onclick="toggleR(this)">🇦🇺 Australia</div>
+    <div class="r-chip on" data-r="eu" onclick="toggleR(this)">🇪🇺 Europe</div>
+    <div class="r-chip on" data-r="us" onclick="toggleR(this)">🇺🇸 USA</div>
+  </div>
+
+  <!-- GROUP 1 -->
+  <div class="sec-head"><div class="sec-dot" style="background:#7c3aed"></div>Group 1 — Studies in Language & Literature</div>
+  <div class="subj-grid" id="sg1"></div>
+
+  <!-- GROUP 2 -->
+  <div class="sec-head"><div class="sec-dot" style="background:#0284c7"></div>Group 2 — Language Acquisition<span class="sec-note">B = prior knowledge · Ab initio = beginners</span></div>
+  <div class="subj-grid" id="sg2"></div>
+
+  <!-- GROUP 3 -->
+  <div class="sec-head"><div class="sec-dot" style="background:#d97706"></div>Group 3 — Individuals & Societies</div>
+  <div class="subj-grid" id="sg3"></div>
+
+  <!-- GROUP 4 -->
+  <div class="sec-head"><div class="sec-dot" style="background:#059669"></div>Group 4 — Sciences</div>
+  <div class="subj-grid" id="sg4"></div>
+
+  <!-- GROUP 5 -->
+  <div class="sec-head"><div class="sec-dot" style="background:#0d9488"></div>Group 5 — Mathematics</div>
+  <div class="subj-grid" id="sg5"></div>
+
+  <!-- GROUP 6 -->
+  <div class="sec-head"><div class="sec-dot" style="background:#db2777"></div>Group 6 — The Arts</div>
+  <div class="subj-grid" id="sg6"></div>
+
+  <!-- IB CORE -->
+  <div class="sec-head"><div class="sec-dot" style="background:#1e1b4b"></div>IB Core — TOK, EE & CAS<span class="sec-note">These shape your pathways more than you think</span></div>
+  <div class="chip-wrap">
+    <div class="chip core" onclick="togChip(this)">TOK — love debating ideas & truth</div>
+    <div class="chip core" onclick="togChip(this)">TOK — interested in ethics & AI</div>
+    <div class="chip core" onclick="togChip(this)">CAS — sport / fitness / coaching</div>
+    <div class="chip core" onclick="togChip(this)">CAS — creative projects (music/art/film)</div>
+    <div class="chip core" onclick="togChip(this)">CAS — volunteering / community work</div>
+    <div class="chip core" onclick="togChip(this)">CAS — entrepreneurship / side projects</div>
+    <div class="chip core" onclick="togChip(this)">CAS — environmental / sustainability</div>
+    <div class="chip core" onclick="togChip(this)">CAS — leadership / organising events</div>
+  </div>
+  <div style="margin-top:10px;">
+    <input class="ee-input" id="ee-input" type="text" placeholder="Extended Essay subject/topic — e.g. 'Economics: price elasticity of street food in Jakarta' (or leave blank)"/>
+  </div>
+
+  <!-- INTERESTS -->
+  <div class="sec-head"><div class="sec-dot" style="background:#6366f1"></div>What are you actually into?<span class="sec-note">Be honest — this shapes results the most</span></div>
+  <div class="chip-wrap">
+    <div class="chip" onclick="togChip(this)">Gaming</div>
+    <div class="chip" onclick="togChip(this)">Building / coding things</div>
+    <div class="chip" onclick="togChip(this)">Making money / investing</div>
+    <div class="chip" onclick="togChip(this)">Sport — playing competitively</div>
+    <div class="chip" onclick="togChip(this)">Sport — strategy & analytics</div>
+    <div class="chip" onclick="togChip(this)">Music — listening</div>
+    <div class="chip" onclick="togChip(this)">Music — making / producing</div>
+    <div class="chip" onclick="togChip(this)">Social media & content creation</div>
+    <div class="chip" onclick="togChip(this)">Films & storytelling</div>
+    <div class="chip" onclick="togChip(this)">Travel & different cultures</div>
+    <div class="chip" onclick="togChip(this)">How things work (machines / engineering)</div>
+    <div class="chip" onclick="togChip(this)">People & what makes them tick</div>
+    <div class="chip" onclick="togChip(this)">Arguing & winning debates</div>
+    <div class="chip" onclick="togChip(this)">Design & how things look</div>
+    <div class="chip" onclick="togChip(this)">The environment & climate</div>
+    <div class="chip" onclick="togChip(this)">Entrepreneurship / starting things</div>
+    <div class="chip" onclick="togChip(this)">Helping people / making a difference</div>
+    <div class="chip" onclick="togChip(this)">Science & discovery</div>
+    <div class="chip" onclick="togChip(this)">Fashion & style</div>
+    <div class="chip" onclick="togChip(this)">Food / cooking</div>
+    <div class="chip" onclick="togChip(this)">Cars / motorsport</div>
+    <div class="chip" onclick="togChip(this)">Politics & how the world works</div>
+    <div class="chip" onclick="togChip(this)">Medicine & health</div>
+    <div class="chip" onclick="togChip(this)">Law & justice</div>
+    <div class="chip" onclick="togChip(this)">Architecture & cities</div>
+  </div>
+
+  <div style="height:72px"></div>
+</div>
+
+<!-- STICKY BAR -->
+<div class="action-bar">
+  <div class="sel-count" id="sel-count">Select subjects or interests above to get started</div>
+  <button class="btn-go" id="go-btn" onclick="runExplore()" disabled>Explore My Pathways →</button>
+</div>
+</div>
+
+<!-- PAGE 2: RESULTS -->
+<div class="page" id="pg-res">
+<div class="res">
+  <div class="res-hdr">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="res-title">Your Career Pathways</div>
+    <div class="r-badges" id="r-badges"></div>
+  </div>
+  <div id="res-content"></div>
+  <div class="exp-bar" id="exp-bar" style="display:none">
+    <p>Save and share with a parent or advisor</p>
+    <button class="btn-exp" onclick="doExport()">⬇ Export as Text</button>
+  </div>
+</div>
+</div>
+
+<script>
+// ===== SUBJECT DATA =====
+// Each subject: [name, hasHL (true = HL+SL, false = SL only)]
+const GROUPS = {
+  g1: { color:'#7c3aed', subjects: [
+    ['English A: Literature', true],
+    ['English A: Language & Literature', true],
+    ['English A: Literature & Performance', false],
+    ['Language A: Literature (Other)', true],
+    ['Language A: Language & Lit (Other)', true],
+  ]},
+  g2: { color:'#0284c7', subjects: [
+    ['French B', true], ['French Ab Initio', false],
+    ['Spanish B', true], ['Spanish Ab Initio', false],
+    ['German B', true], ['German Ab Initio', false],
+    ['Mandarin B', true], ['Mandarin Ab Initio', false],
+    ['Japanese B', true], ['Japanese Ab Initio', false],
+    ['Arabic B', true], ['Arabic Ab Initio', false],
+    ['Italian B', true], ['Italian Ab Initio', false],
+    ['Korean B', true], ['Korean Ab Initio', false],
+    ['Russian B', true], ['Russian Ab Initio', false],
+    ['Portuguese B', true], ['Portuguese Ab Initio', false],
+    ['Indonesian B', true], ['Indonesian Ab Initio', false],
+    ['Dutch B', true],
+    ['Latin (Classical Languages)', true],
+    ['Classical Greek', true],
+  ]},
+  g3: { color:'#d97706', subjects: [
+    ['Business Management', true],
+    ['Economics', true],
+    ['Geography', true],
+    ['Global Politics', true],
+    ['History', true],
+    ['Philosophy', true],
+    ['Psychology', true],
+    ['Social & Cultural Anthropology', true],
+    ['Digital Society', true],
+    ['Environmental Systems & Societies', false],
+    ['World Religions', false],
+  ]},
+  g4: { color:'#059669', subjects: [
+    ['Biology', true],
+    ['Chemistry', true],
+    ['Physics', true],
+    ['Computer Science', true],
+    ['Design Technology', true],
+    ['Sports, Exercise & Health Science', true],
+    ['Environmental Systems & Societies', false],
+  ]},
+  g5: { color:'#0d9488', subjects: [
+    ['Maths: Analysis & Approaches', true],
+    ['Maths: Applications & Interpretation', true],
+  ]},
+  g6: { color:'#db2777', subjects: [
+    ['Dance', true],
+    ['Film', true],
+    ['Music', true],
+    ['Theatre', true],
+    ['Visual Arts', true],
+    ['Literature & Performance', false],
+  ]},
+};
+
+// ===== STATE =====
+let selItems   = [];
+let selRegions = ['uk','au','eu','us'];
+let allResults = [];
+
+// ===== INIT: BUILD SUBJECT ROWS =====
+window.addEventListener('load', () => {
+  const k = localStorage.getItem('cpe3_key');
+  if (k) document.getElementById('api-key').value = k;
+
+  Object.entries(GROUPS).forEach(([gid, gdata]) => {
+    const el = document.getElementById('s' + gid);
+    if (!el) return;
+    gdata.subjects.forEach(([name, hasHL]) => {
+      el.insertAdjacentHTML('beforeend', buildRow(name, hasHL, gdata.color, gid));
+    });
+  });
+});
+
+function buildRow(name, hasHL, color, gid) {
+  const safeName = name.replace(/'/g,'&#39;');
+  const hlBtn = hasHL
+    ? `<button class="lvl-btn" data-name="${safeName} HL" data-color="${color}" onclick="togLevel(this)">HL</button>`
+    : '';
+  const slBtn = `<button class="lvl-btn" data-name="${safeName} SL" data-color="${color}" onclick="togLevel(this)">SL</button>`;
+  const slTag = !hasHL ? `<span class="sl-only-tag">SL only</span>` : '';
+  return `<div class="subj-row" id="row-${gid}-${name.replace(/\W+/g,'_')}">
+    <span class="subj-name">${name}</span>
+    <div class="lvl-btns">${hlBtn}${slBtn}${slTag}</div>
+  </div>`;
+}
+
+// ===== API =====
+function toggleApi() { document.getElementById('api-bar').classList.toggle('open'); }
+function saveKey() {
+  const k = document.getElementById('api-key').value.trim();
+  if (k) { localStorage.setItem('cpe3_key', k); document.getElementById('api-bar').classList.remove('open'); }
+}
+function getKey() { return document.getElementById('api-key').value.trim() || localStorage.getItem('cpe3_key') || ''; }
+
+// ===== TOGGLES =====
+function toggleR(el) {
+  el.classList.toggle('on');
+  const r = el.dataset.r;
+  selRegions = selRegions.includes(r) ? selRegions.filter(x => x !== r) : [...selRegions, r];
+}
+
+function togLevel(btn) {
+  const name  = btn.dataset.name;
+  const color = btn.dataset.color;
+  btn.classList.toggle('on');
+  if (btn.classList.contains('on')) {
+    // HL = solid, SL = lighter tint
+    if (btn.textContent === 'HL') {
+      btn.style.background = color;
+      btn.style.borderColor = color;
+      btn.style.color = '#fff';
+    } else {
+      btn.style.background = color + '22';
+      btn.style.borderColor = color;
+      btn.style.color = color;
+    }
+    if (!selItems.includes(name)) selItems.push(name);
+    btn.closest('.subj-row').classList.add('any-on');
+  } else {
+    btn.style.background = '';
+    btn.style.borderColor = '';
+    btn.style.color = '';
+    selItems = selItems.filter(s => s !== name);
+    // remove any-on if no buttons selected in this row
+    const row = btn.closest('.subj-row');
+    if (!row.querySelector('.lvl-btn.on')) row.classList.remove('any-on');
+  }
+  updateBtn();
+}
+
+function togChip(el) {
+  el.classList.toggle('on');
+  const name = el.textContent.trim();
+  if (el.classList.contains('on')) { if (!selItems.includes(name)) selItems.push(name); }
+  else selItems = selItems.filter(s => s !== name);
+  updateBtn();
+}
+
+function updateBtn() {
+  const ok = selItems.length > 0 && selRegions.length > 0;
+  document.getElementById('go-btn').disabled = !ok;
+  const sc = document.getElementById('sel-count');
+  sc.innerHTML = selItems.length === 0
+    ? 'Select subjects or interests above to get started'
+    : `<strong>${selItems.length}</strong> thing${selItems.length > 1 ? 's' : ''} selected`;
+}
+
+// ===== COLOUR LOOKUP (for result pills) =====
+function itemColor(name) {
+  const n = name.toLowerCase();
+  if (['english a','language a','lit & perf'].some(x => n.includes(x))) return '#7c3aed';
+  if (['french','spanish','german','mandarin','japanese','arabic','italian','korean','russian','portuguese','indonesian','dutch','latin','greek'].some(x => n.startsWith(x))) return '#0284c7';
+  if (['business','economics','geography','global','history','philosophy','psychology','social','digital','world religions','environmental systems'].some(x => n.startsWith(x))) return '#d97706';
+  if (['biology','chemistry','physics','computer science','design tech','sports','environmental sys'].some(x => n.startsWith(x))) return '#059669';
+  if (['maths'].some(x => n.startsWith(x))) return '#0d9488';
+  if (['dance','film','music','theatre','visual arts','literature & perf'].some(x => n.startsWith(x))) return '#db2777';
+  if (['tok','cas','cas'].some(x => n.startsWith(x))) return '#1e1b4b';
+  return '#6366f1';
+}
+
+// ===== SYSTEM PROMPT =====
+function buildPrompt(item) {
+  const rNames = {uk:'United Kingdom',au:'Australia',eu:'Europe (Germany, Netherlands, France — English-taught where possible)',us:'United States'};
+  const regions = selRegions.map(r => rNames[r]).join(', ');
+  const ee = document.getElementById('ee-input').value.trim();
+  const context = [
+    `All the student's selected subjects/interests: ${selItems.join(', ')}`,
+    ee ? `Extended Essay: ${ee}` : '',
+  ].filter(Boolean).join('. ');
+
+  return `You are an honest, direct careers advisor for a 17-year-old international student completing the IBDP at British School Jakarta, Indonesia. He is researching universities across: ${regions}.
+
+Generate career pathways for: "${item}"
+Full student context: ${context}
+
+Write for a 17-year-old boy — direct, honest, specific. Not corporate. Not generic. Mention if a career is actually competitive or oversubscribed. Be real.
+
+If the input is a specific IB subject with HL or SL, factor in the level — HL subjects open more doors for competitive degrees.
+
+Return ONLY valid compact JSON (no markdown, no extra text):
+{"subject":"${item}","careers":[{"title":"","description":"2 honest sentences. Real, not corporate.","outlook":"Excellent|Good|Moderate|Varies","needs_degree":true,"degree_note":"If false, explain the alternative route. If true, empty string.","ib_requirements":"Specific IB points/subject requirements","degrees":["","",""],"day_in_life":"3 vivid honest sentences — a typical Tuesday. Not glamourised.","honest_bit":"The catch, the reality, or the trade-off most people don't say.","do_it_now":[{"icon":"🎯","text":"Something specific to do THIS WEEK"},{"icon":"📚","text":"A specific resource, channel, book, or community"},{"icon":"💡","text":"One thing to add to CAS or EE to signal interest to universities"}],"regions":{"uk":{"universities":["","",""],"employers":["","",""],"salary_entry":"£X–£Y","salary_mid":"£X–£Y"},"au":{"universities":["","",""],"employers":["","",""],"salary_entry":"A$X–A$Y","salary_mid":"A$X–A$Y"},"eu":{"universities":["","",""],"employers":["","",""],"salary_entry":"€X–€Y","salary_mid":"€X–€Y"},"us":{"universities":["","",""],"employers":["","",""],"salary_entry":"$X–$Y","salary_mid":"$X–$Y"}},"apprenticeship_uk":false,"apprenticeship_note":""}]}
+
+Only include region keys for: ${selRegions.join(',')}. Remove other region keys entirely.`;
+}
+
+// ===== EXPLORE: SEQUENTIAL =====
+async function runExplore() {
+  if (!getKey()) { alert('Add your Anthropic API key via the ⚙ button.'); return; }
+  if (!selItems.length || !selRegions.length) return;
+
+  document.getElementById('pg-sel').classList.remove('active');
+  document.getElementById('pg-res').classList.add('active');
+  document.getElementById('res-content').innerHTML = '';
+  document.getElementById('exp-bar').style.display = 'none';
+  allResults = [];
+  window.scrollTo(0, 0);
+
+  const rLabel = {uk:'🇬🇧 UK',au:'🇦🇺 Australia',eu:'🇪🇺 Europe',us:'🇺🇸 USA'};
+  document.getElementById('r-badges').innerHTML = selRegions.map(r => `<span class="rb rb-${r}">${rLabel[r]}</span>`).join('');
+
+  for (const item of selItems) {
+    const pid = 'ph' + Math.random().toString(36).slice(2, 9);
+    document.getElementById('res-content').insertAdjacentHTML('beforeend', `
+      <div class="subj-block" id="${pid}">
+        <div class="subj-block-hdr">
+          <span class="subj-pill" style="background:${itemColor(item)}">${esc(item)}</span>
+          <span class="subj-meta" id="meta-${pid}">Finding pathways…</span>
+        </div>
+        <div class="subj-loading" id="ld-${pid}">
+          <div class="mini-spin"></div>
+          <p>Researching <strong>${esc(item)}</strong>…</p>
+        </div>
+      </div>`);
+
+    try {
+      const result = await callApi(item);
+      allResults.push(result);
+      renderBlock(pid, result);
+    } catch(e) {
+      document.getElementById(`ld-${pid}`).outerHTML = `<div class="err-box">Could not load pathways for ${esc(item)}: ${esc(e.message)}</div>`;
+      document.getElementById(`meta-${pid}`).textContent = 'Error';
+    }
+  }
+  document.getElementById('exp-bar').style.display = 'flex';
+}
+
+async function callApi(item) {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': getKey(),
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 4000,
+      system: buildPrompt(item),
+      messages: [{ role: 'user', content: `Generate the 3 career pathways for: ${item}` }]
+    })
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error?.message || `API error ${resp.status}`);
+  }
+  const data  = await resp.json();
+  const raw   = data.content.map(b => b.text || '').join('');
+  const clean = raw.replace(/```json|```/g, '').trim();
+  return repairAndParse(clean);
+}
+
+// ===== RENDER =====
+const RNAMES = {uk:'🇬🇧 UK',au:'🇦🇺 Australia',eu:'🇪🇺 Europe',us:'🇺🇸 USA'};
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function renderBlock(pid, data) {
+  document.getElementById(`meta-${pid}`).textContent = `${(data.careers||[]).length} pathways found`;
+  let html = '<div class="careers-grid">';
+  (data.careers || []).forEach(c => { html += renderCard(c); });
+  html += '</div>';
+  document.getElementById(`ld-${pid}`).outerHTML = html;
+}
+
+function renderCard(c) {
+  const uid = 'u' + Math.random().toString(36).slice(2, 9);
+  const oMap = {'Excellent':'b-excellent','Good':'b-good','Moderate':'b-moderate'};
+  const oClass = oMap[c.outlook] || 'b-varies';
+  const degBadge = c.needs_degree === false
+    ? '<span class="badge b-nodeg">🎓 No degree needed</span>'
+    : '<span class="badge b-deg">🎓 Degree route</span>';
+
+  const degsHtml = `
+    <div class="deg-tags">${(c.degrees||[]).map(d=>`<span class="deg-tag">${esc(d)}</span>`).join('')}</div>
+    ${c.degree_note?`<div class="deg-note">${esc(c.degree_note)}</div>`:''}
+    <div class="ib-req"><strong>IB requirements:</strong> ${esc(c.ib_requirements)}</div>`;
+
+  let unisHtml = `<table class="regtbl"><thead><tr><th>Region</th><th>Universities</th><th>Employers</th></tr></thead><tbody>`;
+  selRegions.forEach(r => {
+    const rd = c.regions?.[r];
+    if (!rd?.universities) return;
+    unisHtml += `<tr>
+      <td style="font-weight:700;color:var(--indigo);white-space:nowrap">${RNAMES[r]}</td>
+      <td style="font-size:0.72rem">${(rd.universities||[]).map(u=>`<div>• ${esc(u)}</div>`).join('')}</td>
+      <td><div class="emp-chips">${(rd.employers||[]).map(e=>`<span class="emp-chip">${esc(e)}</span>`).join('')}</div></td>
+    </tr>`;
+  });
+  unisHtml += `</tbody></table>`;
+
+  let salHtml = `<div class="sal-grid">`;
+  selRegions.forEach(r => {
+    const rd = c.regions?.[r];
+    if (!rd) return;
+    salHtml += `<div class="sal-box">
+      <div class="sal-rgn">${RNAMES[r]}</div>
+      <div class="sal-e">Start: ${esc(rd.salary_entry||'—')}</div>
+      <div class="sal-m">Later: ${esc(rd.salary_mid||'—')}</div>
+    </div>`;
+  });
+  salHtml += `</div>`;
+
+  const hasApp = c.apprenticeship_uk === true;
+  const appHtml = selRegions.includes('uk')
+    ? `<span class="app-badge ${hasApp?'app-yes':'app-no'}">${hasApp?'✓ UK Degree Apprenticeship available':'✗ No UK degree apprenticeship'}</span>
+       ${c.apprenticeship_note?`<div class="app-note">${esc(c.apprenticeship_note)}</div>`:''}`
+    : `<div class="app-note" style="color:var(--muted)">UK not selected.</div>`;
+
+  const dayHtml = `
+    <div class="day-text">${esc(c.day_in_life)}</div>
+    ${c.honest_bit?`<div class="day-honest"><strong>⚠ The honest bit</strong>${esc(c.honest_bit)}</div>`:''}`;
+
+  const nowHtml = `<div class="now-items">
+    ${(c.do_it_now||[]).map(n=>`<div class="now-item"><div class="now-icon">${n.icon||'→'}</div><div class="now-text">${esc(n.text)}</div></div>`).join('')}
+  </div>`;
+
+  return `
+  <div class="cc">
+    <div class="cc-top">
+      <div class="cc-badges">
+        <span class="badge ${oClass}">Outlook: ${esc(c.outlook)}</span>
+        ${degBadge}
+      </div>
+      <div class="cc-title">${esc(c.title)}</div>
+      <div class="cc-desc">${esc(c.description)}</div>
+    </div>
+    <div class="cc-tabs">
+      <div class="cc-tab on" onclick="tab(this,'${uid}','deg')">Degrees</div>
+      <div class="cc-tab"    onclick="tab(this,'${uid}','uni')">Unis</div>
+      <div class="cc-tab"    onclick="tab(this,'${uid}','sal')">Salary</div>
+      <div class="cc-tab"    onclick="tab(this,'${uid}','app')">Apprentice</div>
+      <div class="cc-tab"    onclick="tab(this,'${uid}','day')">Day in life</div>
+      <div class="cc-tab"    onclick="tab(this,'${uid}','now')">Do it now</div>
+    </div>
+    <div class="cc-pan on" id="${uid}-deg">${degsHtml}</div>
+    <div class="cc-pan"    id="${uid}-uni">${unisHtml}</div>
+    <div class="cc-pan"    id="${uid}-sal">${salHtml}</div>
+    <div class="cc-pan"    id="${uid}-app">${appHtml}</div>
+    <div class="cc-pan"    id="${uid}-day">${dayHtml}</div>
+    <div class="cc-pan"    id="${uid}-now">${nowHtml}</div>
+  </div>`;
+}
+
+function tab(el, uid, pan) {
+  el.closest('.cc').querySelectorAll('.cc-tab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  el.closest('.cc').querySelectorAll('.cc-pan').forEach(p => p.classList.remove('on'));
+  document.getElementById(`${uid}-${pan}`)?.classList.add('on');
+}
+
+function goBack() {
+  document.getElementById('pg-res').classList.remove('active');
+  document.getElementById('pg-sel').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ===== JSON REPAIR =====
+// Handles truncated responses by closing open structures and salvaging complete careers
+function repairAndParse(raw) {
+  // First try clean parse
+  try { return JSON.parse(raw); } catch(e) {}
+
+  // Try to salvage by closing open JSON structures
+  let s = raw;
+
+  // Find how many complete career objects we have by counting closing braces
+  // Strategy: trim to last complete career object, then close the parent structures
+  const repaired = closeJSON(s);
+  try { return JSON.parse(repaired); } catch(e2) {
+    // Last resort — try to extract just the subject name and whatever careers parsed cleanly
+    const subjectMatch = s.match(/"subject"\s*:\s*"([^"]+)"/);
+    const subject = subjectMatch ? subjectMatch[1] : 'Unknown';
+
+    // Extract complete career blocks — each starts with {"title": and ends with a complete }
+    const careers = extractCareers(s);
+    if (careers.length > 0) {
+      return { subject, careers };
+    }
+    throw new Error('Response was too long and could not be recovered. Try selecting fewer regions or contact support.');
+  }
+}
+
+function closeJSON(s) {
+  // Remove trailing incomplete strings/values
+  // Find the last complete top-level array item by working backwards from the last }
+  // Count open brackets and braces to figure out what needs closing
+  let depth = 0;
+  let inStr  = false;
+  let escape = false;
+  let lastSafePos = 0;
+
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (escape) { escape = false; continue; }
+    if (c === '\\' && inStr) { escape = true; continue; }
+    if (c === '"') { inStr = !inStr; continue; }
+    if (inStr) continue;
+    if (c === '{' || c === '[') { depth++; }
+    if (c === '}' || c === ']') {
+      depth--;
+      if (depth <= 2) lastSafePos = i; // inside careers array but career obj closed
+    }
+  }
+
+  // Trim to last safe position and close remaining structures
+  let trimmed = s.substring(0, lastSafePos + 1);
+
+  // Count remaining open structures
+  let opens = 0;
+  inStr = false; escape = false;
+  for (const c of trimmed) {
+    if (escape) { escape = false; continue; }
+    if (c === '\\' && inStr) { escape = true; continue; }
+    if (c === '"') { inStr = !inStr; continue; }
+    if (inStr) continue;
+    if (c === '{' || c === '[') opens++;
+    if (c === '}' || c === ']') opens--;
+  }
+
+  // Close careers array and root object
+  if (trimmed.endsWith(',')) trimmed = trimmed.slice(0, -1);
+  trimmed += ']}'.repeat(Math.max(0, opens));
+  return trimmed;
+}
+
+function extractCareers(s) {
+  const careers = [];
+  // Find each title to locate career starts
+  const titleRe = /"title"\s*:\s*"([^"]+)"/g;
+  let m;
+  const positions = [];
+  while ((m = titleRe.exec(s)) !== null) positions.push(m.index);
+
+  for (let i = 0; i < positions.length; i++) {
+    // Find the { before this title
+    let start = positions[i];
+    while (start > 0 && s[start] !== '{') start--;
+    // End is start of next career or end of string
+    const end = i + 1 < positions.length ? positions[i + 1] : s.length;
+    let chunk = s.substring(start, end).trim();
+    if (chunk.endsWith(',')) chunk = chunk.slice(0, -1);
+    // Try to close and parse
+    try {
+      const fixed = closeJSON(chunk);
+      const parsed = JSON.parse(fixed);
+      if (parsed.title) careers.push(parsed);
+    } catch(e) { /* skip incomplete career */ }
+  }
+  return careers;
+}
+
+function doExport() {
+  let txt = 'CAREER PATHWAY EXPLORER — IBDP\n';
+  txt += `Regions: ${selRegions.map(r=>({uk:'UK',au:'Australia',eu:'Europe',us:'USA'})[r]).join(', ')}\n${'='.repeat(56)}\n\n`;
+  for (const d of allResults) {
+    txt += `[ ${d.subject} ]\n${'─'.repeat(40)}\n`;
+    for (const c of (d.careers||[])) {
+      txt += `\n${c.title} — Outlook: ${c.outlook} | ${c.needs_degree===false?'No degree needed':'Degree route'}\n`;
+      txt += `${c.description}\nIB requirements: ${c.ib_requirements}\nDegrees: ${(c.degrees||[]).join(', ')}\n`;
+      selRegions.forEach(r => {
+        const rd = c.regions?.[r]; if (!rd) return;
+        const rn = {uk:'UK',au:'Australia',eu:'Europe',us:'USA'}[r];
+        txt += `${rn} unis: ${(rd.universities||[]).join(', ')}\n${rn} salary: ${rd.salary_entry} → ${rd.salary_mid}\n`;
+      });
+      txt += `Day in life: ${c.day_in_life}\nThe honest bit: ${c.honest_bit}\n`;
+      if (c.do_it_now) c.do_it_now.forEach(n => txt += `  ${n.icon} ${n.text}\n`);
+      txt += '\n';
+    }
+    txt += '\n';
+  }
+  const blob = new Blob([txt], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'my_career_pathways.txt';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+</script>
+</body>
+</html>

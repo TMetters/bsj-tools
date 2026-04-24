@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DP Biology IA Workspace — BSJ</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0d2240;--blue:#0099d6;--red:#cc0011;
+  --navy-light:#1a3660;--blue-light:#e6f6fc;--blue-mid:#b3e3f5;
+  --bg:#ffffff;--bg2:#f7f8fa;--bg3:#eef0f4;
+  --border:#e0e3ea;--border2:#c8ccd6;
+  --text:#1a1d23;--text2:#4a5062;--text3:#8a91a4;
+  --success-bg:#edfaf3;--success-t:#1a7a4a;--success-b:#a3d9bc;
+  --warn-bg:#fff8e6;--warn-t:#8a6000;--warn-b:#f0d080;
+  --info-bg:#e6f6fc;--info-t:#0066a0;--info-b:#80cbea;
+  --danger-bg:#fdecea;--danger-t:#a32020;--danger-b:#f0a0a0;
+  --radius:8px;--radius-lg:12px;--radius-xl:16px;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 12px rgba(0,0,0,0.04);
+}
+html,body{height:100%;font-family:'Montserrat',sans-serif;color:var(--text);background:var(--bg3);font-size:14px;line-height:1.5}
+
+/* LAYOUT */
+.app{display:flex;height:100vh;max-height:100vh;overflow:hidden}
+.sidebar{width:220px;min-width:220px;background:var(--navy);display:flex;flex-direction:column;overflow:hidden}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+
+/* SIDEBAR */
+.sidebar-header{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.sidebar-logo{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.sidebar-logo-mark{width:28px;height:28px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0}
+.sidebar-brand{font-size:12px;font-weight:600;color:#fff;letter-spacing:0.02em}
+.sidebar-sub{font-size:11px;color:rgba(255,255,255,0.45);margin-top:1px}
+.sidebar-project{font-size:11px;color:rgba(255,255,255,0.6);margin-top:8px;padding:6px 8px;background:rgba(255,255,255,0.07);border-radius:6px;font-style:italic;min-height:28px;line-height:1.4}
+.nav-scroll{flex:1;overflow-y:auto;padding:8px 0}
+.nav-section{padding:4px 0 2px}
+.nav-label{font-size:9px;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;padding:8px 16px 3px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:7px 16px;cursor:pointer;transition:background 0.12s;position:relative}
+.nav-item:hover{background:rgba(255,255,255,0.07)}
+.nav-item.active{background:rgba(0,153,214,0.25)}
+.nav-item.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);border-radius:0 2px 2px 0}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;transition:background 0.2s}
+.nav-dot.done{background:#3ecf8e}
+.nav-dot.active{background:var(--blue)}
+.nav-item-label{font-size:12px;color:rgba(255,255,255,0.7);line-height:1.3;flex:1}
+.nav-item.active .nav-item-label{color:#fff}
+.ct-tag{font-size:9px;padding:1px 5px;border-radius:3px;flex-shrink:0;font-weight:600}
+.ct-D{background:rgba(0,153,214,0.25);color:#7dd4f0}
+.ct-DA{background:rgba(240,159,39,0.25);color:#f0c060}
+.ct-C{background:rgba(62,207,142,0.25);color:#7addb0}
+.ct-E{background:rgba(255,100,100,0.25);color:#ff9090}
+.sidebar-footer{padding:12px 14px;border-top:1px solid rgba(255,255,255,0.08)}
+.progress-label{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:5px}
+.progress-track{height:3px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--blue);border-radius:2px;transition:width 0.4s ease}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;gap:10px;padding:10px 20px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0}
+.topbar-section{font-size:15px;font-weight:600;color:var(--navy);flex:1}
+.wc-pill{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--bg2);color:var(--text3);border:1px solid var(--border)}
+.wc-pill.warn{background:var(--warn-bg);color:var(--warn-t);border-color:var(--warn-b)}
+.wc-pill.over{background:var(--danger-bg);color:var(--danger-t);border-color:var(--danger-b)}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--bg);cursor:pointer;font-size:12px;font-family:'Montserrat',sans-serif;color:var(--text2);font-weight:500;transition:all 0.12s;line-height:1}
+.btn:hover{background:var(--bg2);border-color:var(--text3)}
+.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-primary:hover{background:#007ab5;border-color:#007ab5}
+.btn-navy{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn-navy:hover{background:var(--navy-light)}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn-xs{padding:2px 7px;font-size:10px}
+.btn-danger{border-color:var(--danger-b);color:var(--danger-t)}
+.btn-danger:hover{background:var(--danger-bg)}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:24px}
+.content-inner{max-width:720px;margin:0 auto}
+
+/* WIZARD */
+.wizard-steps{display:flex;gap:0;margin-bottom:24px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border)}
+.wstep{flex:1;padding:9px 6px;text-align:center;font-size:10px;font-weight:600;letter-spacing:0.03em;color:var(--text3);background:var(--bg2);border-right:1px solid var(--border);transition:all 0.2s}
+.wstep:last-child{border-right:none}
+.wstep.done{background:var(--success-bg);color:var(--success-t)}
+.wstep.active{background:var(--navy);color:#fff}
+.wizard-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-xl);padding:24px;box-shadow:var(--shadow)}
+.wizard-q{font-size:16px;font-weight:600;color:var(--navy);margin-bottom:5px}
+.wizard-hint{font-size:12px;color:var(--text3);margin-bottom:18px;line-height:1.6}
+.wiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.wiz-count{font-size:11px;color:var(--text3)}
+
+/* FORMS */
+.form-group{margin-bottom:14px}
+.form-label{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:0.04em}
+.form-input{width:100%;padding:8px 11px;border:1px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;font-family:'Montserrat',sans-serif;transition:border-color 0.15s}
+.form-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,153,214,0.1)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+textarea.form-input{resize:vertical;line-height:1.6}
+
+/* SCAFFOLD / SCAFFOLD FILL */
+.scaffold{background:var(--info-bg);border:1px solid var(--info-b);border-radius:var(--radius);padding:11px 13px;margin-bottom:14px;font-size:12px;color:var(--info-t);line-height:1.7}
+.scaffold em{background:rgba(0,153,214,0.15);padding:0 3px;border-radius:3px;font-style:normal;font-weight:600}
+.scaffold strong{font-weight:600}
+
+/* GUIDANCE */
+.guidance-btn{font-size:11px;color:var(--info-t);background:none;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:500;padding:0;display:flex;align-items:center;gap:4px}
+.guidance-panel{background:var(--info-bg);border:1px solid var(--info-b);border-radius:var(--radius);padding:13px 15px;margin:10px 0;font-size:12px;color:var(--info-t);line-height:1.7}
+.guidance-panel strong{font-weight:600;display:block;margin-bottom:4px}
+
+/* SECTION HEADER */
+.section-header{margin-bottom:18px}
+.section-title{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.section-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.04em}
+.badge-D{background:var(--info-bg);color:var(--info-t)}
+.badge-DA{background:var(--warn-bg);color:var(--warn-t)}
+.badge-C{background:var(--success-bg);color:var(--success-t)}
+.badge-E{background:var(--danger-bg);color:var(--danger-t)}
+.badge-none{background:var(--bg2);color:var(--text3)}
+.wc-info{font-size:11px;color:var(--text3)}
+.divider{border:none;border-top:1px solid var(--border);margin:20px 0}
+
+/* EDITOR */
+.editor{width:100%;padding:12px 14px;border:1px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;font-family:'Source Serif 4','Georgia',serif;line-height:1.8;resize:vertical;min-height:140px;transition:border-color 0.15s}
+.editor:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,153,214,0.08)}
+
+/* TABLES */
+.table-wrap{overflow-x:auto;margin-bottom:12px;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+table.dt{border-collapse:collapse;width:100%;min-width:100%;font-size:12px}
+table.dt th{padding:8px 10px;background:var(--bg2);border-bottom:1px solid var(--border);border-right:1px solid var(--border);font-weight:600;font-size:10px;letter-spacing:0.04em;color:var(--text2);text-align:center;white-space:nowrap}
+table.dt th:last-child{border-right:none}
+table.dt th.iv{background:#dbeeff;color:#005a9e}
+table.dt th.dv{background:#fff3d0;color:#7a5800}
+table.dt th.calc{background:#dff5e8;color:#1a6a40}
+table.dt td{padding:6px 8px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);text-align:center}
+table.dt td:last-child{border-right:none}
+table.dt tr:last-child td{border-bottom:none}
+table.dt td input{border:none;background:transparent;text-align:center;width:65px;font-size:12px;color:var(--text);font-family:'Montserrat',sans-serif}
+table.dt td input:focus{outline:none;background:var(--blue-light);border-radius:3px}
+table.dt td.calc-cell{background:var(--bg2);font-size:11px;color:var(--success-t);font-weight:600}
+table.dt tr:hover td{background:rgba(0,153,214,0.03)}
+
+/* STATS */
+.stat-q-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin-bottom:10px}
+.stat-q-label{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:9px}
+.stat-options{display:flex;gap:7px;flex-wrap:wrap}
+.stat-opt{padding:5px 12px;border:1px solid var(--border2);border-radius:20px;font-size:12px;cursor:pointer;background:var(--bg);color:var(--text2);transition:all 0.15s;font-family:'Montserrat',sans-serif;font-weight:500}
+.stat-opt:hover{border-color:var(--blue);color:var(--info-t)}
+.stat-opt.sel{background:var(--navy);color:#fff;border-color:var(--navy)}
+.stat-result-box{background:var(--success-bg);border:1px solid var(--success-b);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.stat-result-test{font-size:14px;font-weight:700;color:var(--success-t);margin-bottom:5px}
+.stat-result-why{font-size:12px;color:var(--success-t);line-height:1.6;opacity:0.85}
+.anova-warn{background:var(--warn-bg);border:1px solid var(--warn-b);border-radius:var(--radius);padding:11px 13px;font-size:12px;color:var(--warn-t);line-height:1.6;margin-top:10px}
+
+/* PVALUE */
+.pvalue-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.pvalue-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.pvalue-input{width:100px;padding:7px 10px;border:1px solid var(--border2);border-radius:var(--radius);font-size:13px;text-align:center;font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text)}
+.pvalue-interp{background:var(--info-bg);border:1px solid var(--info-b);border-radius:var(--radius);padding:12px 14px;font-size:12px;color:var(--info-t);line-height:1.7}
+.pvalue-interp em{font-weight:600;font-style:normal}
+
+/* BIBLIOGRAPHY */
+.bib-entry{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:11px 13px;display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.bib-text{flex:1;font-size:12px;line-height:1.7;color:var(--text2)}
+.bib-text em{font-style:italic}
+.bib-text strong{font-weight:600;font-style:normal;color:var(--text)}
+.orphan-badge{font-size:9px;padding:2px 7px;background:var(--warn-bg);color:var(--warn-t);border:1px solid var(--warn-b);border-radius:3px;white-space:nowrap;flex-shrink:0;align-self:center;font-weight:600}
+.bib-form-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-top:14px;box-shadow:var(--shadow)}
+.source-tabs{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap}
+.source-tab{padding:4px 11px;border:1px solid var(--border2);border-radius:20px;font-size:11px;cursor:pointer;background:var(--bg2);color:var(--text3);font-family:'Montserrat',sans-serif;font-weight:500}
+.source-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* DASHBOARD */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.dash-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow)}
+.dash-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);margin-bottom:6px}
+.dash-value{font-size:26px;font-weight:700;color:var(--navy)}
+.dash-value.warn{color:var(--warn-t)}
+.dash-value.over{color:var(--danger-t)}
+.dash-sub{font-size:12px;color:var(--text3);font-weight:400}
+.crit-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.crit-name{font-size:11px;font-weight:600;color:var(--text2);width:100px;flex-shrink:0}
+.crit-track{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.crit-fill{height:100%;border-radius:3px;transition:width 0.5s ease}
+.crit-pct{font-size:11px;color:var(--text3);width:32px;text-align:right;flex-shrink:0}
+.milestone-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
+.milestone-item:last-child{border-bottom:none}
+.m-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.m-date{font-size:10px;color:var(--text3);width:65px;flex-shrink:0;font-weight:600}
+
+/* TABS */
+.tab-bar{display:flex;border-bottom:1px solid var(--border);margin-bottom:18px;gap:0}
+.tab{padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s;letter-spacing:0.02em}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--navy);border-bottom-color:var(--blue)}
+
+/* VAR TABLE */
+.var-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px}
+.var-tbl th{padding:7px 10px;background:var(--bg2);border:1px solid var(--border);font-weight:600;font-size:10px;color:var(--text3);text-align:left;letter-spacing:0.04em}
+.var-tbl td{padding:5px 8px;border:1px solid var(--border)}
+.var-tbl td input{width:100%;border:none;background:transparent;font-size:12px;color:var(--text);font-family:'Montserrat',sans-serif;padding:2px}
+.var-tbl td input:focus{outline:none;background:var(--blue-light);border-radius:3px}
+.var-tbl tr:nth-child(even) td{background:var(--bg2)}
+
+/* COMPLETE */
+.complete-check{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:12px;font-weight:500;color:var(--text2)}
+.complete-check input{cursor:pointer;width:15px;height:15px;accent-color:var(--blue)}
+.nomenc-warn{font-size:11px;color:var(--warn-t);background:var(--warn-bg);border:1px solid var(--warn-b);border-radius:4px;padding:4px 9px;display:inline-block;margin-top:4px;font-weight:500}
+
+/* COMPLETE SECTION */
+.section-complete-wrap{margin-top:20px}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* INTRO SPLASH */
+.splash{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 80px);text-align:center;padding:40px 20px}
+.splash-logo{width:56px;height:56px;background:var(--navy);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#fff;margin:0 auto 20px;box-shadow:var(--shadow)}
+.splash-logo span{color:var(--blue)}
+.splash h1{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.splash p{font-size:14px;color:var(--text3);max-width:420px;line-height:1.7;margin-bottom:28px}
+.splash-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:460px;margin-bottom:28px;text-align:left}
+.splash-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:13px 15px;box-shadow:var(--shadow)}
+.splash-card-title{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.04em}
+.splash-card-text{font-size:11px;color:var(--text3);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-mark">B</div>
+        <div>
+          <div class="sidebar-brand">BSJ Biology</div>
+          <div class="sidebar-sub">DP Internal Assessment</div>
+        </div>
+      </div>
+      <div class="sidebar-project" id="sb-project">Start the Design Wizard to begin</div>
+    </div>
+    <div class="nav-scroll">
+      <div class="nav-section">
+        <div class="nav-label">Setup</div>
+        <div class="nav-item" data-s="wizard" onclick="go('wizard')">
+          <div class="nav-dot" id="nd-wizard"></div>
+          <span class="nav-item-label">Design wizard</span>
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Design criterion</div>
+        <div class="nav-item" data-s="rq" onclick="go('rq')">
+          <div class="nav-dot" id="nd-rq"></div>
+          <span class="nav-item-label">Research question</span>
+          <span class="ct-tag ct-D">D</span>
+        </div>
+        <div class="nav-item" data-s="bg" onclick="go('bg')">
+          <div class="nav-dot" id="nd-bg"></div>
+          <span class="nav-item-label">Background</span>
+          <span class="ct-tag ct-D">D</span>
+        </div>
+        <div class="nav-item" data-s="vm" onclick="go('vm')">
+          <div class="nav-dot" id="nd-vm"></div>
+          <span class="nav-item-label">Variables & method</span>
+          <span class="ct-tag ct-D">D</span>
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Data Analysis criterion</div>
+        <div class="nav-item" data-s="raw" onclick="go('raw')">
+          <div class="nav-dot" id="nd-raw"></div>
+          <span class="nav-item-label">Raw data</span>
+          <span class="ct-tag ct-DA">DA</span>
+        </div>
+        <div class="nav-item" data-s="proc" onclick="go('proc')">
+          <div class="nav-dot" id="nd-proc"></div>
+          <span class="nav-item-label">Processed data & stats</span>
+          <span class="ct-tag ct-DA">DA</span>
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Report sections</div>
+        <div class="nav-item" data-s="conc" onclick="go('conc')">
+          <div class="nav-dot" id="nd-conc"></div>
+          <span class="nav-item-label">Conclusion</span>
+          <span class="ct-tag ct-C">C</span>
+        </div>
+        <div class="nav-item" data-s="eval" onclick="go('eval')">
+          <div class="nav-dot" id="nd-eval"></div>
+          <span class="nav-item-label">Evaluation</span>
+          <span class="ct-tag ct-E">E</span>
+        </div>
+        <div class="nav-item" data-s="bib" onclick="go('bib')">
+          <div class="nav-dot" id="nd-bib"></div>
+          <span class="nav-item-label">Bibliography (MLA 8)</span>
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Overview</div>
+        <div class="nav-item" data-s="dash" onclick="go('dash')">
+          <div class="nav-dot" id="nd-dash"></div>
+          <span class="nav-item-label">Progress dashboard</span>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="progress-label"><span>Overall progress</span><span id="prog-pct">0%</span></div>
+      <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-section" id="topbar-title">Welcome</span>
+      <span class="wc-pill" id="wc-pill" style="display:none">0 words</span>
+      <button class="btn btn-sm" onclick="go('dash')">Dashboard</button>
+      <button class="btn btn-sm btn-navy" onclick="alert('PDF export available in full version')">Export PDF</button>
+    </div>
+    <div class="content" id="content">
+      <div class="content-inner" id="content-inner"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const S = {
+  section: 'wizard',
+  wizStep: 0,
+  wizDone: false,
+  p: {
+    iv:'', ivUnit:'', dv:'', dvUnit:'',
+    hypothesis:'', h0:'',
+    controlled:['Temperature','pH','Volume of solution'],
+    n:5, level:'SL'
+  },
+  done:{},
+  wc:{},
+  texts:{},
+  rawData: [[1,'','','','',''],[2,'','','','',''],[3,'','','','',''],[4,'','','','',''],[5,'','','','','']],
+  procData: [
+    {g:'Group A',t:['','','','','']},
+    {g:'Group B',t:['','','','','']},
+    {g:'Group C',t:['','','','','']},
+  ],
+  statQ:[null,null,null],
+  pval:'',
+  statTab:'calc',
+  bib:[
+    {id:1,type:'journal',author:'Smith, Jane',title:'Effect of light intensity on photosynthesis rate',journal:'Journal of Plant Biology',vol:'12',no:'3',year:'2023',pp:'45–58',cited:true},
+    {id:2,type:'website',author:'Jones, A.',title:'Chlorophyll and light absorption',site:'Biology Online',date:'15 Jan 2024',url:'biologyon.com/chloro',cited:false},
+  ],
+  showBibForm:false,
+  bibType:'journal',
+  guidance:{},
+};
+
+function words(t){return t.trim()===''?0:t.trim().split(/\s+/).length;}
+
+function stats(arr){
+  const n=arr.map(v=>parseFloat(v)).filter(v=>!isNaN(v));
+  if(n.length<2)return{mean:'—',sd:'—'};
+  const m=n.reduce((a,b)=>a+b,0)/n.length;
+  const sd=Math.sqrt(n.reduce((a,b)=>a+(b-m)**2,0)/(n.length-1));
+  return{mean:m.toFixed(3),sd:sd.toFixed(3)};
+}
+
+function recommend(){
+  const [g,d,n]=S.statQ;
+  if(g===null||d===null||n===null)return null;
+  if(d==='cat')return{t:'Chi-squared test (χ²)',w:'Categorical data requires a chi-squared test to examine frequency distributions.'};
+  if(d==='rank')return{t:'Spearman rank correlation',w:'Ranked/ordinal data requires a non-parametric correlation test.'};
+  if(g==='2c')return{t:'Pearson correlation coefficient',w:'Two continuous variables — use Pearson correlation to measure the strength of relationship.'};
+  if(d==='cont'){
+    if(n==='yes'){
+      if(g==='2')return{t:'Independent samples t-test',w:'Two groups, continuous data, n ≥ 5 and approximately normal — the t-test is appropriate.'};
+      return{t:'One-way ANOVA → Tukey\'s HSD',w:'Three or more groups, continuous normal data. ANOVA tests for any difference; Tukey\'s HSD identifies which groups differ.'};
+    } else {
+      if(g==='2')return{t:'Mann-Whitney U test',w:'Two groups but non-normal distribution or n < 5 — use this non-parametric alternative to the t-test.'};
+      return{t:'Kruskal-Wallis test',w:'Three or more groups, non-normal data — non-parametric equivalent of ANOVA.'};
+    }
+  }
+  return null;
+}
+
+function pPrompt(){
+  const iv=S.p.iv||'your independent variable';
+  const dv=S.p.dv||'your dependent variable';
+  const p=parseFloat(S.pval);
+  if(isNaN(p))return null;
+  if(p<0.05)return`Your result is statistically significant (p < 0.05). In your own words, explain what this means for the effect of <em>${iv}</em> on <em>${dv}</em> in your experiment. Does this support or contradict your hypothesis? Why might this result have occurred biologically?`;
+  return`Your result is not statistically significant (p ≥ 0.05). Does this mean there is no effect of <em>${iv}</em> on <em>${dv}</em>, or could other factors explain this? Consider your sample size, variability in the data, and potential flaws in the experimental design.`;
+}
+
+function mla(e){
+  if(e.type==='journal')return`${e.author}. "${e.title}." <em>${e.journal}</em>, vol. ${e.vol}, no. ${e.no}, ${e.year}, pp. ${e.pp}.`;
+  if(e.type==='website')return`${e.author}. "${e.title}." <em>${e.site}</em>, ${e.date}, ${e.url}.`;
+  return`${e.author}. <em>${e.title}</em>. ${e.year}.`;
+}
+
+function guidance(key, html){
+  const open=S.guidance[key];
+  return`<button class="guidance-btn" onclick="S.guidance['${key}']=!S.guidance['${key}'];render()">
+    ${open?'▾':'▸'} ${open?'Hide guidance':'What IB is looking for'}
+  </button>${open?`<div class="guidance-panel">${html}</div>`:''}`;
+}
+
+function completeCheck(key){
+  return`<div class="section-complete-wrap"><label class="complete-check">
+    <input type="checkbox" ${S.done[key]?'checked':''} onchange="S.done['${key}']=this.checked;updateProgress()">
+    Mark this section as ready for teacher review
+  </label></div>`;
+}
+
+function go(s){
+  S.section=s;
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.toggle('active',el.dataset.s===s));
+  const titles={wizard:'Design wizard',rq:'Research question & hypothesis',bg:'Background information',vm:'Variables & methodology',raw:'Raw data collection',proc:'Data processing & statistics',conc:'Conclusion',eval:'Evaluation',bib:'Bibliography (MLA 8)',dash:'Progress dashboard'};
+  document.getElementById('topbar-title').textContent=titles[s]||s;
+  const showWC=['rq','bg','vm','conc','eval'].includes(s);
+  const wp=document.getElementById('wc-pill');
+  wp.style.display=showWC?'':'none';
+  if(showWC)updateWCPill();
+  render();
+}
+
+function updateWCPill(){
+  const total=Object.values(S.wc).reduce((a,b)=>a+b,0);
+  const p=document.getElementById('wc-pill');
+  if(!p)return;
+  p.textContent=`${total} / 3,000 words`;
+  p.className='wc-pill'+(total>3200?' over':total>2800?' warn':'');
+}
+
+function updateProgress(){
+  const secs=['rq','bg','vm','raw','proc','conc','eval','bib'];
+  const done=secs.filter(s=>S.done[s]).length;
+  const pct=Math.round(done/secs.length*100);
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-fill').style.width=pct+'%';
+  secs.forEach(s=>{
+    const d=document.getElementById('nd-'+s);
+    if(d)d.className='nav-dot'+(S.done[s]?' done':S.section===s?' active':'');
+  });
+  const wd=document.getElementById('nd-wizard');
+  if(wd)wd.className='nav-dot'+(S.wizDone?' done':S.section==='wizard'?' active':'');
+}
+
+function render(){
+  const ci=document.getElementById('content-inner');
+  const map={wizard:renderWiz,rq:renderRQ,bg:renderBG,vm:renderVM,raw:renderRaw,proc:renderProc,conc:renderConc,eval:renderEval,bib:renderBib,dash:renderDash};
+  ci.innerHTML=(map[S.section]||renderWiz)();
+  updateProgress();
+}
+
+function renderWiz(){
+  const steps=['Topic & RQ','Variables','Hypothesis','Methodology','Data plan'];
+  const w=S.wizStep;
+  const p=S.p;
+  const stepHtml=steps.map((s,i)=>`<div class="wstep ${i<w?'done':i===w?'active':''}">${s}</div>`).join('');
+
+  let body='';
+  if(w===0){
+    body=`<div class="wizard-q">What will you investigate?</div>
+    <div class="wizard-hint">Frame your investigation as: "What is the effect of [something you change] on [something you measure]?" Your answer must be specific, measurable, and safe to test.</div>
+    <div class="form-row">
+      <div class="form-group"><div class="form-label">Independent variable (what you change)</div>
+      <input class="form-input" value="${p.iv}" placeholder="e.g. light intensity" oninput="S.p.iv=this.value"></div>
+      <div class="form-group"><div class="form-label">Units</div>
+      <input class="form-input" value="${p.ivUnit}" placeholder="e.g. lux" oninput="S.p.ivUnit=this.value"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><div class="form-label">Dependent variable (what you measure)</div>
+      <input class="form-input" value="${p.dv}" placeholder="e.g. rate of photosynthesis" oninput="S.p.dv=this.value"></div>
+      <div class="form-group"><div class="form-label">Units</div>
+      <input class="form-input" value="${p.dvUnit}" placeholder="e.g. mm³ O₂/min" oninput="S.p.dvUnit=this.value"></div>
+    </div>
+    <div class="form-group"><div class="form-label">IB level</div>
+    <select class="form-input" style="width:100px" onchange="S.p.level=this.value">
+      <option ${p.level==='SL'?'selected':''}>SL</option><option ${p.level==='HL'?'selected':''}>HL</option>
+    </select></div>`;
+  } else if(w===1){
+    const rows=p.controlled.map((v,i)=>`<tr><td><input value="${v}" oninput="S.p.controlled[${i}]=this.value" placeholder="Variable name" style="width:100%"></td><td><input placeholder="Specific method of control" style="width:100%"></td></tr>`).join('');
+    body=`<div class="wizard-q">Define your controlled variables</div>
+    <div class="wizard-hint">Controlled variables must be kept constant throughout. List at least three and explain exactly how you will control each one.</div>
+    ${p.iv&&p.dv?`<div class="scaffold"><strong>IV:</strong> <em>${p.iv}</em> (${p.ivUnit||'?'}) → <strong>DV:</strong> <em>${p.dv}</em> (${p.dvUnit||'?'})</div>`:''}
+    <table class="var-tbl"><thead><tr><th>Controlled variable</th><th>Method of control</th></tr></thead><tbody>${rows}</tbody></table>
+    <button class="btn btn-sm" style="margin-top:8px" onclick="S.p.controlled.push('');render()">+ Add variable</button>
+    <div class="form-group" style="margin-top:16px"><div class="form-label">Sample size (n per group)</div>
+    <input class="form-input" type="number" value="${p.n}" min="1" style="width:90px" oninput="S.p.n=parseInt(this.value)||5">
+    ${p.n<5?'<div class="nomenc-warn">IB requires n ≥ 5 per group to use inferential statistics</div>':''}</div>`;
+  } else if(w===2){
+    body=`<div class="wizard-q">Write your hypotheses</div>
+    <div class="wizard-hint">A good hypothesis states the expected direction of effect and gives a biological reason. Both H₁ and H₀ must be stated.</div>
+    <div class="form-group"><div class="form-label">H₁ — Alternate hypothesis</div>
+    <textarea class="form-input" style="min-height:80px;font-family:'Source Serif 4',serif" oninput="S.p.hypothesis=this.value" placeholder="It is hypothesised that increasing ${p.iv||'[IV]'} will [increase/decrease] ${p.dv||'[DV]'} because [biological mechanism]...">${p.hypothesis}</textarea></div>
+    <div class="form-group"><div class="form-label">H₀ — Null hypothesis</div>
+    <textarea class="form-input" style="min-height:60px;font-family:'Source Serif 4',serif" oninput="S.p.h0=this.value" placeholder="There is no significant effect of ${p.iv||'[IV]'} on ${p.dv||'[DV]'}.">${p.h0}</textarea></div>`;
+  } else if(w===3){
+    body=`<div class="wizard-q">Plan your methodology</div>
+    <div class="wizard-hint">Your methodology must be detailed enough for another student to replicate exactly. Include materials, procedure, safety, and ethics.</div>
+    <div class="form-group"><div class="form-label">Materials (include quantities and specifications)</div>
+    <textarea class="form-input" style="min-height:80px" placeholder="e.g. Elodea sprigs (5 cm, 3 per trial), 250 mL beaker, LED lamp (adjustable 0–10,000 lux)..."></textarea></div>
+    <div class="form-group"><div class="form-label">Procedure (numbered steps)</div>
+    <textarea class="form-input" style="min-height:100px;font-family:'Source Serif 4',serif" placeholder="1. Set up the apparatus...\n2. Allow 5 minutes for equilibration...\n3. Record [DV] for 3 minutes..."></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><div class="form-label">Safety considerations</div>
+      <textarea class="form-input" style="min-height:70px" placeholder="Hazards, PPE required, precautions..."></textarea></div>
+      <div class="form-group"><div class="form-label">Ethical considerations</div>
+      <textarea class="form-input" style="min-height:70px" placeholder="Use of living organisms, environmental disposal..."></textarea></div>
+    </div>`;
+  } else if(w===4){
+    body=`<div class="wizard-q">Plan your data collection</div>
+    <div class="wizard-hint">Think about how your raw data table will be structured. The app will pre-fill column headers when you reach the Data section.</div>
+    <div class="scaffold"><strong>Your table will measure:</strong> <em>${p.dv||'[DV]'}</em> (${p.dvUnit||'units?'}) across ${p.n} trials per group of <em>${p.iv||'[IV]'}</em> (${p.ivUnit||'units?'})</div>
+    <div class="form-row">
+      <div class="form-group"><div class="form-label">Instrument uncertainty</div>
+      <input class="form-input" placeholder="e.g. ± 0.01 g"></div>
+      <div class="form-group"><div class="form-label">Number of IV groups</div>
+      <input class="form-input" type="number" value="3" min="2" max="8"></div>
+    </div>
+    <div style="background:var(--success-bg);border:1px solid var(--success-b);border-radius:var(--radius);padding:14px;font-size:13px;color:var(--success-t);line-height:1.7;margin-top:8px">
+      <strong>You're ready to start writing.</strong><br>Your wizard answers will pre-populate scaffolds throughout the workspace. Click <strong>Complete wizard</strong> to enter your IA workspace.
+    </div>`;
+  }
+
+  const isLast=w===4;
+  return `<div style="max-width:600px;margin:0 auto">
+  <div class="wizard-steps">${stepHtml}</div>
+  <div class="wizard-card">${body}
+  <div class="wiz-nav">
+    ${w>0?`<button class="btn" onclick="S.wizStep--;render()">← Back</button>`:'<span></span>'}
+    <span class="wiz-count">Step ${w+1} of ${steps.length}</span>
+    ${isLast
+      ?`<button class="btn btn-primary" onclick="finishWiz()">Complete wizard →</button>`
+      :`<button class="btn btn-primary" onclick="S.wizStep++;render()">Continue →</button>`}
+  </div></div></div>`;
+}
+
+function finishWiz(){
+  S.wizDone=true;
+  S.done.wizard=true;
+  const p=S.p;
+  document.getElementById('sb-project').textContent=
+    p.iv&&p.dv?`Effect of ${p.iv} on ${p.dv}`:'My IA project';
+  go('rq');
+}
+
+function renderRQ(){
+  const p=S.p;
+  const preRQ=p.iv&&p.dv?`What is the effect of ${p.iv} on ${p.dv}?`:'';
+  return `<div class="section-header">
+    <div class="section-title">Research question & hypothesis</div>
+    <div class="section-meta">
+      <span class="badge badge-D">Design</span>
+      <span class="wc-info">Recommended: 300–500 words</span>
+      ${guidance('rq',`<strong>Mark band 5–6:</strong> A focused, specific, and directly measurable research question. The hypothesis is biologically justified with reference to published theory, and states the expected direction of effect. Both H₀ and H₁ are explicitly stated.<br><br><strong>Common mistakes:</strong> Vague RQs ("How does light affect plants?"), missing H₀, hypothesis with no biological mechanism stated.`)}
+    </div>
+  </div>
+  ${p.iv&&p.dv?`<div class="scaffold">Your investigation: effect of <em>${p.iv}</em> on <em>${p.dv}</em> — make the research question specific, testable, and bounded.</div>`:''}
+  <div class="form-group"><div class="form-label">Research question</div>
+  <input class="form-input" value="${preRQ}" placeholder="What is the effect of … on … in …?" oninput="S.wc.rq=words(this.value);updateWCPill()"></div>
+  <div class="form-group"><div class="form-label">H₁ — Alternate hypothesis</div>
+  <textarea class="editor" oninput="S.p.hypothesis=this.value;S.wc.rqh=words(this.value);updateWCPill()">${p.hypothesis}</textarea></div>
+  <div class="form-group"><div class="form-label">H₀ — Null hypothesis</div>
+  <textarea class="editor" style="min-height:80px" placeholder="There is no significant effect of ${p.iv||'[IV]'} on ${p.dv||'[DV]'}." oninput="S.p.h0=this.value"></textarea></div>
+  <div class="divider"></div>${completeCheck('rq')}`;
+}
+
+function renderBG(){
+  const txt=S.texts.bg||'';
+  const hasBad=/\b[A-Z][a-z]+\s[A-Z][a-z]+\b/.test(txt);
+  return `<div class="section-header">
+    <div class="section-title">Background information</div>
+    <div class="section-meta">
+      <span class="badge badge-D">Design</span>
+      <span class="wc-info">Recommended: 400–600 words</span>
+      ${guidance('bg',`<strong>Mark band 5–6:</strong> Relevant, detailed biological theory drawn from credible sources. Directly links background science to your IV and DV. All sources cited in-text using MLA 8 format: (Author page) or (Author) for web.<br><br><strong>Binomial nomenclature:</strong> Write as <em>Genus species</em> (italicised, genus capitalised). Abbreviated form (e.g. <em>E. coli</em>) accepted after first full use.`)}
+    </div>
+  </div>
+  ${S.p.iv&&S.p.dv?`<div class="scaffold">Explain the biological theory behind why <em>${S.p.iv}</em> would affect <em>${S.p.dv}</em>. What is the mechanism? Cite all sources in-text.</div>`:''}
+  ${hasBad?'<div class="nomenc-warn">⚠ Possible binomial nomenclature issue — check genus is capitalised and species is lowercase, both italicised</div>':''}
+  <textarea class="editor" style="min-height:240px" placeholder="Provide relevant biological context and theory. Cite all external sources in-text (Author, page)..." oninput="S.texts.bg=this.value;S.wc.bg=words(this.value);updateWCPill();render()">${txt}</textarea>
+  <div style="font-size:11px;color:var(--text3);margin-top:5px">Insert citations using the bibliography section</div>
+  <div class="divider"></div>${completeCheck('bg')}`;
+}
+
+function renderVM(){
+  const p=S.p;
+  const rows=p.controlled.map((v,i)=>`<tr>
+    <td><input value="${v}" oninput="S.p.controlled[${i}]=this.value" style="width:100%"></td>
+    <td><input placeholder="Specific method" style="width:100%"></td>
+    <td><input placeholder="Biological reason" style="width:100%"></td>
+  </tr>`).join('');
+  return `<div class="section-header">
+    <div class="section-title">Variables & methodology</div>
+    <div class="section-meta">
+      <span class="badge badge-D">Design</span>
+      <span class="wc-info">Recommended: 400–700 words</span>
+      ${guidance('vm',`<strong>Mark band 5–6:</strong> All variables fully operationalised with units and ranges stated. Methodology clear enough to replicate without clarification. Safety, ethics, and sample size justified. ANOVA requires n ≥ 5 per group minimum.`)}
+    </div>
+  </div>
+  <div class="scaffold"><strong>IV:</strong> <em>${p.iv||'—'}</em> (${p.ivUnit||'?'}) &nbsp;·&nbsp; <strong>DV:</strong> <em>${p.dv||'—'}</em> (${p.dvUnit||'?'}) &nbsp;·&nbsp; <strong>n =</strong> ${p.n} per group</div>
+  <div class="form-group"><div class="form-label">Controlled variables, methods of control, and biological justification</div>
+  <table class="var-tbl"><thead><tr><th>Controlled variable</th><th>How controlled</th><th>Why it matters</th></tr></thead>
+  <tbody>${rows}</tbody></table>
+  <button class="btn btn-sm" style="margin-top:8px" onclick="S.p.controlled.push('');render()">+ Add variable</button></div>
+  <div class="form-group"><div class="form-label">Methodology</div>
+  <textarea class="editor" style="min-height:180px" placeholder="Numbered steps. Be specific enough that another researcher can replicate exactly..."></textarea></div>
+  <div class="divider"></div>${completeCheck('vm')}`;
+}
+
+function renderRaw(){
+  const p=S.p;
+  const ivL=p.iv||'IV'; const dvL=p.dv||'DV';
+  const rows=S.rawData.map((row,ri)=>`<tr>
+    <td style="font-size:11px;color:var(--text3);width:30px">${ri+1}</td>
+    <td style="color:var(--text2);font-size:12px;width:100px">${ivL} level ${ri+1}</td>
+    ${[1,2,3,4,5].map(ti=>`<td><input type="number" value="${row[ti]||''}" step="any" oninput="S.rawData[${ri}][${ti}]=this.value" placeholder="—"></td>`).join('')}
+  </tr>`).join('');
+  return `<div class="section-header">
+    <div class="section-title">Raw data collection</div>
+    <div class="section-meta">
+      <span class="badge badge-DA">Data Analysis</span>
+      ${guidance('raw',`<strong>Required:</strong> Raw data only — no calculated values. Column headers must include variable names and units. Include instrument uncertainty (e.g. ± 0.01 g) in the header. n ≥ 5 trials per group needed for STDEV.`)}
+    </div>
+  </div>
+  <div class="scaffold">Measuring <em>${dvL}</em> (${p.dvUnit||'units?'}) across 5 trials per group of <em>${ivL}</em> (${p.ivUnit||'units?'})</div>
+  <div class="table-wrap">
+    <table class="dt">
+      <thead><tr>
+        <th>#</th>
+        <th class="iv">${ivL} (${p.ivUnit||'?'})</th>
+        <th class="dv">Trial 1</th><th class="dv">Trial 2</th><th class="dv">Trial 3</th><th class="dv">Trial 4</th><th class="dv">Trial 5</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:10px">
+    <button class="btn btn-sm" onclick="S.rawData.push([S.rawData.length+1,'','','','','']);render()">+ Add row</button>
+    <button class="btn btn-sm btn-danger" onclick="if(S.rawData.length>1){S.rawData.pop();render()}">− Remove last</button>
+  </div>
+  <div style="font-size:11px;color:var(--text3)">Raw measurements only — means and STDEV go in the Processed Data section</div>
+  <div class="divider"></div>${completeCheck('raw')}`;
+}
+
+function renderProc(){
+  const p=S.p;
+  const ivL=p.iv||'Group'; const dvL=p.dv||'DV';
+  const procRows=S.procData.map((row,ri)=>{
+    const st=stats(row.t);
+    return `<tr>
+      <td><input value="${row.g}" oninput="S.procData[${ri}].g=this.value" style="width:80px"></td>
+      ${row.t.map((t,ti)=>`<td><input type="number" value="${t||''}" step="any" oninput="S.procData[${ri}].t[${ti}]=this.value;render()" style="width:55px"></td>`).join('')}
+      <td class="calc-cell">${st.mean}</td>
+      <td class="calc-cell">${st.sd}</td>
+    </tr>`;
+  }).join('');
+
+  const rec=recommend();
+  const isANOVA=rec&&rec.t.includes('ANOVA');
+  const pp=pPrompt();
+
+  return `<div class="section-header">
+    <div class="section-title">Data processing & statistics</div>
+    <div class="section-meta">
+      <span class="badge badge-DA">Data Analysis</span>
+      ${guidance('proc',`<strong>Mandatory:</strong> Mean and STDEV per group (calculated automatically below). Error bars on all graphs must be ±1 STDEV. Named inferential test with p-value and biological interpretation required. ANOVA → Tukey's HSD is mandatory if 3+ groups.`)}
+    </div>
+  </div>
+  <div class="tab-bar">
+    <div class="tab ${S.statTab==='calc'?'active':''}" onclick="S.statTab='calc';render()">Processed data table</div>
+    <div class="tab ${S.statTab==='stat'?'active':''}" onclick="S.statTab='stat';render()">Statistical test</div>
+    <div class="tab ${S.statTab==='pval'?'active':''}" onclick="S.statTab='pval';render()">p-value & interpretation</div>
+  </div>
+  ${S.statTab==='calc'?`
+  <div class="table-wrap">
+    <table class="dt">
+      <thead><tr>
+        <th class="iv">${ivL} group</th>
+        <th class="dv">T1</th><th class="dv">T2</th><th class="dv">T3</th><th class="dv">T4</th><th class="dv">T5</th>
+        <th class="calc">Mean ${dvL}</th><th class="calc">STDEV</th>
+      </tr></thead>
+      <tbody>${procRows}</tbody>
+    </table>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:12px">
+    <button class="btn btn-sm" onclick="S.procData.push({g:'Group '+(S.procData.length+1),t:['','','','','']});render()">+ Add group</button>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:13px;font-size:12px;color:var(--text2)">
+    <strong>Graph checklist</strong> — confirm before marking this section complete:<br>
+    <label style="display:flex;align-items:center;gap:7px;margin-top:9px;cursor:pointer">
+      <input type="checkbox" style="accent-color:var(--blue)"> Error bars on my graph reflect ±1 STDEV from the table above
+    </label>
+    <label style="display:flex;align-items:center;gap:7px;margin-top:6px;cursor:pointer">
+      <input type="checkbox" style="accent-color:var(--blue)"> X-axis label: <em>${ivL} (${p.ivUnit||'?'})</em>
+    </label>
+    <label style="display:flex;align-items:center;gap:7px;margin-top:6px;cursor:pointer">
+      <input type="checkbox" style="accent-color:var(--blue)"> Y-axis label: <em>${dvL} (${p.dvUnit||'?'})</em>
+    </label>
+    <label style="display:flex;align-items:center;gap:7px;margin-top:6px;cursor:pointer">
+      <input type="checkbox" style="accent-color:var(--blue)"> Graph has a descriptive title
+    </label>
+  </div>`
+  :S.statTab==='stat'?`
+  ${[
+    {q:'How many groups are you comparing?',opts:[{v:'2',l:'2 groups'},{v:'3+',l:'3 or more groups'},{v:'2c',l:'2 continuous variables (correlation)'}]},
+    {q:'What type of data did you collect?',opts:[{v:'cont',l:'Continuous (mass, rate, volume…)'},{v:'cat',l:'Categorical (presence/absence…)'},{v:'rank',l:'Ranked / ordinal'}]},
+    {q:'Are data normally distributed and n ≥ 5 per group?',opts:[{v:'yes',l:'Yes / likely yes'},{v:'no',l:'No / unsure (n < 5)'}]},
+  ].map((q,qi)=>`<div class="stat-q-card">
+    <div class="stat-q-label">${qi+1}. ${q.q}</div>
+    <div class="stat-options">${q.opts.map(o=>`<div class="stat-opt ${S.statQ[qi]===o.v?'sel':''}" onclick="S.statQ[${qi}]='${o.v}';render()">${o.l}</div>`).join('')}</div>
+  </div>`).join('')}
+  ${rec?`<div class="stat-result-box">
+    <div class="stat-result-test">Recommended: ${rec.t}</div>
+    <div class="stat-result-why">${rec.w}</div>
+    ${isANOVA?`<div class="anova-warn">ANOVA tells you that a significant difference exists somewhere — <strong>Tukey's HSD post-hoc test is required</strong> to identify which groups differ. This section cannot be marked complete without Tukey's HSD results recorded and interpreted.</div>`:''}
+  </div>`:'<div style="font-size:12px;color:var(--text3);padding:8px 0">Answer all three questions above to get a test recommendation.</div>'}`
+  :`<div class="pvalue-box">
+    <div class="form-label" style="margin-bottom:10px">Enter your p-value to generate a writing scaffold</div>
+    <div class="pvalue-row">
+      <input class="pvalue-input" type="number" step="0.001" min="0" max="1" placeholder="e.g. 0.032" value="${S.pval}" oninput="S.pval=this.value;render()">
+      <span style="font-size:12px;color:var(--text3)">Test: ${rec?rec.t:'(select test first)'}</span>
+    </div>
+    ${pp?`<div class="pvalue-interp">${pp}</div>`:'<div style="font-size:12px;color:var(--text3)">Enter a p-value above to see your personalised writing scaffold</div>'}
+  </div>
+  <textarea class="editor" style="min-height:130px;margin-top:12px" placeholder="Write your statistical interpretation here, using the scaffold above as a guide..."></textarea>`}
+  <div class="divider"></div>${completeCheck('proc')}`;
+}
+
+function renderConc(){
+  const p=S.p;
+  const iv=p.iv||'[IV]'; const dv=p.dv||'[DV]';
+  const sig=S.pval?parseFloat(S.pval)<0.05:'unknown';
+  return `<div class="section-header">
+    <div class="section-title">Conclusion</div>
+    <div class="section-meta">
+      <span class="badge badge-C">Conclusion</span>
+      <span class="wc-info">Recommended: 400–600 words</span>
+      ${guidance('conc',`<strong>Mark band 5–6:</strong> Explicitly links results to research question and hypothesis. References statistical result (test name + p-value) and interprets in biological context. Relates findings to published literature with in-text citations. Accepts or rejects H₀ with justification.`)}
+    </div>
+  </div>
+  <div class="scaffold">
+    Your investigation examined the effect of <em>${iv}</em> on <em>${dv}</em>.<br>
+    Your hypothesis predicted: <em>${p.hypothesis||'(from wizard)'}</em><br>
+    ${S.pval?`Your p-value = ${S.pval} — this is <strong>${typeof sig==='boolean'?(sig?'statistically significant (p < 0.05)':'not statistically significant (p ≥ 0.05)'):'unknown'}</strong>.`:'Refer to your p-value when discussing whether H₀ is accepted or rejected.'}<br>
+    Use the scaffold: mean ${dv} = ___, STDEV = ___, p = ___ — therefore H₀ is [accepted/rejected] because...
+  </div>
+  <textarea class="editor" style="min-height:250px" placeholder="Write your conclusion here. Required: state whether H₀ is accepted or rejected (with reference to your p-value); explain the biological significance; relate to published theory with in-text citations..." oninput="S.wc.conc=words(this.value);updateWCPill()"></textarea>
+  <div class="divider"></div>${completeCheck('conc')}`;
+}
+
+function renderEval(){
+  const p=S.p;
+  const ctrlList=p.controlled.filter(v=>v.trim());
+  return `<div class="section-header">
+    <div class="section-title">Evaluation</div>
+    <div class="section-meta">
+      <span class="badge badge-E">Evaluation</span>
+      <span class="wc-info">Recommended: 400–600 words</span>
+      ${guidance('eval',`<strong>Mark band 5–6:</strong> Specific, mechanistically explained limitations with feasible and specific improvements. Extension suggestions go beyond simply repeating with more samples. Generic limitations ("human error", "time constraints") are insufficient — explain the mechanism by which the limitation affected results.`)}
+    </div>
+  </div>
+  <div class="scaffold">Consider evaluating how well each controlled variable was maintained:
+  ${ctrlList.map(v=>`<br>· <em>${v}</em> — was it successfully controlled? What impact might any variation have had on ${p.dv||'[DV]'}?`).join('')}
+  </div>
+  <div class="form-group"><div class="form-label">Strengths of the investigation</div>
+  <textarea class="editor" style="min-height:80px" placeholder="What aspects of the design were strong? (e.g. large sample size, precise instrument choice, effective controls)"></textarea></div>
+  <div class="form-group"><div class="form-label">Limitations and improvements</div>
+  <table class="var-tbl"><thead><tr><th>#</th><th>Specific limitation</th><th>Biological impact on results</th><th>Specific improvement</th></tr></thead>
+  <tbody>${[1,2,3].map(i=>`<tr>
+    <td style="color:var(--text3);font-size:11px;width:22px;text-align:center">${i}</td>
+    <td><input placeholder="Specific to your experiment" style="width:100%"></td>
+    <td><input placeholder="Mechanistic explanation" style="width:100%"></td>
+    <td><input placeholder="Feasible, specific fix" style="width:100%"></td>
+  </tr>`).join('')}</tbody></table></div>
+  <div class="form-group"><div class="form-label">Extensions</div>
+  <textarea class="editor" style="min-height:80px" placeholder="How could the investigation be meaningfully extended? (not just 'increase sample size' — suggest a new variable, different organism, or alternative methodology)" oninput="S.wc.eval=words(this.value);updateWCPill()"></textarea></div>
+  <div class="divider"></div>${completeCheck('eval')}`;
+}
+
+function renderBib(){
+  const sorted=[...S.bib].sort((a,b)=>a.author.split(',')[0].trim().localeCompare(b.author.split(',')[0].trim()));
+  const orphans=S.bib.filter(e=>!e.cited);
+  return `<div class="section-header">
+    <div class="section-title">Bibliography (MLA 8)</div>
+    <div class="section-meta"><span class="badge badge-none">Required — not assessed</span></div>
+  </div>
+  ${orphans.length?`<div style="background:var(--warn-bg);border:1px solid var(--warn-b);border-radius:var(--radius);padding:11px 13px;font-size:12px;color:var(--warn-t);margin-bottom:14px;font-weight:500">
+    ${orphans.length} source${orphans.length>1?'s have':' has'} no in-text citation — fix before PDF export.</div>`:''}
+  <div style="margin-bottom:14px">
+    ${sorted.map(e=>`<div class="bib-entry">
+      <div class="bib-text">${mla(e)}</div>
+      ${!e.cited?'<span class="orphan-badge">No citation</span>':''}
+      <button class="btn btn-xs" onclick="alert('Citation text: ('+e.author.split(\\',\\')[0]+')')" title="Copy in-text citation">(${e.author.split(',')[0]})</button>
+    </div>`).join('')}
+  </div>
+  <button class="btn btn-sm" onclick="S.showBibForm=!S.showBibForm;render()">+ Add source</button>
+  ${S.showBibForm?`<div class="bib-form-card">
+    <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:12px">Add new source</div>
+    <div class="source-tabs">
+      ${['journal','website','book','book_chapter','documentary','interview'].map(t=>`<div class="source-tab ${S.bibType===t?'active':''}" onclick="S.bibType='${t}';render()">${t.replace('_',' ')}</div>`).join('')}
+    </div>
+    <div class="form-row">
+      <div class="form-group"><div class="form-label">Author (Last, First)</div><input class="form-input" placeholder="Smith, Jane"></div>
+      <div class="form-group"><div class="form-label">Year</div><input class="form-input" placeholder="2024" style="width:80px"></div>
+    </div>
+    <div class="form-group"><div class="form-label">${S.bibType==='website'?'Page title':'Article / chapter title'}</div><input class="form-input" placeholder="Title"></div>
+    ${S.bibType==='journal'?`
+    <div class="form-row">
+      <div class="form-group"><div class="form-label">Journal name</div><input class="form-input" placeholder="Journal of Plant Biology"></div>
+      <div class="form-group"><div class="form-label">Volume / Number</div><input class="form-input" placeholder="12 / 3"></div>
+    </div>
+    <div class="form-group"><div class="form-label">Pages</div><input class="form-input" style="width:120px" placeholder="45–58"></div>`
+    :S.bibType==='website'?`
+    <div class="form-group"><div class="form-label">Website name</div><input class="form-input" placeholder="Biology Online"></div>
+    <div class="form-row">
+      <div class="form-group"><div class="form-label">Access date</div><input class="form-input" placeholder="15 Jan 2024"></div>
+      <div class="form-group"><div class="form-label">URL</div><input class="form-input" placeholder="https://..."></div>
+    </div>`
+    :`<div class="form-group"><div class="form-label">Publisher</div><input class="form-input" placeholder="Publisher name"></div>`}
+    <div style="display:flex;gap:8px;margin-top:6px">
+      <button class="btn btn-primary btn-sm" onclick="S.showBibForm=false;render()">Add source</button>
+      <button class="btn btn-sm" onclick="S.showBibForm=false;render()">Cancel</button>
+    </div>
+  </div>`:''}
+  <div style="font-size:11px;color:var(--text3);margin-top:12px">Entries auto-sorted A–Z by first author's last name. Bibliography is excluded from the word count.</div>`;
+}
+
+function renderDash(){
+  const secs=['rq','bg','vm','raw','proc','conc','eval','bib'];
+  const done=secs.filter(s=>S.done[s]).length;
+  const total=Object.values(S.wc).reduce((a,b)=>a+b,0);
+  const wcClass=total>3200?'over':total>2800?'warn':'';
+  const crits=[
+    {name:'Design',keys:['rq','bg','vm'],color:'#0099d6'},
+    {name:'Data Analysis',keys:['raw','proc'],color:'#ba7517'},
+    {name:'Conclusion',keys:['conc'],color:'#1a7a4a'},
+    {name:'Evaluation',keys:['eval'],color:'#a32020'},
+  ];
+  const milestones=[
+    {l:'Design sections complete',d:'Week 4',done:['rq','bg','vm'].every(k=>S.done[k])},
+    {l:'Data collected & processed',d:'Week 8',done:['raw','proc'].every(k=>S.done[k])},
+    {l:'Full first draft',d:'Week 12',done:secs.slice(0,7).every(k=>S.done[k])},
+    {l:'Teacher review',d:'Week 14',done:false},
+    {l:'Final submission',d:'Week 16',done:false},
+  ];
+  return `<div class="section-title" style="margin-bottom:18px">Progress dashboard</div>
+  <div class="dash-grid">
+    <div class="dash-card"><div class="dash-label">Sections complete</div><div class="dash-value">${done}<span class="dash-sub"> / ${secs.length}</span></div></div>
+    <div class="dash-card"><div class="dash-label">Total word count</div><div class="dash-value ${wcClass}">${total}<span class="dash-sub"> / 3,000</span></div></div>
+  </div>
+  <div class="dash-card" style="margin-bottom:12px">
+    <div class="dash-label" style="margin-bottom:12px">Criterion progress</div>
+    ${crits.map(c=>{const pct=Math.round(c.keys.filter(k=>S.done[k]).length/c.keys.length*100);return`<div class="crit-row">
+      <span class="crit-name">${c.name}</span>
+      <div class="crit-track"><div class="crit-fill" style="width:${pct}%;background:${c.color}"></div></div>
+      <span class="crit-pct">${pct}%</span>
+    </div>`;}).join('')}
+  </div>
+  <div class="dash-card">
+    <div class="dash-label" style="margin-bottom:10px">Milestones</div>
+    ${milestones.map(m=>`<div class="milestone-item">
+      <div class="m-dot" style="background:${m.done?'#3ecf8e':'var(--border2)'}"></div>
+      <span class="m-date">${m.d}</span>
+      <span style="color:${m.done?'var(--text)':'var(--text2)'}">${m.l}</span>
+      ${m.done?'<span style="font-size:10px;color:#1a7a4a;margin-left:auto;font-weight:600">✓ Done</span>':''}
+    </div>`).join('')}
+  </div>`;
+}
+
+go('wizard');
+</script>
+</body>
+</html>
