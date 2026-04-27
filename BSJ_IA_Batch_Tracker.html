@@ -4,22 +4,19 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>DP Biology IA Batch Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./bsj-style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-
 body {
-  font-family: 'Nunito Sans', sans-serif;
-  background: #ffffff;
-  color: #1a1a1a;
+  background: var(--white);
   min-height: 100vh;
-  border-left: 4px solid #0099d6;
+  border-left: 4px solid var(--blue);
 }
 
 /* ── HEADER ── */
 header {
-  background: #ffffff;
-  border-bottom: 1px solid #eeeeee;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -36,7 +33,7 @@ header {
 
 .logo-mark {
   width: 40px; height: 40px;
-  background: #0099d6;
+  background: var(--blue);
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
@@ -47,13 +44,13 @@ header {
 .header-text h1 {
   font-size: 0.95rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: var(--text);
   line-height: 1.2;
 }
 
 .header-text p {
   font-size: 0.7rem;
-  color: #6b7280;
+  color: var(--muted);
   font-weight: 500;
   margin-top: 2px;
 }
@@ -68,19 +65,19 @@ header {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #ffffff;
-  border: 1px solid #eeeeee;
+  background: var(--white);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 7px 12px;
   transition: border-color 0.2s;
 }
 
-.api-input-wrap:focus-within { border-color: #0099d6; }
+.api-input-wrap:focus-within { border-color: var(--blue); }
 
 .api-input-wrap label {
   font-family: 'DM Mono', monospace;
   font-size: 0.58rem;
-  color: #6b7280;
+  color: var(--muted);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -90,7 +87,7 @@ header {
   background: transparent;
   border: none;
   outline: none;
-  color: #1a1a1a;
+  color: var(--text);
   font-family: 'DM Mono', monospace;
   font-size: 0.75rem;
   width: 220px;
@@ -105,7 +102,7 @@ header {
   flex-shrink: 0;
 }
 
-.key-status.ok { background: #22c55e; }
+.key-status.ok { background: var(--success); }
 
 /* ── MAIN ── */
 main {
@@ -116,9 +113,9 @@ main {
 
 /* ── DROP ZONE ── */
 .drop-zone {
-  border: 2px dashed #eeeeee;
+  border: 2px dashed var(--border);
   border-radius: 20px;
-  background: #ffffff;
+  background: var(--white);
   padding: 52px 32px;
   text-align: center;
   cursor: pointer;
@@ -126,11 +123,11 @@ main {
   margin-bottom: 32px;
 }
 
-.drop-zone:hover, .drop-zone.dragover { border-color: #0099d6; }
+.drop-zone:hover, .drop-zone.dragover { border-color: var(--blue); }
 
 .drop-icon {
   width: 56px; height: 56px;
-  border: 2px solid #0099d6;
+  border: 2px solid var(--blue);
   border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 18px;
@@ -141,30 +138,26 @@ main {
 .drop-title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--text);
   margin-bottom: 6px;
 }
 
 .drop-sub {
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--muted);
   margin-bottom: 22px;
 }
 
 .drop-btn {
-  background: #0099d6;
-  color: #ffffff;
   border: none;
   border-radius: 8px;
   padding: 10px 26px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.88rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: opacity 0.2s;
 }
-
-.drop-btn:hover { background: #0085b8; }
 
 #file-input { display: none; }
 
@@ -181,15 +174,15 @@ main {
 .queue-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--text);
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
 .count-pill {
-  background: #0099d6;
-  color: #ffffff;
+  background: var(--blue);
+  color: var(--white);
   font-size: 0.7rem;
   font-weight: 700;
   padding: 2px 9px;
@@ -199,44 +192,44 @@ main {
 .btn-group { display: flex; gap: 8px; align-items: center; }
 
 .btn-primary {
-  background: #0099d6;
-  color: #ffffff;
+  background: var(--blue);
+  color: var(--white);
   border: none;
   border-radius: 8px;
   padding: 9px 20px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: opacity 0.15s;
   display: flex;
   align-items: center;
   gap: 7px;
 }
 
-.btn-primary:hover { background: #0085b8; }
+.btn-primary:hover { opacity: 0.88; }
 .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .btn-secondary {
-  background: #ffffff;
-  color: #6b7280;
-  border: 1px solid #eeeeee;
+  background: var(--white);
+  color: var(--muted);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 16px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s;
 }
 
-.btn-secondary:hover { border-color: #0099d6; color: #1a1a1a; }
+.btn-secondary:hover { border-color: var(--blue); color: var(--text); }
 
 /* ── FILE LIST ── */
 .file-list {
-  background: #ffffff;
+  background: var(--white);
   border-radius: 20px;
-  border: 1px solid #eeeeee;
+  border: 1px solid var(--border);
   overflow: hidden;
 }
 
@@ -245,7 +238,7 @@ main {
   align-items: center;
   gap: 12px;
   padding: 13px 20px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--border);
   transition: background 0.1s;
 }
 
@@ -254,7 +247,7 @@ main {
 
 .file-icon {
   width: 30px; height: 30px;
-  border: 1px solid #eeeeee;
+  border: 1px solid var(--border);
   border-radius: 6px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
@@ -267,21 +260,21 @@ main {
   border: none;
   border-bottom: 1px solid transparent;
   outline: none;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.88rem;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--text);
   padding: 2px 4px;
   transition: border-color 0.2s;
 }
 
-.file-name-input:focus { border-bottom-color: #0099d6; }
-.file-name-input:disabled { color: #6b7280; }
+.file-name-input:focus { border-bottom-color: var(--blue); }
+.file-name-input:disabled { color: var(--muted); }
 
 .file-size {
   font-family: 'DM Mono', monospace;
   font-size: 0.65rem;
-  color: #6b7280;
+  color: var(--muted);
   white-space: nowrap;
 }
 
@@ -291,15 +284,15 @@ main {
   white-space: nowrap;
 }
 
-.status-queued  { color: #6b7280; }
-.status-running { color: #0099d6; }
-.status-done    { color: #16a34a; }
-.status-error   { color: #dc2626; }
+.status-queued  { color: var(--muted); }
+.status-running { color: var(--blue); }
+.status-done    { color: var(--success); }
+.status-error   { color: var(--danger); }
 
 .file-remove {
   background: none;
   border: none;
-  color: #6b7280;
+  color: var(--muted);
   cursor: pointer;
   font-size: 18px;
   line-height: 1;
@@ -308,7 +301,7 @@ main {
   transition: color 0.15s;
 }
 
-.file-remove:hover { color: #dc2626; }
+.file-remove:hover { color: var(--danger); }
 
 /* ── PROGRESS ── */
 .progress-wrap { margin: 20px 0 32px; }
@@ -316,13 +309,13 @@ main {
 .progress-label {
   font-size: 0.82rem;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--muted);
   text-align: center;
   margin-bottom: 10px;
 }
 
 .progress-bar-outer {
-  background: #eeeeee;
+  background: var(--border);
   border-radius: 99px;
   height: 5px;
   overflow: hidden;
@@ -330,7 +323,7 @@ main {
 
 .progress-bar {
   height: 100%;
-  background: #0099d6;
+  background: var(--blue);
   border-radius: 99px;
   transition: width 0.4s ease;
 }
@@ -339,8 +332,8 @@ main {
 .results-section { margin-top: 40px; }
 
 .export-bar {
-  background: #ffffff;
-  border: 1px solid #eeeeee;
+  background: var(--white);
+  border: 1px solid var(--border);
   border-radius: 20px;
   padding: 20px 28px;
   display: flex;
@@ -351,33 +344,33 @@ main {
 
 .export-bar-text {
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--muted);
   font-weight: 500;
 }
 
-.export-bar-text strong { color: #1a1a1a; font-weight: 800; }
+.export-bar-text strong { color: var(--text); font-weight: 800; }
 
 .btn-export {
-  background: #0099d6;
-  color: #ffffff;
+  background: var(--blue);
+  color: var(--white);
   border: none;
   border-radius: 8px;
   padding: 9px 20px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: opacity 0.15s;
   white-space: nowrap;
 }
 
-.btn-export:hover { background: #0085b8; }
+.btn-export:hover { opacity: 0.88; }
 
 /* ── SUMMARY TABLE ── */
 .summary-table-wrap {
-  background: #ffffff;
+  background: var(--white);
   border-radius: 20px;
-  border: 1px solid #eeeeee;
+  border: 1px solid var(--border);
   overflow: hidden;
   margin-bottom: 28px;
 }
@@ -387,11 +380,11 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--border);
 }
 
-.tbl-title { font-size: 0.9rem; font-weight: 700; color: #1a1a1a; }
-.tbl-avg   { font-size: 0.82rem; font-weight: 700; color: #0099d6; }
+.tbl-title { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+.tbl-avg   { font-size: 0.82rem; font-weight: 700; color: var(--blue); }
 
 table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
 
@@ -399,17 +392,17 @@ th {
   background: #fafafa;
   font-size: 0.68rem;
   font-weight: 700;
-  color: #6b7280;
+  color: var(--muted);
   padding: 10px 16px;
   text-align: left;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--border);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 td {
   padding: 12px 16px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--border);
   vertical-align: middle;
 }
 
@@ -431,31 +424,31 @@ tr:hover td { background: #fafafa; }
 .score-mid  { background: #fef3c7; color: #92400e; }
 .score-low  { background: #fee2e2; color: #991b1b; }
 
-.total-score { font-size: 0.95rem; font-weight: 800; color: #1a1a1a; }
-.flag-count  { font-size: 0.78rem; font-weight: 700; color: #dc2626; }
+.total-score { font-size: 0.95rem; font-weight: 800; color: var(--text); }
+.flag-count  { font-size: 0.78rem; font-weight: 700; color: var(--danger); }
 
 /* ── RESULT CARDS ── */
 .result-card {
-  background: #ffffff;
+  background: var(--white);
   border-radius: 20px;
-  border: 1px solid #eeeeee;
+  border: 1px solid var(--border);
   margin-bottom: 20px;
   overflow: hidden;
   transition: border-color 0.2s;
 }
 
-.result-card:hover { border-color: #0099d6; }
+.result-card:hover { border-color: var(--blue); }
 
 .result-card-header {
   padding: 18px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--border);
 }
 
-.result-student { font-size: 1rem; font-weight: 800; color: #1a1a1a; }
-.result-total   { font-size: 0.88rem; font-weight: 700; color: #0099d6; }
+.result-student { font-size: 1rem; font-weight: 800; color: var(--text); }
+.result-total   { font-size: 0.88rem; font-weight: 700; color: var(--blue); }
 
 .result-body { padding: 24px 28px; }
 
@@ -467,9 +460,9 @@ tr:hover td { background: #fafafa; }
 }
 
 .criterion-box {
-  background: #ffffff;
-  border: 1px solid #eeeeee;
-  border-left: 3px solid #0099d6;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
   border-radius: 12px;
   padding: 14px 16px;
 }
@@ -479,21 +472,21 @@ tr:hover td { background: #fafafa; }
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #6b7280;
+  color: var(--muted);
   margin-bottom: 8px;
 }
 
 .criterion-score {
   font-size: 1.7rem;
   font-weight: 800;
-  color: #0099d6;
+  color: var(--blue);
   line-height: 1;
   margin-bottom: 4px;
 }
 
-.criterion-score span { font-size: 0.85rem; color: #6b7280; font-weight: 500; }
+.criterion-score span { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
 
-.criterion-label { font-size: 0.72rem; color: #6b7280; font-weight: 500; }
+.criterion-label { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
 
 .result-block { margin-bottom: 20px; }
 
@@ -502,13 +495,13 @@ tr:hover td { background: #fafafa; }
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #0099d6;
+  color: var(--blue);
   margin-bottom: 10px;
   padding-bottom: 6px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--border);
 }
 
-.result-text { font-size: 0.88rem; line-height: 1.75; color: #1a1a1a; }
+.result-text { font-size: 0.88rem; line-height: 1.75; color: var(--text); }
 
 .flags-list { list-style: none; }
 
@@ -519,8 +512,8 @@ tr:hover td { background: #fafafa; }
   padding: 7px 0;
   font-size: 0.84rem;
   font-weight: 600;
-  color: #dc2626;
-  border-bottom: 1px solid #eeeeee;
+  color: var(--danger);
+  border-bottom: 1px solid var(--border);
 }
 
 .flag-item:last-child { border-bottom: none; }
@@ -528,7 +521,7 @@ tr:hover td { background: #fafafa; }
 .flag-dot {
   width: 5px; height: 5px;
   border-radius: 50%;
-  background: #dc2626;
+  background: var(--danger);
   margin-top: 7px;
   flex-shrink: 0;
 }
@@ -536,8 +529,8 @@ tr:hover td { background: #fafafa; }
 /* ── MANAGEBAC BOX ── */
 .managebac-box {
   background: #f8fbfd;
-  border: 1px solid #eeeeee;
-  border-left: 3px solid #0099d6;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
   border-radius: 12px;
   padding: 16px 20px;
   margin-top: 16px;
@@ -548,7 +541,7 @@ tr:hover td { background: #fafafa; }
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #0099d6;
+  color: var(--blue);
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -556,11 +549,11 @@ tr:hover td { background: #fafafa; }
 }
 
 .copy-btn {
-  background: #ffffff;
-  border: 1px solid #eeeeee;
+  background: var(--white);
+  border: 1px solid var(--border);
   border-radius: 6px;
-  color: #6b7280;
-  font-family: 'Nunito Sans', sans-serif;
+  color: var(--muted);
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.72rem;
   font-weight: 600;
   padding: 4px 12px;
@@ -568,9 +561,9 @@ tr:hover td { background: #fafafa; }
   transition: border-color 0.15s, color 0.15s;
 }
 
-.copy-btn:hover { border-color: #0099d6; color: #1a1a1a; }
+.copy-btn:hover { border-color: var(--blue); color: var(--text); }
 
-.managebac-text { font-size: 0.88rem; line-height: 1.75; color: #1a1a1a; }
+.managebac-text { font-size: 0.88rem; line-height: 1.75; color: var(--text); }
 
 /* ── ANIMATION ── */
 @keyframes fadeUp {
@@ -627,7 +620,7 @@ tr:hover td { background: #fafafa; }
     </div>
     <div class="drop-title">Drop student IA PDFs here</div>
     <div class="drop-sub">Or click to select — multiple PDFs accepted</div>
-    <button class="drop-btn" onclick="event.stopPropagation(); document.getElementById('file-input').click()">
+    <button class="drop-btn bsj-btn bsj-btn-primary" onclick="event.stopPropagation(); document.getElementById('file-input').click()">
       Select PDF Files
     </button>
     <input type="file" id="file-input" accept=".pdf" multiple onchange="addFiles(this.files)"/>
@@ -643,7 +636,7 @@ tr:hover td { background: #fafafa; }
       <div class="btn-group">
         <button class="btn-secondary" onclick="clearCompleted()">Clear completed</button>
         <button class="btn-secondary" onclick="clearAll()">Clear all</button>
-        <button class="btn-primary" id="grade-btn" onclick="startBatch()" disabled>
+        <button class="btn-primary bsj-btn bsj-btn-primary" id="grade-btn" onclick="startBatch()" disabled>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M2 7h10M7 2l5 5-5 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -671,7 +664,7 @@ tr:hover td { background: #fafafa; }
       <div class="export-bar-text">
         <strong id="results-count">0</strong> IAs graded · Scores are first-pass AI estimates — apply professional judgement before entering in ManageBac
       </div>
-      <button class="btn-export" onclick="exportCSV()">↓ Export CSV</button>
+      <button class="btn-export bsj-btn bsj-btn-primary" onclick="exportCSV()">↓ Export CSV</button>
     </div>
 
     <div class="summary-table-wrap">
@@ -710,7 +703,7 @@ let isRunning = false;
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 function safeHtml(str) {
-  return String(str == null ? '')
+  return String(str == null ? '' : str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -719,7 +712,7 @@ function safeHtml(str) {
 }
 
 function csvField(val) {
-  return '"' + String(val == null ? '').replace(/"/g, '""') + '"';
+  return '"' + String(val == null ? '' : val).replace(/"/g, '""') + '"';
 }
 
 // ── API Key — localStorage ─────────────────────────────────────────────────────
