@@ -4,25 +4,25 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>TM Command Centre</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./bsj-style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
-    font-family: 'Syne', sans-serif;
-    background: #ffffff;
-    color: #1a1a1a;
+    background: var(--bg);
     min-height: 100vh;
     overflow-x: hidden;
-    border-left: 4px solid #0099d6;
   }
 
   /* ── HEADER ── */
   header {
-    padding: 48px 56px 0 52px;
+    background: var(--navy);
+    padding: 16px 56px;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
   }
 
   .logo-block {
@@ -34,8 +34,7 @@
   .logo-mark {
     width: 48px;
     height: 48px;
-    background: #ffffff;
-    border: 2px solid #0099d6;
+    background: var(--white);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -46,18 +45,18 @@
   .logo-mark svg { width: 26px; height: 26px; }
 
   .logo-text h1 {
-    font-size: 1.75rem;
+    font-size: 1.4rem;
     font-weight: 800;
-    color: #1a1a1a;
+    color: var(--white);
     line-height: 1;
     letter-spacing: -0.02em;
   }
 
   .logo-text p {
-    font-size: 0.8rem;
-    color: #6b7280;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.55);
     font-weight: 500;
-    margin-top: 5px;
+    margin-top: 4px;
   }
 
   .header-right { text-align: right; }
@@ -66,46 +65,48 @@
 
   #time {
     display: block;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 800;
-    color: #0099d6;
+    color: var(--white);
     letter-spacing: -0.02em;
   }
 
   #datestr {
     display: block;
-    font-size: 0.8rem;
-    color: #6b7280;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.55);
     font-weight: 500;
     margin-top: 2px;
   }
 
   /* ── DIVIDER ── */
   .divider {
-    margin: 40px 56px 0 52px;
+    margin: 0 56px;
     height: 1px;
-    background: #eeeeee;
+    background: var(--border);
   }
 
   /* ── MAIN ── */
   main {
-    padding: 52px 56px 80px 52px;
+    padding: 48px 56px 80px;
     max-width: 1400px;
   }
 
   /* ── SECTION LABEL ── */
   .section-label {
-    font-size: 1rem;
+    font-size: 0.68rem;
     font-weight: 700;
-    color: #1a1a1a;
-    margin-bottom: 20px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
   }
 
   /* ── CARD GRID ── */
   .card-grid {
     display: grid;
     gap: 16px;
-    margin-bottom: 56px;
+    margin-bottom: 48px;
   }
 
   .grid-2 { grid-template-columns: repeat(2, 1fr); }
@@ -114,81 +115,84 @@
 
   /* ── APP CARD ── */
   .app-card {
-    background: #ffffff;
-    border: 1px solid #eeeeee;
-    border-radius: 20px;
-    padding: 28px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
     text-decoration: none;
     display: block;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
 
-  .app-card:hover { border-color: #0099d6; }
+  .app-card:hover { border-color: var(--blue); box-shadow: 0 4px 16px rgba(0,153,214,0.1); }
 
   .card-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
-    font-size: 28px;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    font-size: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
+    background: var(--bg);
   }
 
   .card-title {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     font-weight: 700;
-    color: #1a1a1a;
-    margin-bottom: 8px;
+    color: var(--text);
+    margin-bottom: 6px;
     line-height: 1.2;
   }
 
   .card-desc {
-    font-size: 0.85rem;
-    color: #6b7280;
+    font-size: 0.82rem;
+    color: var(--muted);
     line-height: 1.65;
     font-weight: 400;
-    margin-bottom: 16px;
+    margin-bottom: 0;
   }
 
   .card-url {
-    font-size: 0.8rem;
-    color: #0099d6;
+    font-size: 0.75rem;
+    color: var(--blue);
     font-weight: 600;
+    margin-top: 10px;
+    display: block;
   }
 
   .card-action {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    color: #6b7280;
-    margin-top: 18px;
+    color: var(--muted);
+    margin-top: 14px;
     letter-spacing: 0.02em;
     transition: color 0.2s;
   }
 
-  .app-card:hover .card-action { color: #0099d6; }
+  .app-card:hover .card-action { color: var(--blue); }
   .card-action svg { width: 12px; height: 12px; }
 
   /* ── TERMINAL CARD ── */
   .terminal-card {
-    background: #ffffff;
-    border: 1px solid #eeeeee;
-    border-radius: 20px;
-    padding: 28px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
     transition: border-color 0.2s;
   }
 
-  .terminal-card:hover { border-color: #0099d6; }
+  .terminal-card:hover { border-color: var(--blue); }
 
   .terminal-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
   .terminal-dots { display: flex; gap: 6px; }
@@ -204,17 +208,17 @@
   .dot-green { background: #28c840; }
 
   .terminal-title {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 600;
-    color: #6b7280;
+    color: var(--muted);
   }
 
   .terminal-body {
     background: #1e1e2e;
-    border-radius: 10px;
-    padding: 20px 22px;
+    border-radius: 8px;
+    padding: 18px 20px;
     font-family: 'DM Mono', monospace;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     line-height: 1.9;
   }
 
@@ -241,43 +245,43 @@
   /* ── QUICK LINKS ── */
   .quick-links {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
-    margin-bottom: 56px;
+    margin-bottom: 48px;
   }
 
   .quick-link {
     display: flex;
     align-items: center;
-    background: #ffffff;
-    border: 1px solid #eeeeee;
-    border-radius: 10px;
-    padding: 10px 18px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 16px;
     text-decoration: none;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 600;
-    color: #6b7280;
+    color: var(--muted);
     transition: border-color 0.2s, color 0.2s;
   }
 
-  .quick-link:hover { border-color: #0099d6; color: #1a1a1a; }
+  .quick-link:hover { border-color: var(--blue); color: var(--text); }
 
   /* ── NOTES CARD ── */
   .notes-card {
-    background: #ffffff;
-    border: 1px solid #eeeeee;
-    border-radius: 20px;
-    padding: 28px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
   }
 
   .note-item {
     display: flex;
     align-items: flex-start;
     gap: 18px;
-    padding: 14px 0;
-    border-bottom: 1px solid #eeeeee;
-    font-size: 0.88rem;
-    color: #6b7280;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
     line-height: 1.65;
     font-weight: 400;
   }
@@ -285,15 +289,15 @@
   .note-item:last-child { border-bottom: none; padding-bottom: 0; }
 
   .note-num {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    color: #0099d6;
+    color: var(--blue);
     min-width: 24px;
     padding-top: 2px;
     flex-shrink: 0;
   }
 
-  .note-text strong { color: #1a1a1a; font-weight: 700; }
+  .note-text strong { color: var(--text); font-weight: 700; }
 
   /* ── ANIMATION ── */
   @keyframes fadeUp {
@@ -313,9 +317,9 @@
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
     .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-    header { padding: 36px 28px 0 24px; }
-    .divider { margin: 32px 28px 0 24px; }
-    main { padding: 40px 28px 60px 24px; }
+    header { padding: 12px 24px; }
+    .divider { margin: 0 24px; }
+    main { padding: 36px 24px 60px; }
   }
 </style>
 </head>
@@ -403,7 +407,7 @@
       <div class="card-icon">📋</div>
       <div class="card-title">IA Batch Tracker</div>
       <div class="card-desc">Upload multiple student IA PDFs → batch criterion scores, flags, ManageBac comments, CSV export. API key saved automatically.</div>
-      <div class="card-url">bsj-tools.vercel.app</div>
+
       <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </a>
 
@@ -411,7 +415,7 @@
       <div class="card-icon">💰</div>
       <div class="card-title">Investment Onboarding</div>
       <div class="card-desc">Self-paced investing guide for teachers — asset classes, risk profiling, Binance/Indodax setup. No server needed.</div>
-      <div class="card-url">bsj-tools.vercel.app</div>
+
       <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </a>
 
@@ -419,7 +423,7 @@
       <div class="card-icon">📅</div>
       <div class="card-title">Form Time Generator</div>
       <div class="card-desc">Year 11 Tutor &amp; Wellbeing</div>
-      <div class="card-url">bsj-tools.vercel.app</div>
+
       <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </a>
 
@@ -427,7 +431,7 @@
       <div class="card-icon">🧭</div>
       <div class="card-title">Career Explorer</div>
       <div class="card-desc">IBDP subject and career pathway tool</div>
-      <div class="card-url">bsj-tools.vercel.app</div>
+
       <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </a>
 
@@ -435,7 +439,7 @@
       <div class="card-icon">🧬</div>
       <div class="card-title">DP Biology IA Workspace</div>
       <div class="card-desc">Standalone offline IA planning tool</div>
-      <div class="card-url">bsj-tools.vercel.app</div>
+
       <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </a>
 

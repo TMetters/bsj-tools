@@ -4,23 +4,19 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Invest Smarter — Financial Onboarding</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./bsj-style.css"/>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-
 body {
-  font-family: 'Nunito Sans', sans-serif;
-  background: #ffffff;
-  color: #1a1a1a;
+  background: var(--white);
   min-height: 100vh;
 }
 
 /* ── MOBILE HEADER ── */
 .mobile-header {
   display: none;
-  background: #ffffff;
-  border-bottom: 1px solid #eeeeee;
-  border-left: 4px solid #0099d6;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  border-left: 4px solid var(--blue);
   padding: 14px 20px;
   align-items: center;
   justify-content: space-between;
@@ -36,13 +32,13 @@ body {
   padding: 2px;
   display: flex;
   align-items: center;
-  color: #1a1a1a;
+  color: var(--text);
 }
 
 .mobile-title {
   font-size: 0.9rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: var(--text);
 }
 
 /* ── OVERLAY ── */
@@ -65,9 +61,9 @@ body {
 /* ── SIDEBAR ── */
 .sidebar {
   width: 260px;
-  background: #ffffff;
-  border-left: 4px solid #0099d6;
-  border-right: 1px solid #eeeeee;
+  background: var(--white);
+  border-left: 4px solid var(--blue);
+  border-right: 1px solid var(--border);
   position: fixed;
   top: 0; left: 0; bottom: 0;
   display: flex;
@@ -78,7 +74,7 @@ body {
 
 .sidebar-logo {
   padding: 24px 20px 18px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--border);
 }
 
 .logo-row {
@@ -90,7 +86,7 @@ body {
 
 .logo-mark {
   width: 36px; height: 36px;
-  background: #0099d6;
+  background: var(--blue);
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
@@ -101,27 +97,27 @@ body {
 .logo-name {
   font-size: 0.95rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: var(--text);
   line-height: 1.2;
 }
 
 .logo-sub {
   font-size: 0.68rem;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--muted);
   margin-top: 2px;
   padding-left: 46px;
 }
 
 .progress-wrap {
   padding: 14px 20px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--border);
 }
 
 .progress-label {
   font-size: 0.65rem;
   font-weight: 700;
-  color: #6b7280;
+  color: var(--muted);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-bottom: 8px;
@@ -130,7 +126,7 @@ body {
 }
 
 .progress-bar-outer {
-  background: #eeeeee;
+  background: var(--border);
   border-radius: 99px;
   height: 4px;
   overflow: hidden;
@@ -138,7 +134,7 @@ body {
 
 .progress-bar-inner {
   height: 100%;
-  background: #0099d6;
+  background: var(--blue);
   border-radius: 99px;
   transition: width 0.4s ease;
 }
@@ -153,7 +149,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #6b7280;
+  color: var(--muted);
   padding: 0 20px;
   margin-bottom: 4px;
 }
@@ -167,25 +163,25 @@ body {
   transition: all 0.15s;
   font-size: 0.84rem;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--muted);
   border-left: 2px solid transparent;
   margin-left: -1px;
 }
 
-.nav-item:hover { color: #1a1a1a; background: #fafafa; }
+.nav-item:hover { color: var(--text); background: #fafafa; }
 
 .nav-item.active {
-  color: #0099d6;
+  color: var(--blue);
   background: #f0f9ff;
-  border-left-color: #0099d6;
+  border-left-color: var(--blue);
 }
 
-.nav-item.completed { color: #1a1a1a; }
+.nav-item.completed { color: var(--text); }
 
 .nav-check {
   width: 18px; height: 18px;
   border-radius: 50%;
-  border: 1.5px solid #eeeeee;
+  border: 1.5px solid var(--border);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
   font-size: 10px;
@@ -194,15 +190,15 @@ body {
 }
 
 .nav-item.completed .nav-check {
-  background: #16a34a;
-  border-color: #16a34a;
-  color: #ffffff;
+  background: var(--success);
+  border-color: var(--success);
+  color: var(--white);
 }
 
 .nav-item.active .nav-check {
-  border-color: #0099d6;
+  border-color: var(--blue);
   background: #e0f2fe;
-  color: #0099d6;
+  color: var(--blue);
 }
 
 /* ── CONTENT ── */
@@ -221,9 +217,9 @@ body {
 
 /* ── HERO ── */
 .hero {
-  background: #ffffff;
+  background: var(--white);
   padding: 52px 56px 40px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--border);
 }
 
 .section-num {
@@ -231,14 +227,14 @@ body {
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #0099d6;
+  color: var(--blue);
   margin-bottom: 12px;
 }
 
 .section-title {
   font-size: 2rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: var(--text);
   line-height: 1.15;
   margin-bottom: 12px;
   letter-spacing: -0.02em;
@@ -247,7 +243,7 @@ body {
 .section-subtitle {
   font-size: 0.95rem;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--muted);
   max-width: 560px;
   line-height: 1.65;
 }
@@ -260,20 +256,20 @@ body {
 
 /* ── CARDS ── */
 .card {
-  background: #ffffff;
-  border: 1px solid #eeeeee;
+  background: var(--white);
+  border: 1px solid var(--border);
   border-radius: 20px;
   padding: 24px 28px;
   margin-bottom: 20px;
   transition: border-color 0.2s;
 }
 
-.card:hover { border-color: #0099d6; }
+.card:hover { border-color: var(--blue); }
 
 .card-title {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--text);
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -283,10 +279,10 @@ body {
 .card-body {
   font-size: 0.88rem;
   line-height: 1.75;
-  color: #6b7280;
+  color: var(--muted);
 }
 
-.card-body strong { color: #1a1a1a; font-weight: 700; }
+.card-body strong { color: var(--text); font-weight: 700; }
 
 /* ── HIGHLIGHT BOXES ── */
 .highlight {
@@ -295,21 +291,21 @@ body {
   margin-bottom: 16px;
   font-size: 0.86rem;
   line-height: 1.65;
-  background: #ffffff;
-  border: 1px solid #eeeeee;
-  color: #6b7280;
+  background: var(--white);
+  border: 1px solid var(--border);
+  color: var(--muted);
 }
 
-.highlight-blue  { border-left: 3px solid #0099d6; }
-.highlight-gold  { border-left: 3px solid #d97706; }
-.highlight-green { border-left: 3px solid #16a34a; }
-.highlight-red   { border-left: 3px solid #dc2626; }
+.highlight-blue  { border-left: 3px solid var(--blue); }
+.highlight-gold  { border-left: 3px solid var(--warn); }
+.highlight-green { border-left: 3px solid var(--success); }
+.highlight-red   { border-left: 3px solid var(--danger); }
 
-.highlight strong { color: #1a1a1a; font-weight: 700; }
+.highlight strong { color: var(--text); font-weight: 700; }
 
 /* ── COMPARISON TABLE ── */
 .table-wrap {
-  border: 1px solid #eeeeee;
+  border: 1px solid var(--border);
   border-radius: 14px;
   overflow: hidden;
   margin-bottom: 20px;
@@ -329,21 +325,21 @@ body {
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: #6b7280;
-  border-bottom: 1px solid #eeeeee;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
 }
 
 .compare-table td {
   padding: 11px 14px;
-  border-bottom: 1px solid #eeeeee;
-  color: #6b7280;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
   vertical-align: top;
   font-size: 0.84rem;
 }
 
 .compare-table tr:last-child td { border-bottom: none; }
 .compare-table tr:hover td { background: #fafafa; }
-.compare-table td:first-child { color: #1a1a1a; font-weight: 600; }
+.compare-table td:first-child { color: var(--text); font-weight: 600; }
 
 /* ── STEP LIST ── */
 .step-list { list-style: none; }
@@ -352,7 +348,7 @@ body {
   display: flex;
   gap: 16px;
   padding: 16px 0;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--border);
 }
 
 .step-item:last-child { border-bottom: none; }
@@ -360,11 +356,11 @@ body {
 .step-num {
   width: 28px; height: 28px;
   border-radius: 50%;
-  background: #0099d6;
+  background: var(--blue);
   display: flex; align-items: center; justify-content: center;
   font-size: 0.72rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--white);
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -374,20 +370,20 @@ body {
 .step-title {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--text);
   margin-bottom: 4px;
 }
 
 .step-desc {
   font-size: 0.83rem;
-  color: #6b7280;
+  color: var(--muted);
   line-height: 1.65;
 }
 
 /* ── QUIZ ── */
 .quiz-card {
-  background: #ffffff;
-  border: 1px solid #eeeeee;
+  background: var(--white);
+  border: 1px solid var(--border);
   border-radius: 20px;
   padding: 24px 28px;
   margin-bottom: 20px;
@@ -396,7 +392,7 @@ body {
 .quiz-q {
   font-size: 0.98rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--text);
   margin-bottom: 18px;
   line-height: 1.45;
 }
@@ -413,17 +409,17 @@ body {
   gap: 12px;
   padding: 12px 16px;
   border-radius: 10px;
-  border: 1px solid #eeeeee;
+  border: 1px solid var(--border);
   cursor: pointer;
   transition: border-color 0.15s;
   font-size: 0.86rem;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--muted);
 }
 
-.quiz-option:hover { border-color: #0099d6; color: #1a1a1a; }
+.quiz-option:hover { border-color: var(--blue); color: var(--text); }
 .quiz-option.correct { border-color: #16a34a; background: #f0fdf4; color: #166534; }
-.quiz-option.wrong   { border-color: #dc2626; background: #fef2f2; color: #991b1b; }
+.quiz-option.wrong   { border-color: var(--danger); background: #fef2f2; color: #991b1b; }
 .quiz-option.disabled { pointer-events: none; opacity: 0.55; }
 .quiz-option.disabled.correct,
 .quiz-option.disabled.wrong   { opacity: 1; }
@@ -431,7 +427,7 @@ body {
 .quiz-radio {
   width: 16px; height: 16px;
   border-radius: 50%;
-  border: 1.5px solid #eeeeee;
+  border: 1.5px solid var(--border);
   flex-shrink: 0;
 }
 
@@ -454,7 +450,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid #eeeeee;
+  border-top: 1px solid var(--border);
   margin-top: 16px;
 }
 
@@ -464,7 +460,7 @@ body {
   gap: 8px;
   padding: 11px 22px;
   border-radius: 10px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
@@ -473,32 +469,32 @@ body {
 }
 
 .btn-back {
-  background: #ffffff;
-  color: #6b7280;
-  border: 1px solid #eeeeee;
+  background: var(--white);
+  color: var(--muted);
+  border: 1px solid var(--border);
 }
 
-.btn-back:hover { border-color: #0099d6; color: #1a1a1a; }
+.btn-back:hover { border-color: var(--blue); color: var(--text); }
 
 .btn-next {
-  background: #0099d6;
-  color: #ffffff;
+  background: var(--blue);
+  color: var(--white);
 }
 
-.btn-next:hover { background: #0085b8; }
+.btn-next:hover { opacity: 0.88; }
 
 .btn-complete {
-  background: #0099d6;
-  color: #ffffff;
+  background: var(--blue);
+  color: var(--white);
 }
 
-.btn-complete:hover { background: #0085b8; }
+.btn-complete:hover { opacity: 0.88; }
 .btn-complete:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .page-indicator {
   font-size: 0.72rem;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--muted);
 }
 
 /* ── COMPLETION ── */
@@ -525,7 +521,7 @@ body {
 .completion-title {
   font-size: 2rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: var(--text);
   margin-bottom: 12px;
   letter-spacing: -0.02em;
 }
@@ -533,7 +529,7 @@ body {
 .completion-sub {
   font-size: 0.9rem;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--muted);
   max-width: 440px;
   line-height: 1.7;
   margin-bottom: 32px;
@@ -542,7 +538,7 @@ body {
 .score-display {
   font-size: 3.5rem;
   font-weight: 800;
-  color: #0099d6;
+  color: var(--blue);
   margin-bottom: 6px;
   letter-spacing: -0.04em;
 }
@@ -550,7 +546,7 @@ body {
 .score-label {
   font-size: 0.68rem;
   font-weight: 700;
-  color: #6b7280;
+  color: var(--muted);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -700,7 +696,7 @@ body {
     </div>
     <div class="bottom-nav">
       <div class="page-indicator">1 / 7</div>
-      <button class="btn-nav btn-next" onclick="next()">Next: Asset Classes →</button>
+      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="next()">Next: Asset Classes →</button>
     </div>
   </div>
 
@@ -749,7 +745,7 @@ body {
     <div class="bottom-nav">
       <button class="btn-nav btn-back" onclick="back()">← Back</button>
       <div class="page-indicator">2 / 7</div>
-      <button class="btn-nav btn-next" onclick="next()">Next: Risk Profile →</button>
+      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="next()">Next: Risk Profile →</button>
     </div>
   </div>
 
@@ -794,7 +790,7 @@ body {
     <div class="bottom-nav">
       <button class="btn-nav btn-back" onclick="back()">← Back</button>
       <div class="page-indicator">3 / 7</div>
-      <button class="btn-nav btn-next" onclick="next()">Next: Binance Setup →</button>
+      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="next()">Next: Binance Setup →</button>
     </div>
   </div>
 
@@ -862,7 +858,7 @@ body {
     <div class="bottom-nav">
       <button class="btn-nav btn-back" onclick="back()">← Back</button>
       <div class="page-indicator">4 / 7</div>
-      <button class="btn-nav btn-next" onclick="next()">Next: Indodax Setup →</button>
+      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="next()">Next: Indodax Setup →</button>
     </div>
   </div>
 
@@ -923,7 +919,7 @@ body {
     <div class="bottom-nav">
       <button class="btn-nav btn-back" onclick="back()">← Back</button>
       <div class="page-indicator">5 / 7</div>
-      <button class="btn-nav btn-next" onclick="next()">Next: First Investment →</button>
+      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="next()">Next: First Investment →</button>
     </div>
   </div>
 
@@ -970,7 +966,7 @@ body {
     <div class="bottom-nav">
       <button class="btn-nav btn-back" onclick="back()">← Back</button>
       <div class="page-indicator">6 / 7</div>
-      <button class="btn-nav btn-next" onclick="next()">Next: Knowledge Check →</button>
+      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="next()">Next: Knowledge Check →</button>
     </div>
   </div>
 
@@ -1067,7 +1063,7 @@ body {
     <div class="bottom-nav">
       <button class="btn-nav btn-back" onclick="back()">← Back</button>
       <div class="page-indicator">7 / 7</div>
-      <button class="btn-nav btn-complete" id="complete-btn" onclick="complete()" disabled>Complete Course ✓</button>
+      <button class="btn-nav btn-complete bsj-btn bsj-btn-primary" id="complete-btn" onclick="complete()" disabled>Complete Course ✓</button>
     </div>
   </div>
 
@@ -1080,7 +1076,7 @@ body {
       <div class="score-display" id="final-score">—</div>
       <div class="score-label">Quiz Score</div>
       <br/><br/>
-      <button class="btn-nav btn-next" onclick="restartCourse()" style="margin-top:16px">← Start Over</button>
+      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="restartCourse()" style="margin-top:16px">← Start Over</button>
     </div>
   </div>
 

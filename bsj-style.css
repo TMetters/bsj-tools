@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+/* ── VARIABLES ── */
+:root {
+  --navy:    #0d2240;
+  --blue:    #0099d6;
+  --red:     #cc0011;
+  --white:   #ffffff;
+  --bg:      #f4f6f9;
+  --text:    #1a1a1a;
+  --muted:   #6b7280;
+  --border:  #e2e8f0;
+  --success: #059669;
+  --warn:    #d97706;
+  --danger:  #dc2626;
+  --info:    #0284c7;
+}
+
+/* ── RESET ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── BASE ── */
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+.bsj-header {
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.bsj-header h1,
+.bsj-header h2 {
+  color: var(--white);
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ── CARD ── */
+.bsj-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07), 0 4px 12px rgba(0, 0, 0, 0.04);
+  padding: 24px;
+}
+
+/* ── BUTTONS ── */
+.bsj-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.bsj-btn:hover { opacity: 0.88; }
+.bsj-btn:active { transform: translateY(1px); }
+.bsj-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.bsj-btn-primary {
+  background: var(--blue);
+  color: var(--white);
+}
+
+.bsj-btn-danger {
+  background: var(--red);
+  color: var(--white);
+}
+
+/* ── SIDEBAR ── */
+.bsj-sidebar {
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.bsj-sidebar a,
+.bsj-sidebar .nav-item {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s, background 0.15s;
+}
+
+.bsj-sidebar a:hover,
+.bsj-sidebar .nav-item:hover {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.bsj-sidebar .nav-item.active {
+  color: var(--white);
+  background: rgba(0, 153, 214, 0.2);
+  border-left: 3px solid var(--blue);
+}
+
+/* ── BADGES ── */
+.bsj-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.bsj-badge-success {
+  background: #d1fae5;
+  color: var(--success);
+}
+
+.bsj-badge-warn {
+  background: #fef3c7;
+  color: var(--warn);
+}
+
+.bsj-badge-danger {
+  background: #fee2e2;
+  color: var(--danger);
+}
+
+.bsj-badge-info {
+  background: #e0f2fe;
+  color: var(--info);
+}
