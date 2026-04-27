@@ -6,6 +6,7 @@
 <title>DP Biology IA Workspace — BSJ</title>
 <link rel="stylesheet" href="./bsj-style.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
 <style>
 :root{
   --navy:#0d2240;
@@ -324,7 +325,7 @@ table.dt tr:hover td{background:rgba(0,153,214,0.03)}
       <span class="topbar-section" id="topbar-title">Welcome</span>
       <span class="wc-pill" id="wc-pill" style="display:none">0 words</span>
       <button class="btn btn-sm" onclick="go('dash')">Dashboard</button>
-      <button class="btn btn-sm btn-navy" onclick="alert('PDF export available in full version')">Export PDF</button>
+      <button class="btn btn-sm btn-navy" onclick="exportWord()">Export Word</button>
     </div>
     <div class="content" id="content">
       <div class="content-inner" id="content-inner"></div>
@@ -345,7 +346,8 @@ const S = {
   },
   done:{},
   wc:{},
-  texts:{},
+  texts:{bg:'',vm:'',conc:'',procInterp:'',evalExt:''},
+  evalRows:[{lim:'',effect:'',improvement:''},{lim:'',effect:'',improvement:''},{lim:'',effect:'',improvement:''}],
   rawData: [[1,'','','','',''],[2,'','','','',''],[3,'','','','',''],[4,'','','','',''],[5,'','','','','']],
   procData: [
     {g:'Group A',t:['','','','','']},
@@ -620,7 +622,7 @@ function renderVM(){
   <tbody>${rows}</tbody></table>
   <button class="btn btn-sm" style="margin-top:8px" onclick="S.p.controlled.push('');render()">+ Add variable</button></div>
   <div class="form-group"><div class="form-label">Methodology</div>
-  <textarea class="editor" style="min-height:180px" placeholder="Numbered steps. Be specific enough that another researcher can replicate exactly..."></textarea></div>
+  <textarea class="editor" style="min-height:180px" placeholder="Numbered steps. Be specific enough that another researcher can replicate exactly..." oninput="S.texts.vm=this.value">${S.texts.vm||''}</textarea></div>
   <div class="divider"></div>${aiPanel('vm')}${completeCheck('vm')}`;
 }
 
@@ -740,7 +742,7 @@ function renderProc(){
     </div>
     ${pp?`<div class="pvalue-interp">${pp}</div>`:'<div style="font-size:12px;color:var(--text3)">Enter a p-value above to see your personalised writing scaffold</div>'}
   </div>
-  <textarea class="editor" style="min-height:130px;margin-top:12px" placeholder="Write your statistical interpretation here, using the scaffold above as a guide..."></textarea>`}
+  <textarea class="editor" style="min-height:130px;margin-top:12px" placeholder="Write your statistical interpretation here, using the scaffold above as a guide..." oninput="S.texts.procInterp=this.value">${S.texts.procInterp||''}</textarea>`}
   <div class="divider"></div>${aiPanel('proc')}${completeCheck('proc')}`;
 }
 
@@ -763,7 +765,7 @@ function renderConc(){
     ${S.pval?`Your p-value = ${S.pval} — this is <strong>${typeof sig==='boolean'?(sig?'statistically significant (p < 0.05)':'not statistically significant (p ≥ 0.05)'):'unknown'}</strong>.`:'Refer to your p-value when discussing whether H₀ is accepted or rejected.'}<br>
     Use the scaffold: mean ${dv} = ___, STDEV = ___, p = ___ — therefore H₀ is [accepted/rejected] because...
   </div>
-  <textarea class="editor" style="min-height:250px" placeholder="Write your conclusion here. Required: state whether H₀ is accepted or rejected (with reference to your p-value); explain the biological significance; relate to published theory with in-text citations..." oninput="S.wc.conc=words(this.value);updateWCPill()"></textarea>
+  <textarea class="editor" style="min-height:250px" placeholder="Write your conclusion here. Required: state whether H₀ is accepted or rejected (with reference to your p-value); explain the biological significance; relate to published theory with in-text citations..." oninput="S.texts.conc=this.value;S.wc.conc=words(this.value);updateWCPill()">${S.texts.conc||''}</textarea>
   <div class="divider"></div>${aiPanel('conc')}${completeCheck('conc')}`;
 }
 
@@ -786,14 +788,14 @@ function renderEval(){
   <textarea class="editor" style="min-height:80px" placeholder="What aspects of the design were strong? (e.g. large sample size, precise instrument choice, effective controls)"></textarea></div>
   <div class="form-group"><div class="form-label">Limitations and improvements</div>
   <table class="var-tbl"><thead><tr><th>#</th><th>Specific limitation</th><th>Biological impact on results</th><th>Specific improvement</th></tr></thead>
-  <tbody>${[1,2,3].map(i=>`<tr>
-    <td style="color:var(--text3);font-size:11px;width:22px;text-align:center">${i}</td>
-    <td><input placeholder="Specific to your experiment" style="width:100%"></td>
-    <td><input placeholder="Mechanistic explanation" style="width:100%"></td>
-    <td><input placeholder="Feasible, specific fix" style="width:100%"></td>
+  <tbody>${[0,1,2].map(i=>`<tr>
+    <td style="color:var(--text3);font-size:11px;width:22px;text-align:center">${i+1}</td>
+    <td><input placeholder="Specific to your experiment" style="width:100%" value="${S.evalRows[i].lim||''}" oninput="S.evalRows[${i}].lim=this.value"></td>
+    <td><input placeholder="Mechanistic explanation" style="width:100%" value="${S.evalRows[i].effect||''}" oninput="S.evalRows[${i}].effect=this.value"></td>
+    <td><input placeholder="Feasible, specific fix" style="width:100%" value="${S.evalRows[i].improvement||''}" oninput="S.evalRows[${i}].improvement=this.value"></td>
   </tr>`).join('')}</tbody></table></div>
   <div class="form-group"><div class="form-label">Extensions</div>
-  <textarea class="editor" style="min-height:80px" placeholder="How could the investigation be meaningfully extended? (not just 'increase sample size' — suggest a new variable, different organism, or alternative methodology)" oninput="S.wc.eval=words(this.value);updateWCPill()"></textarea></div>
+  <textarea class="editor" style="min-height:80px" placeholder="How could the investigation be meaningfully extended? (not just 'increase sample size' — suggest a new variable, different organism, or alternative methodology)" oninput="S.texts.evalExt=this.value;S.wc.eval=words(this.value);updateWCPill()">${S.texts.evalExt||''}</textarea></div>
   <div class="divider"></div>${aiPanel('eval')}${completeCheck('eval')}`;
 }
 
@@ -999,6 +1001,142 @@ async function askClaudeSection(key) {
   }
   S.aiLoading[key] = false;
   render();
+}
+
+async function exportWord(){
+  const {Document,Paragraph,TextRun,Table,TableRow,TableCell,Header,Footer,PageNumber,NumberFormat,AlignmentType,WidthType,BorderStyle,HeadingLevel,Packer,convertInchesToTwip,PageBreak}=docx;
+  const p=S.p;
+  const iv=p.iv||'[IV]'; const dv=p.dv||'[DV]';
+  const candidate=prompt('Enter candidate number (e.g. 001234-0001):','');
+  if(candidate===null)return;
+
+  function pt(n){return n*20;}
+  function mkPara(runs,opts={}){
+    return new Paragraph({children:Array.isArray(runs)?runs:[runs],spacing:{line:276,lineRule:'auto'},alignment:AlignmentType.LEFT,...opts});
+  }
+  function mkText(text,opts={}){
+    return new TextRun({text:text||'',font:'Calibri',size:24,...opts});
+  }
+  function mkH2(text){
+    return new Paragraph({children:[new TextRun({text,font:'Calibri',size:28,bold:true,color:'0d2240'})],spacing:{before:280,after:100,line:276,lineRule:'auto'}});
+  }
+  function mkH3(text){
+    return new Paragraph({children:[new TextRun({text,font:'Calibri',size:24,bold:true,color:'0d2240'})],spacing:{before:180,after:80,line:276,lineRule:'auto'}});
+  }
+  function emptyPara(){return mkPara(mkText(''));}
+  function cell(text,opts={}){
+    return new TableCell({
+      children:[new Paragraph({children:[new TextRun({text:text||'',font:'Calibri',size:20,...(opts.bold?{bold:true}:{})})],spacing:{line:276,lineRule:'auto'}})],
+      margins:{top:80,bottom:80,left:100,right:100},
+      ...opts.cellOpts
+    });
+  }
+  function tblRow(cells,cantSplit=true){
+    return new TableRow({children:cells,cantSplit});
+  }
+  function simpleTable(headers,rows){
+    const hdrRow=tblRow(headers.map(h=>cell(h,{bold:true,cellOpts:{shading:{fill:'E6F6FC'}}})));
+    const dataRows=rows.map(r=>tblRow(r.map(v=>cell(v))));
+    return new Table({rows:[hdrRow,...dataRows],width:{size:100,type:WidthType.PERCENTAGE},borders:{top:{style:BorderStyle.SINGLE,size:4,color:'C8CCD6'},bottom:{style:BorderStyle.SINGLE,size:4,color:'C8CCD6'},left:{style:BorderStyle.SINGLE,size:4,color:'C8CCD6'},right:{style:BorderStyle.SINGLE,size:4,color:'C8CCD6'},insideH:{style:BorderStyle.SINGLE,size:4,color:'C8CCD6'},insideV:{style:BorderStyle.SINGLE,size:4,color:'C8CCD6'}}});
+  }
+
+  // --- Section: Research Question & Background ---
+  const rqEl=document.querySelector('#content-inner [data-rq]');
+  const rqText=(rqEl?rqEl.innerText:'')||`Effect of ${iv} (${p.ivUnit||'units'}) on ${dv} (${p.dvUnit||'units'}) in [organism/system].`;
+
+  // --- Raw data rows ---
+  const rawHeaders=['Trial','IV level','T1','T2','T3','T4','T5'];
+  const rawRows=S.rawData.map((row,ri)=>[String(ri+1),`${iv} level ${ri+1}`,String(row[1]||''),String(row[2]||''),String(row[3]||''),String(row[4]||''),String(row[5]||'')]);
+
+  // --- Processed data rows ---
+  function calcMean(vals){const n=vals.map(v=>parseFloat(v)).filter(v=>!isNaN(v));if(!n.length)return '—';return (n.reduce((a,b)=>a+b,0)/n.length).toFixed(3);}
+  function calcSD(vals){const n=vals.map(v=>parseFloat(v)).filter(v=>!isNaN(v));if(n.length<2)return '—';const m=n.reduce((a,b)=>a+b,0)/n.length;return Math.sqrt(n.reduce((a,b)=>a+(b-m)**2,0)/(n.length-1)).toFixed(3);}
+  const procHeaders=[`${iv} group`,`Mean ${dv} (${p.dvUnit||'units'})`,`SD (${p.dvUnit||'units'})`];
+  const procRows=S.procData.map(g=>[g.g,calcMean(g.t),calcSD(g.t)]);
+
+  // --- Eval limitations ---
+  const evalLimRows=S.evalRows.map((r,i)=>[String(i+1),r.lim||'',r.effect||'',r.improvement||'']);
+
+  const doc=new Document({
+    styles:{default:{document:{run:{font:'Calibri',size:24}}}},
+    sections:[{
+      properties:{page:{margin:{top:convertInchesToTwip(1),bottom:convertInchesToTwip(1),left:convertInchesToTwip(1.25),right:convertInchesToTwip(1.25)}}},
+      headers:{default:new Header({children:[mkPara([mkText(`Candidate: ${candidate||'—'}`,{bold:true}),mkText(`   |   ${iv} effect on ${dv}`,{color:'6B7280'})])]})},
+      footers:{default:new Footer({children:[new Paragraph({children:[mkText('Page '),new TextRun({children:[PageNumber.CURRENT],font:'Calibri',size:24}),mkText(' of '),new TextRun({children:[PageNumber.TOTAL_PAGES],font:'Calibri',size:24})],alignment:AlignmentType.CENTER,spacing:{line:276,lineRule:'auto'}})]})},
+      children:[
+        // Title
+        new Paragraph({children:[new TextRun({text:'DP Biology Internal Assessment',font:'Calibri',size:36,bold:true,color:'0d2240'})],spacing:{after:60,line:276,lineRule:'auto'},alignment:AlignmentType.CENTER}),
+        new Paragraph({children:[new TextRun({text:`${iv} effect on ${dv}`,font:'Calibri',size:28,color:'0099d6'})],spacing:{after:400,line:276,lineRule:'auto'},alignment:AlignmentType.CENTER}),
+
+        // 1. Research Question
+        mkH2('1. Research Question'),
+        mkPara(mkText(rqText)),
+        emptyPara(),
+        mkH3('Hypothesis'),
+        mkPara(mkText(p.hypothesis||'')),
+        emptyPara(),
+        mkH3('Null Hypothesis (H₀)'),
+        mkPara(mkText(p.h0||'')),
+        emptyPara(),
+
+        // 2. Background
+        mkH2('2. Background Information'),
+        ...((S.texts.bg||'').split('\n').map(line=>mkPara(mkText(line)))),
+        emptyPara(),
+
+        // 3. Variables & Methodology
+        mkH2('3. Variables and Methodology'),
+        mkH3('Variables'),
+        simpleTable(['Variable','Name','Unit','Role'],[
+          ['Independent',iv,p.ivUnit||'','The variable deliberately changed'],
+          ['Dependent',dv,p.dvUnit||'','The variable measured'],
+          ...p.controlled.filter(v=>v.trim()).map(cv=>[cv,'','','Controlled — kept constant']),
+        ]),
+        emptyPara(),
+        mkH3('Methodology'),
+        ...((S.texts.vm||'').split('\n').map(line=>mkPara(mkText(line)))),
+        emptyPara(),
+
+        // 4. Raw Data
+        mkH2('4. Raw Data'),
+        simpleTable(rawHeaders,rawRows),
+        emptyPara(),
+
+        // 5. Processed Data & Statistics
+        mkH2('5. Processed Data and Statistical Analysis'),
+        simpleTable(procHeaders,procRows),
+        emptyPara(),
+        mkH3('Statistical Interpretation'),
+        ...((S.texts.procInterp||'').split('\n').map(line=>mkPara(mkText(line)))),
+        emptyPara(),
+
+        // 6. Conclusion
+        mkH2('6. Conclusion'),
+        ...((S.texts.conc||'').split('\n').map(line=>mkPara(mkText(line)))),
+        emptyPara(),
+
+        // 7. Evaluation
+        mkH2('7. Evaluation'),
+        mkH3('Limitations and Improvements'),
+        simpleTable(['#','Specific limitation','Biological impact on results','Specific improvement'],evalLimRows),
+        emptyPara(),
+        mkH3('Extensions'),
+        ...((S.texts.evalExt||'').split('\n').map(line=>mkPara(mkText(line)))),
+        emptyPara(),
+
+        // 8. Bibliography
+        mkH2('8. Bibliography'),
+        ...[...S.bib].sort((a,b)=>a.author.split(',')[0].trim().localeCompare(b.author.split(',')[0].trim()))
+          .map(e=>mkPara(mkText(mla(e)))),
+      ]
+    }]
+  });
+
+  const blob=await Packer.toBlob(doc);
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`IA_${(candidate||'candidate').replace(/\s+/g,'_')}_${iv.replace(/\s+/g,'_')}.docx`;
+  a.click();
 }
 
 go('wizard');
