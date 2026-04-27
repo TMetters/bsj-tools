@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DP Biology IA Workspace — BSJ</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./bsj-style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#0d2240;--blue:#0099d6;--red:#cc0011;
+  --navy:#0d2240;
   --navy-light:#1a3660;--blue-light:#e6f6fc;--blue-mid:#b3e3f5;
   --bg:#ffffff;--bg2:#f7f8fa;--bg3:#eef0f4;
   --border:#e0e3ea;--border2:#c8ccd6;
@@ -20,7 +20,7 @@
   --radius:8px;--radius-lg:12px;--radius-xl:16px;
   --shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 12px rgba(0,0,0,0.04);
 }
-html,body{height:100%;font-family:'Montserrat',sans-serif;color:var(--text);background:var(--bg3);font-size:14px;line-height:1.5}
+html,body{height:100%;background:var(--bg3);font-size:14px;line-height:1.5}
 
 /* LAYOUT */
 .app{display:flex;height:100vh;max-height:100vh;overflow:hidden}
@@ -30,8 +30,8 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;color:var(--text);back
 /* SIDEBAR */
 .sidebar-header{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,0.1)}
 .sidebar-logo{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.sidebar-logo-mark{width:28px;height:28px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0}
-.sidebar-brand{font-size:12px;font-weight:600;color:#fff;letter-spacing:0.02em}
+.sidebar-logo-mark{width:28px;height:28px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--white);flex-shrink:0}
+.sidebar-brand{font-size:12px;font-weight:600;color:var(--white);letter-spacing:0.02em}
 .sidebar-sub{font-size:11px;color:rgba(255,255,255,0.45);margin-top:1px}
 .sidebar-project{font-size:11px;color:rgba(255,255,255,0.6);margin-top:8px;padding:6px 8px;background:rgba(255,255,255,0.07);border-radius:6px;font-style:italic;min-height:28px;line-height:1.4}
 .nav-scroll{flex:1;overflow-y:auto;padding:8px 0}
@@ -45,7 +45,7 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;color:var(--text);back
 .nav-dot.done{background:#3ecf8e}
 .nav-dot.active{background:var(--blue)}
 .nav-item-label{font-size:12px;color:rgba(255,255,255,0.7);line-height:1.3;flex:1}
-.nav-item.active .nav-item-label{color:#fff}
+.nav-item.active .nav-item-label{color:var(--white)}
 .ct-tag{font-size:9px;padding:1px 5px;border-radius:3px;flex-shrink:0;font-weight:600}
 .ct-D{background:rgba(0,153,214,0.25);color:#7dd4f0}
 .ct-DA{background:rgba(240,159,39,0.25);color:#f0c060}
@@ -64,9 +64,9 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;color:var(--text);back
 .wc-pill.over{background:var(--danger-bg);color:var(--danger-t);border-color:var(--danger-b)}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--bg);cursor:pointer;font-size:12px;font-family:'Montserrat',sans-serif;color:var(--text2);font-weight:500;transition:all 0.12s;line-height:1}
 .btn:hover{background:var(--bg2);border-color:var(--text3)}
-.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-primary{background:var(--blue);color:var(--white);border-color:var(--blue)}
 .btn-primary:hover{background:#007ab5;border-color:#007ab5}
-.btn-navy{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn-navy{background:var(--navy);color:var(--white);border-color:var(--navy)}
 .btn-navy:hover{background:var(--navy-light)}
 .btn-sm{padding:4px 10px;font-size:11px}
 .btn-xs{padding:2px 7px;font-size:10px}
@@ -82,7 +82,7 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;color:var(--text);back
 .wstep{flex:1;padding:9px 6px;text-align:center;font-size:10px;font-weight:600;letter-spacing:0.03em;color:var(--text3);background:var(--bg2);border-right:1px solid var(--border);transition:all 0.2s}
 .wstep:last-child{border-right:none}
 .wstep.done{background:var(--success-bg);color:var(--success-t)}
-.wstep.active{background:var(--navy);color:#fff}
+.wstep.active{background:var(--navy);color:var(--white)}
 .wizard-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-xl);padding:24px;box-shadow:var(--shadow)}
 .wizard-q{font-size:16px;font-weight:600;color:var(--navy);margin-bottom:5px}
 .wizard-hint{font-size:12px;color:var(--text3);margin-bottom:18px;line-height:1.6}
@@ -147,7 +147,7 @@ table.dt tr:hover td{background:rgba(0,153,214,0.03)}
 .stat-options{display:flex;gap:7px;flex-wrap:wrap}
 .stat-opt{padding:5px 12px;border:1px solid var(--border2);border-radius:20px;font-size:12px;cursor:pointer;background:var(--bg);color:var(--text2);transition:all 0.15s;font-family:'Montserrat',sans-serif;font-weight:500}
 .stat-opt:hover{border-color:var(--blue);color:var(--info-t)}
-.stat-opt.sel{background:var(--navy);color:#fff;border-color:var(--navy)}
+.stat-opt.sel{background:var(--navy);color:var(--white);border-color:var(--navy)}
 .stat-result-box{background:var(--success-bg);border:1px solid var(--success-b);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
 .stat-result-test{font-size:14px;font-weight:700;color:var(--success-t);margin-bottom:5px}
 .stat-result-why{font-size:12px;color:var(--success-t);line-height:1.6;opacity:0.85}
@@ -169,7 +169,7 @@ table.dt tr:hover td{background:rgba(0,153,214,0.03)}
 .bib-form-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-top:14px;box-shadow:var(--shadow)}
 .source-tabs{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap}
 .source-tab{padding:4px 11px;border:1px solid var(--border2);border-radius:20px;font-size:11px;cursor:pointer;background:var(--bg2);color:var(--text3);font-family:'Montserrat',sans-serif;font-weight:500}
-.source-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.source-tab.active{background:var(--navy);color:var(--white);border-color:var(--navy)}
 
 /* DASHBOARD */
 .dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
@@ -211,6 +211,12 @@ table.dt tr:hover td{background:rgba(0,153,214,0.03)}
 /* COMPLETE SECTION */
 .section-complete-wrap{margin-top:20px}
 
+/* AI FEEDBACK PANEL */
+.ai-panel{border-left:3px solid var(--navy);background:var(--bg2);border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin-top:16px;font-family:'Montserrat',sans-serif}
+.ai-panel-header{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--navy);margin-bottom:8px}
+.ai-panel-body{font-size:12px;line-height:1.75;color:var(--text2)}
+.ai-panel-loading{font-size:12px;color:var(--text3);font-style:italic}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -218,7 +224,7 @@ table.dt tr:hover td{background:rgba(0,153,214,0.03)}
 
 /* INTRO SPLASH */
 .splash{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 80px);text-align:center;padding:40px 20px}
-.splash-logo{width:56px;height:56px;background:var(--navy);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#fff;margin:0 auto 20px;box-shadow:var(--shadow)}
+.splash-logo{width:56px;height:56px;background:var(--navy);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--white);margin:0 auto 20px;box-shadow:var(--shadow)}
 .splash-logo span{color:var(--blue)}
 .splash h1{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:8px}
 .splash p{font-size:14px;color:var(--text3);max-width:420px;line-height:1.7;margin-bottom:28px}
@@ -356,6 +362,8 @@ const S = {
   showBibForm:false,
   bibType:'journal',
   guidance:{},
+  aiResponse:{},
+  aiLoading:{},
 };
 
 function words(t){return t.trim()===''?0:t.trim().split(/\s+/).length;}
@@ -558,6 +566,7 @@ function renderRQ(){
       <span class="badge badge-D">Design</span>
       <span class="wc-info">Recommended: 300–500 words</span>
       ${guidance('rq',`<strong>Mark band 5–6:</strong> A focused, specific, and directly measurable research question. The hypothesis is biologically justified with reference to published theory, and states the expected direction of effect. Both H₀ and H₁ are explicitly stated.<br><br><strong>Common mistakes:</strong> Vague RQs ("How does light affect plants?"), missing H₀, hypothesis with no biological mechanism stated.`)}
+      <button class="btn btn-sm btn-navy" style="margin-left:auto" onclick="askClaudeSection('rq')">AI Feedback</button>
     </div>
   </div>
   ${p.iv&&p.dv?`<div class="scaffold">Your investigation: effect of <em>${p.iv}</em> on <em>${p.dv}</em> — make the research question specific, testable, and bounded.</div>`:''}
@@ -567,7 +576,7 @@ function renderRQ(){
   <textarea class="editor" oninput="S.p.hypothesis=this.value;S.wc.rqh=words(this.value);updateWCPill()">${p.hypothesis}</textarea></div>
   <div class="form-group"><div class="form-label">H₀ — Null hypothesis</div>
   <textarea class="editor" style="min-height:80px" placeholder="There is no significant effect of ${p.iv||'[IV]'} on ${p.dv||'[DV]'}." oninput="S.p.h0=this.value"></textarea></div>
-  <div class="divider"></div>${completeCheck('rq')}`;
+  <div class="divider"></div>${aiPanel('rq')}${completeCheck('rq')}`;
 }
 
 function renderBG(){
@@ -579,13 +588,14 @@ function renderBG(){
       <span class="badge badge-D">Design</span>
       <span class="wc-info">Recommended: 400–600 words</span>
       ${guidance('bg',`<strong>Mark band 5–6:</strong> Relevant, detailed biological theory drawn from credible sources. Directly links background science to your IV and DV. All sources cited in-text using MLA 8 format: (Author page) or (Author) for web.<br><br><strong>Binomial nomenclature:</strong> Write as <em>Genus species</em> (italicised, genus capitalised). Abbreviated form (e.g. <em>E. coli</em>) accepted after first full use.`)}
+      <button class="btn btn-sm btn-navy" style="margin-left:auto" onclick="askClaudeSection('bg')">AI Feedback</button>
     </div>
   </div>
   ${S.p.iv&&S.p.dv?`<div class="scaffold">Explain the biological theory behind why <em>${S.p.iv}</em> would affect <em>${S.p.dv}</em>. What is the mechanism? Cite all sources in-text.</div>`:''}
   ${hasBad?'<div class="nomenc-warn">⚠ Possible binomial nomenclature issue — check genus is capitalised and species is lowercase, both italicised</div>':''}
   <textarea class="editor" style="min-height:240px" placeholder="Provide relevant biological context and theory. Cite all external sources in-text (Author, page)..." oninput="S.texts.bg=this.value;S.wc.bg=words(this.value);updateWCPill();render()">${txt}</textarea>
   <div style="font-size:11px;color:var(--text3);margin-top:5px">Insert citations using the bibliography section</div>
-  <div class="divider"></div>${completeCheck('bg')}`;
+  <div class="divider"></div>${aiPanel('bg')}${completeCheck('bg')}`;
 }
 
 function renderVM(){
@@ -601,6 +611,7 @@ function renderVM(){
       <span class="badge badge-D">Design</span>
       <span class="wc-info">Recommended: 400–700 words</span>
       ${guidance('vm',`<strong>Mark band 5–6:</strong> All variables fully operationalised with units and ranges stated. Methodology clear enough to replicate without clarification. Safety, ethics, and sample size justified. ANOVA requires n ≥ 5 per group minimum.`)}
+      <button class="btn btn-sm btn-navy" style="margin-left:auto" onclick="askClaudeSection('vm')">AI Feedback</button>
     </div>
   </div>
   <div class="scaffold"><strong>IV:</strong> <em>${p.iv||'—'}</em> (${p.ivUnit||'?'}) &nbsp;·&nbsp; <strong>DV:</strong> <em>${p.dv||'—'}</em> (${p.dvUnit||'?'}) &nbsp;·&nbsp; <strong>n =</strong> ${p.n} per group</div>
@@ -610,7 +621,7 @@ function renderVM(){
   <button class="btn btn-sm" style="margin-top:8px" onclick="S.p.controlled.push('');render()">+ Add variable</button></div>
   <div class="form-group"><div class="form-label">Methodology</div>
   <textarea class="editor" style="min-height:180px" placeholder="Numbered steps. Be specific enough that another researcher can replicate exactly..."></textarea></div>
-  <div class="divider"></div>${completeCheck('vm')}`;
+  <div class="divider"></div>${aiPanel('vm')}${completeCheck('vm')}`;
 }
 
 function renderRaw(){
@@ -626,6 +637,7 @@ function renderRaw(){
     <div class="section-meta">
       <span class="badge badge-DA">Data Analysis</span>
       ${guidance('raw',`<strong>Required:</strong> Raw data only — no calculated values. Column headers must include variable names and units. Include instrument uncertainty (e.g. ± 0.01 g) in the header. n ≥ 5 trials per group needed for STDEV.`)}
+      <button class="btn btn-sm btn-navy" style="margin-left:auto" onclick="askClaudeSection('raw')">AI Feedback</button>
     </div>
   </div>
   <div class="scaffold">Measuring <em>${dvL}</em> (${p.dvUnit||'units?'}) across 5 trials per group of <em>${ivL}</em> (${p.ivUnit||'units?'})</div>
@@ -644,7 +656,7 @@ function renderRaw(){
     <button class="btn btn-sm btn-danger" onclick="if(S.rawData.length>1){S.rawData.pop();render()}">− Remove last</button>
   </div>
   <div style="font-size:11px;color:var(--text3)">Raw measurements only — means and STDEV go in the Processed Data section</div>
-  <div class="divider"></div>${completeCheck('raw')}`;
+  <div class="divider"></div>${aiPanel('raw')}${completeCheck('raw')}`;
 }
 
 function renderProc(){
@@ -669,6 +681,7 @@ function renderProc(){
     <div class="section-meta">
       <span class="badge badge-DA">Data Analysis</span>
       ${guidance('proc',`<strong>Mandatory:</strong> Mean and STDEV per group (calculated automatically below). Error bars on all graphs must be ±1 STDEV. Named inferential test with p-value and biological interpretation required. ANOVA → Tukey's HSD is mandatory if 3+ groups.`)}
+      <button class="btn btn-sm btn-navy" style="margin-left:auto" onclick="askClaudeSection('proc')">AI Feedback</button>
     </div>
   </div>
   <div class="tab-bar">
@@ -728,7 +741,7 @@ function renderProc(){
     ${pp?`<div class="pvalue-interp">${pp}</div>`:'<div style="font-size:12px;color:var(--text3)">Enter a p-value above to see your personalised writing scaffold</div>'}
   </div>
   <textarea class="editor" style="min-height:130px;margin-top:12px" placeholder="Write your statistical interpretation here, using the scaffold above as a guide..."></textarea>`}
-  <div class="divider"></div>${completeCheck('proc')}`;
+  <div class="divider"></div>${aiPanel('proc')}${completeCheck('proc')}`;
 }
 
 function renderConc(){
@@ -741,6 +754,7 @@ function renderConc(){
       <span class="badge badge-C">Conclusion</span>
       <span class="wc-info">Recommended: 400–600 words</span>
       ${guidance('conc',`<strong>Mark band 5–6:</strong> Explicitly links results to research question and hypothesis. References statistical result (test name + p-value) and interprets in biological context. Relates findings to published literature with in-text citations. Accepts or rejects H₀ with justification.`)}
+      <button class="btn btn-sm btn-navy" style="margin-left:auto" onclick="askClaudeSection('conc')">AI Feedback</button>
     </div>
   </div>
   <div class="scaffold">
@@ -750,7 +764,7 @@ function renderConc(){
     Use the scaffold: mean ${dv} = ___, STDEV = ___, p = ___ — therefore H₀ is [accepted/rejected] because...
   </div>
   <textarea class="editor" style="min-height:250px" placeholder="Write your conclusion here. Required: state whether H₀ is accepted or rejected (with reference to your p-value); explain the biological significance; relate to published theory with in-text citations..." oninput="S.wc.conc=words(this.value);updateWCPill()"></textarea>
-  <div class="divider"></div>${completeCheck('conc')}`;
+  <div class="divider"></div>${aiPanel('conc')}${completeCheck('conc')}`;
 }
 
 function renderEval(){
@@ -762,6 +776,7 @@ function renderEval(){
       <span class="badge badge-E">Evaluation</span>
       <span class="wc-info">Recommended: 400–600 words</span>
       ${guidance('eval',`<strong>Mark band 5–6:</strong> Specific, mechanistically explained limitations with feasible and specific improvements. Extension suggestions go beyond simply repeating with more samples. Generic limitations ("human error", "time constraints") are insufficient — explain the mechanism by which the limitation affected results.`)}
+      <button class="btn btn-sm btn-navy" style="margin-left:auto" onclick="askClaudeSection('eval')">AI Feedback</button>
     </div>
   </div>
   <div class="scaffold">Consider evaluating how well each controlled variable was maintained:
@@ -779,7 +794,7 @@ function renderEval(){
   </tr>`).join('')}</tbody></table></div>
   <div class="form-group"><div class="form-label">Extensions</div>
   <textarea class="editor" style="min-height:80px" placeholder="How could the investigation be meaningfully extended? (not just 'increase sample size' — suggest a new variable, different organism, or alternative methodology)" oninput="S.wc.eval=words(this.value);updateWCPill()"></textarea></div>
-  <div class="divider"></div>${completeCheck('eval')}`;
+  <div class="divider"></div>${aiPanel('eval')}${completeCheck('eval')}`;
 }
 
 function renderBib(){
@@ -870,6 +885,120 @@ function renderDash(){
       ${m.done?'<span style="font-size:10px;color:#1a7a4a;margin-left:auto;font-weight:600">✓ Done</span>':''}
     </div>`).join('')}
   </div>`;
+}
+
+// ===== AI HELP =====
+const AI_PROMPTS = {
+  rq:   'You are an IB Biology IA examiner. Review this research question against IB criterion D (Research Design). Check: is it focused and measurable, does it name the IV and DV clearly, is it appropriately scoped for a student investigation? Give specific, actionable feedback in under 150 words.',
+  bg:   'You are an IB Biology IA examiner. Review this background section against IB criterion D. Check: is relevant biological theory present, are sources cited in MLA 8 format, is binomial nomenclature used correctly, does it link directly to the IV and DV? Give specific, actionable feedback in under 150 words.',
+  vm:   'You are an IB Biology IA examiner. Review this variables and method section against IB criterion D. Check: are IV, DV and CVs clearly identified, is the method reproducible, is sample size adequate (n≥5), are units and equipment specified? Give specific, actionable feedback in under 150 words.',
+  raw:  'You are an IB Biology IA examiner. Review this raw data section against IB criterion DA. Check: is there a properly formatted data table with units, uncertainties, and a descriptive title? Are there at least 5 repeats per condition? Give specific, actionable feedback in under 150 words.',
+  proc: 'You are an IB Biology IA examiner. Review this processed data section against IB criterion DA. Check: are means and standard deviations calculated correctly, are error bars present and labelled, is an appropriate inferential statistical test named with p-value interpreted, are graphs properly labelled with axes and units? Give specific, actionable feedback in under 150 words.',
+  conc: 'You are an IB Biology IA examiner. Review this conclusion against IB criterion C. Check: does it directly answer the research question, does it reference the data, does it link to biological theory, does it avoid introducing new information? Give specific, actionable feedback in under 150 words.',
+  eval: 'You are an IB Biology IA examiner. Review this evaluation against IB criterion E. Check: are weaknesses specific and related to the method, are improvements realistic and directly addressing the weakness identified, is the evaluation balanced? Give specific, actionable feedback in under 150 words.',
+};
+
+function collectSectionContent(key) {
+  const p = S.p;
+  const wizCtx = `IV: ${p.iv||'?'} (${p.ivUnit||'?'})
+DV: ${p.dv||'?'} (${p.dvUnit||'?'})
+n per group: ${p.n}
+H₁: ${p.hypothesis||'(not written)'}
+H₀: ${p.h0||'(not written)'}
+Controlled variables: ${p.controlled.filter(v=>v.trim()).join(', ')||'(none listed)'}`;
+
+  switch (key) {
+    case 'rq': {
+      const rqEl = document.querySelector('#content-inner input.form-input');
+      return wizCtx + '\n\n' + `Research question: ${rqEl ? rqEl.value : ''}\nH₁: ${p.hypothesis || '(not written)'}\nH₀: ${p.h0 || '(not written)'}\nIV: ${p.iv || '?'} (${p.ivUnit || '?'}) | DV: ${p.dv || '?'} (${p.dvUnit || '?'})`;
+    }
+    case 'bg':
+      return wizCtx + '\n\n' + (S.texts.bg || '');
+    case 'vm': {
+      const cvRows = p.controlled.filter(v => v.trim()).map((v, i) => `${i + 1}. ${v}`).join('\n');
+      const methodEl = document.querySelector('#content-inner .editor');
+      return wizCtx + '\n\n' + `IV: ${p.iv || '?'} (${p.ivUnit || '?'})\nDV: ${p.dv || '?'} (${p.dvUnit || '?'})\nn per group: ${p.n}\n\nControlled variables:\n${cvRows || '(none listed)'}\n\nMethodology:\n${methodEl ? methodEl.value : '(not written)'}`;
+    }
+    case 'raw': {
+      const ivL = p.iv || 'IV', dvL = p.dv || 'DV';
+      return wizCtx + '\n\n' + (`Raw data — measuring ${dvL} (${p.dvUnit || 'units'}):\n` +
+        S.rawData.map((r, i) => `${ivL} level ${i + 1}: ${r.slice(1).join(', ')}`).join('\n'));
+    }
+    case 'proc': {
+      const rec = recommend();
+      const rows = S.procData.map(r => {
+        const st = stats(r.t);
+        return `${r.g}: values=[${r.t.join(', ')}], mean=${st.mean}, SD=${st.sd}`;
+      }).join('\n');
+      return wizCtx + '\n\n' + `Processed data:\n${rows}\n\nStatistical test: ${rec ? rec.t : 'not yet selected'}\np-value: ${S.pval || 'not entered'}`;
+    }
+    case 'conc': {
+      const ta = document.querySelector('#content-inner .editor');
+      return wizCtx + '\n\n' + (ta ? ta.value : '');
+    }
+    case 'eval': {
+      const tas = document.querySelectorAll('#content-inner .editor');
+      return wizCtx + '\n\n' + Array.from(tas).map(el => el.value).filter(v => v.trim()).join('\n\n');
+    }
+  }
+  return '';
+}
+
+function aiPanel(key) {
+  if (S.aiLoading[key]) {
+    return `<div class="ai-panel"><div class="ai-panel-loading">⧗ Asking Claude…</div></div>`;
+  }
+  if (S.aiResponse[key]) {
+    const safe = S.aiResponse[key]
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\n/g, '<br>');
+    return `<div class="ai-panel">
+      <div class="ai-panel-header">✶ Claude’s IB Feedback</div>
+      <div class="ai-panel-body">${safe}</div>
+      <button class="btn btn-xs" style="margin-top:10px" onclick="S.aiResponse['${key}']=null;render()">Clear</button>
+    </div>`;
+  }
+  return '';
+}
+
+async function askClaudeSection(key) {
+  const apiKey = localStorage.getItem('anthropic_api_key');
+  if (!apiKey) {
+    alert('No API key found. Enter your Anthropic API key in the IA Batch Tracker — it saves automatically and is shared across BSJ tools.');
+    return;
+  }
+  const content = collectSectionContent(key);
+  if (!content.trim()) {
+    alert('Please add some content to this section before asking for feedback.');
+    return;
+  }
+  S.aiLoading[key] = true;
+  S.aiResponse[key] = null;
+  render();
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: AI_PROMPTS[key],
+        messages: [{ role: 'user', content }]
+      })
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error?.message || `API error ${resp.status}`);
+    S.aiResponse[key] = data.content?.[0]?.text || '(No response received)';
+  } catch(e) {
+    S.aiResponse[key] = `Error: ${e.message}`;
+  }
+  S.aiLoading[key] = false;
+  render();
 }
 
 go('wizard');
