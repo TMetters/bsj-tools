@@ -4,17 +4,14 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Form Time Generator — BSJ Year 11</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./bsj-style.css"/>
 <style>
 :root {
   --navy:      #0d2240;
   --navy-mid:  #163260;
-  --blue:      #0099d6;
   --blue-light:#33b3e8;
   --blue-soft: #e8f6fc;
-  --red:       #cc0011;
   --bg:        #f5f7fa;
-  --white:     #ffffff;
   --border:    #dde3eb;
   --text:      #0d2240;
   --text-dim:  #3d5a7a;
@@ -24,31 +21,30 @@
   --amber:     #b45309;
   --amber-soft:#fef3c7;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body{background:var(--bg);min-height:100vh;}
 
 /* HEADER */
 header{background:var(--navy);padding:0;}
 .hdr{max-width:1200px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
 .hdr-logo{display:flex;align-items:center;gap:14px;}
-.bsj-mark{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.4rem;color:#fff;letter-spacing:-0.02em;line-height:1;position:relative;display:flex;align-items:baseline;}
+.bsj-mark{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.4rem;color:var(--white);letter-spacing:-0.02em;line-height:1;position:relative;display:flex;align-items:baseline;}
 .bsj-j-wrap{position:relative;display:inline-block;}
 .bsj-bar{display:block;height:3px;background:var(--red);border-radius:1px;position:absolute;bottom:-3px;left:0;right:0;}
 .hdr-divider{width:1px;height:32px;background:rgba(255,255,255,0.15);}
-.hdr-text h1{font-size:0.92rem;font-weight:700;color:#fff;line-height:1.2;}
+.hdr-text h1{font-size:0.92rem;font-weight:700;color:var(--white);line-height:1.2;}
 .hdr-text p{font-size:0.68rem;color:rgba(255,255,255,0.45);font-weight:500;text-transform:uppercase;letter-spacing:0.07em;margin-top:2px;}
 .hdr-right{display:flex;gap:8px;align-items:center;margin-left:auto;}
 .btn-ghost{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);padding:7px 14px;border-radius:6px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;letter-spacing:0.02em;}
-.btn-ghost:hover{background:rgba(255,255,255,0.15);color:#fff;}
+.btn-ghost:hover{background:rgba(255,255,255,0.15);color:var(--white);}
 
 /* API BAR */
 .api-bar{background:var(--navy-mid);border-top:1px solid rgba(255,255,255,0.08);padding:10px 32px;display:none;}
 .api-bar.open{display:block;}
 .api-inner{max-width:1200px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-.api-bar input{flex:1;min-width:200px;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:5px;font-family:'Montserrat',monospace;font-size:0.78rem;color:#fff;outline:none;transition:border-color 0.2s;}
+.api-bar input{flex:1;min-width:200px;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:5px;font-family:'Montserrat',monospace;font-size:0.78rem;color:var(--white);outline:none;transition:border-color 0.2s;}
 .api-bar input:focus{border-color:var(--blue);}
 .api-bar input::placeholder{color:rgba(255,255,255,0.25);}
-.btn-blue{padding:8px 18px;background:var(--blue);color:#fff;border:none;border-radius:5px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;white-space:nowrap;letter-spacing:0.02em;}
+.btn-blue{padding:8px 18px;background:var(--blue);color:var(--white);border:none;border-radius:5px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;white-space:nowrap;letter-spacing:0.02em;}
 .btn-blue:hover{background:#0087bc;}
 .api-note{font-size:0.68rem;color:rgba(255,255,255,0.35);}
 
@@ -58,7 +54,7 @@ header{background:var(--navy);padding:0;}
 /* LEFT PANEL */
 .panel-left{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;position:sticky;top:16px;}
 .panel-header{background:var(--navy);padding:18px 22px;}
-.panel-header h2{font-size:0.82rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.08em;}
+.panel-header h2{font-size:0.82rem;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:0.08em;}
 .panel-header p{font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:3px;font-weight:400;}
 .panel-body{padding:20px 22px;}
 
@@ -70,8 +66,8 @@ header{background:var(--navy);padding:0;}
 .theme-grid{display:flex;flex-direction:column;gap:6px;}
 .theme-chip{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;transition:all 0.18s;user-select:none;background:var(--white);}
 .theme-chip:hover{border-color:var(--navy);background:var(--bg);}
-.theme-chip.selected{border-color:var(--navy);background:var(--navy);color:#fff;}
-.theme-chip.selected .theme-label{color:#fff;}
+.theme-chip.selected{border-color:var(--navy);background:var(--navy);color:var(--white);}
+.theme-chip.selected .theme-label{color:var(--white);}
 .theme-chip.selected .theme-icon{filter:none;}
 .theme-icon{font-size:1.1rem;flex-shrink:0;}
 .theme-label{font-size:0.8rem;font-weight:600;color:var(--text);}
@@ -80,7 +76,7 @@ header{background:var(--navy);padding:0;}
 .duration-row{display:flex;gap:8px;}
 .dur-btn{flex:1;padding:9px;border:1.5px solid var(--border);border-radius:6px;font-size:0.8rem;font-weight:700;color:var(--muted);cursor:pointer;text-align:center;background:var(--white);transition:all 0.18s;font-family:'Montserrat',sans-serif;}
 .dur-btn:hover{border-color:var(--navy);color:var(--navy);}
-.dur-btn.selected{border-color:var(--navy);background:var(--navy);color:#fff;}
+.dur-btn.selected{border-color:var(--navy);background:var(--navy);color:var(--white);}
 
 /* CONTEXT */
 .form-textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:6px;font-family:'Montserrat',sans-serif;font-size:0.8rem;color:var(--text);outline:none;resize:vertical;min-height:80px;background:var(--bg);transition:border-color 0.2s;line-height:1.5;font-weight:400;}
@@ -91,10 +87,10 @@ header{background:var(--navy);padding:0;}
 .tone-row{display:flex;gap:6px;}
 .tone-btn{flex:1;padding:7px 4px;border:1.5px solid var(--border);border-radius:6px;font-size:0.7rem;font-weight:700;color:var(--muted);cursor:pointer;text-align:center;background:var(--white);transition:all 0.18s;font-family:'Montserrat',sans-serif;letter-spacing:0.02em;}
 .tone-btn:hover{border-color:var(--blue);color:var(--blue);}
-.tone-btn.selected{border-color:var(--blue);background:var(--blue);color:#fff;}
+.tone-btn.selected{border-color:var(--blue);background:var(--blue);color:var(--white);}
 
 /* GENERATE BUTTON */
-.btn-generate{width:100%;padding:13px;background:var(--navy);color:#fff;border:none;border-radius:7px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;letter-spacing:0.03em;margin-top:4px;}
+.btn-generate{width:100%;padding:13px;background:var(--navy);color:var(--white);border:none;border-radius:7px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;letter-spacing:0.03em;margin-top:4px;}
 .btn-generate:hover:not(:disabled){background:var(--navy-mid);}
 .btn-generate:disabled{opacity:0.45;cursor:not-allowed;}
 .btn-generate.loading{opacity:0.7;cursor:wait;}
@@ -113,7 +109,7 @@ header{background:var(--navy);padding:0;}
 .output-card-header{background:var(--navy);padding:20px 28px;position:relative;overflow:hidden;}
 .output-card-header::after{content:'';position:absolute;bottom:0;right:0;width:35%;height:100%;background:var(--navy-mid);clip-path:polygon(25% 0%,100% 0%,100% 100%,0% 100%);pointer-events:none;}
 .session-theme-tag{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--blue);margin-bottom:6px;position:relative;z-index:2;}
-.session-title{font-size:1.3rem;font-weight:800;color:#fff;line-height:1.2;margin-bottom:8px;position:relative;z-index:2;max-width:580px;}
+.session-title{font-size:1.3rem;font-weight:800;color:var(--white);line-height:1.2;margin-bottom:8px;position:relative;z-index:2;max-width:580px;}
 .session-meta{display:flex;gap:16px;flex-wrap:wrap;position:relative;z-index:2;}
 .meta-pill{font-size:0.7rem;color:rgba(255,255,255,0.55);font-weight:500;display:flex;align-items:center;gap:5px;}
 
@@ -121,7 +117,7 @@ header{background:var(--navy);padding:0;}
 .output-toolbar{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--bg);}
 .btn-action{padding:7px 16px;border:1.5px solid var(--border);border-radius:5px;font-size:0.72rem;font-weight:700;cursor:pointer;background:var(--white);color:var(--text-dim);font-family:'Montserrat',sans-serif;transition:all 0.2s;letter-spacing:0.02em;}
 .btn-action:hover{border-color:var(--navy);color:var(--navy);}
-.btn-action.primary{background:var(--navy);color:#fff;border-color:var(--navy);}
+.btn-action.primary{background:var(--navy);color:var(--white);border-color:var(--navy);}
 .btn-action.primary:hover{background:var(--navy-mid);}
 .regen-note{font-size:0.7rem;color:var(--muted);margin-left:auto;}
 
@@ -129,8 +125,8 @@ header{background:var(--navy);padding:0;}
 .session-body{padding:24px 28px;display:flex;flex-direction:column;gap:20px;}
 .session-section{border-radius:8px;overflow:hidden;border:1px solid var(--border);}
 .section-header{padding:12px 18px;display:flex;align-items:center;gap:12px;}
-.section-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;color:#fff;flex-shrink:0;}
-.section-title{font-size:0.82rem;font-weight:700;color:#fff;flex:1;}
+.section-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;color:var(--white);flex-shrink:0;}
+.section-title{font-size:0.82rem;font-weight:700;color:var(--white);flex:1;}
 .section-time{font-size:0.7rem;color:rgba(255,255,255,0.65);font-weight:600;white-space:nowrap;}
 .section-body{padding:16px 18px;background:var(--white);}
 
@@ -166,7 +162,7 @@ header{background:var(--navy);padding:0;}
 .tutor-notes-box p{font-size:0.8rem;color:#78350f;line-height:1.6;font-weight:400;}
 
 /* ERROR */
-.error-box{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:14px 18px;margin:0 28px 20px;font-size:0.8rem;color:#dc2626;display:none;font-weight:500;}
+.error-box{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:14px 18px;margin:0 28px 20px;font-size:0.8rem;color:var(--danger);display:none;font-weight:500;}
 
 /* SPINNER */
 .spinner-wrap{padding:60px;text-align:center;display:none;}
@@ -177,7 +173,7 @@ header{background:var(--navy);padding:0;}
 /* PRINT STYLES */
 @media print {
   header,.api-bar,.panel-left,.output-toolbar,.regen-note{display:none!important;}
-  body{background:#fff;}
+  body{background:var(--white);}
   .app{display:block;padding:0;max-width:none;}
   .panel-right{display:block;}
   .output-card{display:block!important;border:none;box-shadow:none;}
@@ -216,7 +212,7 @@ header{background:var(--navy);padding:0;}
   <div class="api-bar" id="api-bar">
     <div class="api-inner">
       <input type="password" id="api-key" placeholder="sk-ant-api03-…" autocomplete="off"/>
-      <button class="btn-blue" onclick="saveKey()">Save</button>
+      <button class="btn-blue bsj-btn bsj-btn-primary" onclick="saveKey()">Save</button>
       <span class="api-note">Stored in your browser only</span>
     </div>
   </div>
@@ -357,15 +353,15 @@ let lastContext      = '';
 
 // ===== API KEY =====
 window.addEventListener('load', () => {
-  const k = localStorage.getItem('bsj_ft_key');
+  const k = localStorage.getItem('anthropic_api_key');
   if (k) document.getElementById('api-key').value = k;
 });
 function toggleApi() { document.getElementById('api-bar').classList.toggle('open'); }
 function saveKey() {
   const k = document.getElementById('api-key').value.trim();
-  if (k) { localStorage.setItem('bsj_ft_key', k); document.getElementById('api-bar').classList.remove('open'); }
+  if (k) { localStorage.setItem('anthropic_api_key', k); document.getElementById('api-bar').classList.remove('open'); }
 }
-function getKey() { return document.getElementById('api-key').value.trim() || localStorage.getItem('bsj_ft_key') || ''; }
+function getKey() { return document.getElementById('api-key').value.trim() || localStorage.getItem('anthropic_api_key') || ''; }
 
 // ===== SELECTORS =====
 function selectTheme(el, theme) {
