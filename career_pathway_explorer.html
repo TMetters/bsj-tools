@@ -41,6 +41,8 @@ body{background:var(--bg);min-height:100vh;}
 .hdr-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--teal),var(--teal-light));display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
 .hdr-name{font-size:1.05rem;font-weight:800;color:var(--white);letter-spacing:-0.01em;}
 .hdr-sub{font-size:0.68rem;color:rgba(255,255,255,0.4);font-weight:400;margin-top:1px;}
+.btn-teal{padding:8px 18px;background:var(--teal);color:var(--white);border:none;border-radius:6px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap;}
+.btn-teal:hover{background:var(--teal-dim);}
 .btn-ghost{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);padding:7px 14px;border-radius:7px;font-size:0.73rem;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;}
 .btn-ghost:hover{background:rgba(255,255,255,0.14);color:var(--white);}
 .api-bar{background:var(--indigo-mid);border-top:1px solid rgba(255,255,255,0.08);padding:10px 28px;display:none;}
@@ -49,8 +51,6 @@ body{background:var(--bg);min-height:100vh;}
 .api-bar input{flex:1;min-width:200px;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:6px;font-family:'Montserrat',monospace;font-size:0.79rem;color:var(--white);outline:none;}
 .api-bar input:focus{border-color:var(--teal);}
 .api-bar input::placeholder{color:rgba(255,255,255,0.25);}
-.btn-teal{padding:8px 18px;background:var(--teal);color:var(--white);border:none;border-radius:6px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap;}
-.btn-teal:hover{background:var(--teal-dim);}
 .api-note{font-size:0.69rem;color:rgba(255,255,255,0.35);}
 
 /* PAGES */
@@ -196,7 +196,7 @@ body{background:var(--bg);min-height:100vh;}
 .btn-exp:hover{opacity:0.88;}
 
 @media(max-width:640px){
-  .hdr-inner,.sel,.res,.action-bar,.api-bar{padding-left:16px;padding-right:16px;}
+  .hdr-inner,.sel,.res,.action-bar{padding-left:16px;padding-right:16px;}
   .sel-hero h1{font-size:1.7rem;}
   .careers-grid,.subj-grid{grid-template-columns:1fr;}
   .sal-grid{grid-template-columns:1fr 1fr;}
@@ -435,7 +435,7 @@ function buildRow(name, hasHL, color, gid) {
   </div>`;
 }
 
-// ===== API =====
+// ===== API KEY =====
 function toggleApi() { document.getElementById('api-bar').classList.toggle('open'); }
 function saveKey() {
   const k = document.getElementById('api-key').value.trim();

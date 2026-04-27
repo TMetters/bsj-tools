@@ -37,6 +37,9 @@ header{background:var(--navy);padding:0;}
 .btn-ghost{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);padding:7px 14px;border-radius:6px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;letter-spacing:0.02em;}
 .btn-ghost:hover{background:rgba(255,255,255,0.15);color:var(--white);}
 
+.btn-blue{padding:8px 18px;background:var(--blue);color:var(--white);border:none;border-radius:5px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;white-space:nowrap;letter-spacing:0.02em;}
+.btn-blue:hover{background:#0087bc;}
+
 /* API BAR */
 .api-bar{background:var(--navy-mid);border-top:1px solid rgba(255,255,255,0.08);padding:10px 32px;display:none;}
 .api-bar.open{display:block;}
@@ -44,8 +47,6 @@ header{background:var(--navy);padding:0;}
 .api-bar input{flex:1;min-width:200px;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:5px;font-family:'Montserrat',monospace;font-size:0.78rem;color:var(--white);outline:none;transition:border-color 0.2s;}
 .api-bar input:focus{border-color:var(--blue);}
 .api-bar input::placeholder{color:rgba(255,255,255,0.25);}
-.btn-blue{padding:8px 18px;background:var(--blue);color:var(--white);border:none;border-radius:5px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;white-space:nowrap;letter-spacing:0.02em;}
-.btn-blue:hover{background:#0087bc;}
 .api-note{font-size:0.68rem;color:rgba(255,255,255,0.35);}
 
 /* LAYOUT */
@@ -172,7 +173,7 @@ header{background:var(--navy);padding:0;}
 
 /* PRINT STYLES */
 @media print {
-  header,.api-bar,.panel-left,.output-toolbar,.regen-note{display:none!important;}
+  header,.panel-left,.output-toolbar,.regen-note{display:none!important;}
   body{background:var(--white);}
   .app{display:block;padding:0;max-width:none;}
   .panel-right{display:block;}
@@ -186,7 +187,6 @@ header{background:var(--navy);padding:0;}
   .app{grid-template-columns:1fr;}
   .panel-left{position:static;}
   .hdr{padding:14px 16px;}
-  .api-bar{padding:10px 16px;}
   .app{padding:16px;}
 }
 </style>
