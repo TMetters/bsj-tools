@@ -964,11 +964,6 @@ function aiPanel(key) {
 }
 
 async function askClaudeSection(key) {
-  const apiKey = localStorage.getItem('anthropic_api_key');
-  if (!apiKey) {
-    alert('No API key found. Enter your Anthropic API key in the IA Batch Tracker — it saves automatically and is shared across BSJ tools.');
-    return;
-  }
   const content = collectSectionContent(key);
   if (!content.trim()) {
     alert('Please add some content to this section before asking for feedback.');
@@ -978,13 +973,10 @@ async function askClaudeSection(key) {
   S.aiResponse[key] = null;
   render();
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch('/api/claude', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
