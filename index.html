@@ -16,7 +16,7 @@
   /* ── HEADER ── */
   header {
     background: var(--navy);
-    padding: 16px 56px;
+    padding: 20px 56px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -61,14 +61,13 @@
 
   .header-right { text-align: right; }
 
-  .date-display { line-height: 1.3; }
-
   #time {
     display: block;
     font-size: 1.3rem;
     font-weight: 800;
     color: var(--white);
     letter-spacing: -0.02em;
+    line-height: 1;
   }
 
   #datestr {
@@ -76,7 +75,7 @@
     font-size: 0.75rem;
     color: rgba(255,255,255,0.55);
     font-weight: 500;
-    margin-top: 2px;
+    margin-top: 4px;
   }
 
   /* ── DIVIDER ── */
@@ -88,25 +87,34 @@
 
   /* ── MAIN ── */
   main {
-    padding: 48px 56px 80px;
+    padding: 32px 56px 80px;
     max-width: 1400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 
-  /* ── SECTION LABEL ── */
-  .section-label {
+  /* ── PANELS ── */
+  .panel {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 24px;
+  }
+
+  .panel-label {
     font-size: 0.68rem;
     font-weight: 700;
-    color: var(--muted);
+    color: var(--navy);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
   }
 
   /* ── CARD GRID ── */
   .card-grid {
     display: grid;
     gap: 16px;
-    margin-bottom: 48px;
   }
 
   .grid-2 { grid-template-columns: repeat(2, 1fr); }
@@ -115,13 +123,14 @@
 
   /* ── APP CARD ── */
   .app-card {
-    background: var(--white);
+    background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 24px;
     text-decoration: none;
     display: block;
     transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
   }
 
   .app-card:hover { border-color: var(--blue); box-shadow: 0 4px 16px rgba(0,153,214,0.1); }
@@ -135,7 +144,7 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 14px;
-    background: var(--bg);
+    background: var(--white);
   }
 
   .card-title {
@@ -151,7 +160,6 @@
     color: var(--muted);
     line-height: 1.65;
     font-weight: 400;
-    margin-bottom: 0;
   }
 
   .card-url {
@@ -177,13 +185,43 @@
   .app-card:hover .card-action { color: var(--blue); }
   .card-action svg { width: 12px; height: 12px; }
 
+  /* ── STATUS DOTS ── */
+  .card-status {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-status-green { background: #059669; }
+  .dot-status-red   { background: #dc2626; }
+  .dot-status-grey  { background: #6b7280; }
+
+  .label-green { color: #059669; }
+  .label-red   { color: #dc2626; }
+  .label-grey  { color: #6b7280; }
+
   /* ── TERMINAL CARD ── */
   .terminal-card {
-    background: var(--white);
+    background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 24px;
     transition: border-color 0.2s;
+    position: relative;
   }
 
   .terminal-card:hover { border-color: var(--blue); }
@@ -191,7 +229,7 @@
   .terminal-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 12px;
     margin-bottom: 14px;
   }
 
@@ -203,9 +241,9 @@
     border-radius: 50%;
   }
 
-  .dot-red   { background: #ff5f57; }
-  .dot-amber { background: #febc2e; }
-  .dot-green { background: #28c840; }
+  .tdot-red   { background: #ff5f57; }
+  .tdot-amber { background: #febc2e; }
+  .tdot-green { background: #28c840; }
 
   .terminal-title {
     font-size: 0.82rem;
@@ -220,6 +258,7 @@
     font-family: 'DM Mono', monospace;
     font-size: 0.78rem;
     line-height: 1.9;
+    margin-bottom: 16px;
   }
 
   .t-prompt  { color: #4ade80; }
@@ -227,33 +266,40 @@
   .t-comment { color: #6b7280; }
   .t-url     { color: #38bdf8; }
 
-  .copy-btn {
-    background: #1e1e2e;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 6px;
-    color: #9ca3af;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    padding: 4px 10px;
+  /* ── BLOOMBERG LAUNCH BUTTON ── */
+  .btn-launch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    background: #0099d6;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 13px 24px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-family: inherit;
     cursor: pointer;
-    transition: all 0.15s;
-    letter-spacing: 0.05em;
+    transition: background 0.2s, transform 0.15s;
+    letter-spacing: 0.01em;
   }
 
-  .copy-btn:hover { border-color: rgba(255,255,255,0.28); color: #e5e7eb; }
+  .btn-launch:hover { background: #007ab5; transform: translateY(-1px); }
+  .btn-launch:active { transform: translateY(0); }
 
   /* ── QUICK LINKS ── */
   .quick-links {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    margin-bottom: 48px;
   }
 
   .quick-link {
     display: flex;
     align-items: center;
-    background: var(--white);
+    background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 9px 16px;
@@ -266,60 +312,140 @@
 
   .quick-link:hover { border-color: var(--blue); color: var(--text); }
 
-  /* ── NOTES CARD ── */
-  .notes-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
+  /* ── COPY BUTTON (deploy terminal) ── */
+  .copy-btn {
+    background: #1e1e2e;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    color: #9ca3af;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
   }
 
-  .note-item {
+  .copy-btn:hover { border-color: rgba(255,255,255,0.28); color: #e5e7eb; }
+
+  /* ── TODO LIST ── */
+  .todo-list {
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
+  }
+
+  .todo-item {
     display: flex;
     align-items: flex-start;
-    gap: 18px;
-    padding: 13px 0;
+    gap: 12px;
+    padding: 12px 0;
     border-bottom: 1px solid var(--border);
     font-size: 0.85rem;
     color: var(--muted);
     line-height: 1.65;
-    font-weight: 400;
+    transition: opacity 0.2s;
   }
 
-  .note-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .todo-item:last-child { border-bottom: none; }
+  .todo-item.done { opacity: 0.45; }
+  .todo-item.done .todo-text { text-decoration: line-through; }
 
-  .note-num {
+  .todo-num {
     font-size: 0.72rem;
     font-weight: 700;
     color: var(--blue);
-    min-width: 24px;
-    padding-top: 2px;
+    min-width: 22px;
+    padding-top: 3px;
     flex-shrink: 0;
   }
 
-  .note-text strong { color: var(--text); font-weight: 700; }
+  .todo-check {
+    width: 15px;
+    height: 15px;
+    margin-top: 4px;
+    flex-shrink: 0;
+    cursor: pointer;
+    accent-color: #059669;
+  }
 
-  /* ── ANIMATION ── */
+  .todo-text strong { color: var(--text); font-weight: 700; }
+
+  .todo-add-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .todo-input {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 0.82rem;
+    font-family: inherit;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .todo-input:focus { border-color: var(--blue); }
+  .todo-input::placeholder { color: var(--muted); opacity: 0.6; }
+
+  .todo-btn-add {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+
+  .todo-btn-add:hover { background: #1a3558; }
+
+  .todo-btn-clear {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .todo-btn-clear:hover { border-color: #dc2626; color: #dc2626; }
+
+  /* ── ANIMATIONS ── */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  .app-card, .terminal-card, .quick-link, .notes-card {
-    animation: fadeUp 0.35s ease both;
-  }
-
-  .app-card:nth-child(1) { animation-delay: 0.04s; }
-  .app-card:nth-child(2) { animation-delay: 0.08s; }
-  .app-card:nth-child(3) { animation-delay: 0.12s; }
-  .app-card:nth-child(4) { animation-delay: 0.16s; }
+  .panel { animation: fadeUp 0.3s ease both; }
+  .panel:nth-child(1) { animation-delay: 0.03s; }
+  .panel:nth-child(2) { animation-delay: 0.07s; }
+  .panel:nth-child(3) { animation-delay: 0.11s; }
+  .panel:nth-child(4) { animation-delay: 0.15s; }
+  .panel:nth-child(5) { animation-delay: 0.19s; }
+  .panel:nth-child(6) { animation-delay: 0.23s; }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
     .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-    header { padding: 12px 24px; }
+    header { padding: 14px 24px; }
     .divider { margin: 0 24px; }
-    main { padding: 36px 24px 60px; }
+    main { padding: 20px 24px 60px; }
   }
 </style>
 </head>
@@ -341,10 +467,8 @@
     </div>
   </div>
   <div class="header-right">
-    <div class="date-display">
-      <span id="time">--:--</span>
-      <span id="datestr">--</span>
-    </div>
+    <span id="time">--:--:--</span>
+    <span id="datestr">--</span>
   </div>
 </header>
 
@@ -352,187 +476,320 @@
 
 <main>
 
-  <!-- WEB APPS -->
-  <div class="section-label">Live web apps</div>
-  <div class="card-grid grid-2">
+  <!-- ── LIVE WEB APPS ── -->
+  <div class="panel">
+    <div class="panel-label">Live web apps</div>
+    <div class="card-grid grid-2">
 
-    <a class="app-card" href="https://ibdp-bio-ia-grader.vercel.app" target="_blank">
-      <div class="card-icon">🧬</div>
-      <div class="card-title">IA Workspace</div>
-      <div class="card-desc">Student-facing IA planner — Design Wizard, writing sections, stats selector, MLA 8 bibliography, Word export. 34 students active.</div>
-      <div class="card-url">ibdp-bio-ia-grader.vercel.app</div>
-      <div class="card-action">
-        Open app
-        <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-    </a>
+      <a class="app-card" href="https://ibdp-bio-ia-grader.vercel.app" target="_blank">
+        <div class="card-status" id="status-ia">
+          <span class="status-dot dot-status-grey"></span>
+          <span class="label-grey">Checking</span>
+        </div>
+        <div class="card-icon">🧬</div>
+        <div class="card-title">IA Workspace</div>
+        <div class="card-desc">Student-facing IA planner — Design Wizard, writing sections, stats selector, MLA 8 bibliography, Word export. 34 students active.</div>
+        <div class="card-url">ibdp-bio-ia-grader.vercel.app</div>
+        <div class="card-action">
+          Open app
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </a>
 
-    <a class="app-card" href="https://biomate-app.vercel.app" target="_blank">
-      <div class="card-icon">⚗️</div>
-      <div class="card-title">BioMate</div>
-      <div class="card-desc">Teacher IA grader — upload student PDF, get RD/DA/C/E criterion scores, moderator justification, ManageBac comment, .docx export.</div>
-      <div class="card-url">biomate-app.vercel.app</div>
-      <div class="card-action">
-        Open app
-        <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-    </a>
+      <a class="app-card" href="https://biomate-app.vercel.app" target="_blank">
+        <div class="card-status" id="status-biomate">
+          <span class="status-dot dot-status-grey"></span>
+          <span class="label-grey">Checking</span>
+        </div>
+        <div class="card-icon">⚗️</div>
+        <div class="card-title">BioMate</div>
+        <div class="card-desc">Teacher IA grader — upload student PDF, get RD/DA/C/E criterion scores, moderator justification, ManageBac comment, .docx export.</div>
+        <div class="card-url">biomate-app.vercel.app</div>
+        <div class="card-action">
+          Open app
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </a>
 
-  </div>
-
-  <!-- BLOOMBERG TERMINAL -->
-  <div class="section-label">Desktop app — local</div>
-  <div class="terminal-card" style="margin-bottom: 56px;">
-    <div class="terminal-header">
-      <div class="terminal-dots">
-        <span class="dot-red"></span>
-        <span class="dot-amber"></span>
-        <span class="dot-green"></span>
-      </div>
-      <div class="terminal-title">Bloomberg Terminal — Metters Capital</div>
-      <button class="copy-btn" onclick="copyCmd()">Copy command</button>
-    </div>
-    <div class="terminal-body">
-      <div><span class="t-prompt">~ </span><span class="t-comment"># Launch Bloomberg Terminal</span></div>
-      <div><span class="t-prompt">~ </span><span class="t-cmd" id="terminal-cmd">cd ~/Desktop/bloomberg_terminal && python3 bloomberg.py</span></div>
-      <div style="margin-top:6px;"><span class="t-comment"># Opens at → </span><span class="t-url">http://127.0.0.1:5001</span></div>
     </div>
   </div>
 
-  <!-- HTML TOOLS -->
-  <div class="section-label">HTML tools — shareable files</div>
-  <div class="card-grid grid-3" style="margin-bottom:56px;">
-
-    <a class="app-card" href="./BSJ_IA_Batch_Tracker.html" target="_blank">
-      <div class="card-icon">📋</div>
-      <div class="card-title">IA Batch Tracker</div>
-      <div class="card-desc">Upload multiple student IA PDFs → batch criterion scores, flags, ManageBac comments, CSV export. API key saved automatically.</div>
-
-      <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    </a>
-
-    <a class="app-card" href="./BSJ_Investment_Onboarding.html" target="_blank">
-      <div class="card-icon">💰</div>
-      <div class="card-title">Investment Onboarding</div>
-      <div class="card-desc">Self-paced investing guide for teachers — asset classes, risk profiling, Binance/Indodax setup. No server needed.</div>
-
-      <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    </a>
-
-    <a class="app-card" href="./bsj_formtime_generator.html" target="_blank">
-      <div class="card-icon">📅</div>
-      <div class="card-title">Form Time Generator</div>
-      <div class="card-desc">Year 11 Tutor &amp; Wellbeing</div>
-
-      <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    </a>
-
-    <a class="app-card" href="./career_pathway_explorer.html" target="_blank">
-      <div class="card-icon">🧭</div>
-      <div class="card-title">Career Explorer</div>
-      <div class="card-desc">IBDP subject and career pathway tool</div>
-
-      <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    </a>
-
-  </div>
-
-  <!-- QUICK LINKS -->
-  <div class="section-label">Quick links</div>
-  <div class="quick-links" style="margin-bottom:56px;">
-
-    <a class="quick-link" href="https://github.com/TMetters/ibdp-bio-ia-grader" target="_blank">GitHub — IA Workspace</a>
-    <a class="quick-link" href="https://github.com/TMetters/biomate-app" target="_blank">GitHub — BioMate</a>
-    <a class="quick-link" href="https://github.com/TMetters/bsj-tools" target="_blank">GitHub — Tools</a>
-    <a class="quick-link" href="https://vercel.com/tmetters-projects" target="_blank">Vercel Dashboard</a>
-    <a class="quick-link" href="https://supabase.com/dashboard" target="_blank">Supabase Dashboard</a>
-    <a class="quick-link" href="https://console.anthropic.com" target="_blank">Anthropic Console</a>
-    <a class="quick-link" href="https://managebac.com" target="_blank">ManageBac</a>
-    <a class="quick-link" href="https://github.com/TMetters/bsj-tools/compare" target="_blank">Deploy update</a>
-
-  </div>
-
-  <!-- DEPLOY WORKFLOW -->
-  <div class="section-label">Deploy to bsj-tools.vercel.app</div>
-  <div class="terminal-card" style="margin-bottom: 56px;">
-    <div class="terminal-header">
-      <div class="terminal-dots">
-        <span class="dot-red"></span>
-        <span class="dot-amber"></span>
-        <span class="dot-green"></span>
+  <!-- ── DESKTOP APP ── -->
+  <div class="panel">
+    <div class="panel-label">Desktop app — local</div>
+    <div class="terminal-card">
+      <div class="card-status" id="status-bloomberg">
+        <span class="status-dot dot-status-grey"></span>
+        <span class="label-grey">Checking</span>
       </div>
-      <div class="terminal-title">Deploy to bsj-tools.vercel.app</div>
-    </div>
-    <div class="terminal-body">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <div><span class="t-prompt">~ </span><span class="t-cmd" id="deploy-cmd-1">cd ~/Desktop/bsj-tools</span></div>
-        <button class="copy-btn" onclick="copyDeployCmd(1, this)">Copy</button>
+      <div class="terminal-header">
+        <div class="terminal-dots">
+          <span class="tdot-red"></span>
+          <span class="tdot-amber"></span>
+          <span class="tdot-green"></span>
+        </div>
+        <div class="terminal-title">Bloomberg Terminal — Metters Capital</div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
-        <div><span class="t-prompt">~ </span><span class="t-cmd" id="deploy-cmd-2">git add .</span></div>
-        <button class="copy-btn" onclick="copyDeployCmd(2, this)">Copy</button>
+      <div class="terminal-body">
+        <div><span class="t-prompt">~ </span><span class="t-comment"># Launch Bloomberg Terminal</span></div>
+        <div><span class="t-prompt">~ </span><span class="t-cmd" id="terminal-cmd">cd ~/Desktop/bloomberg_terminal && python3 bloomberg.py</span></div>
+        <div style="margin-top:6px;"><span class="t-comment"># Opens at → </span><span class="t-url">http://127.0.0.1:5001</span></div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
-        <div><span class="t-prompt">~ </span><span class="t-cmd" id="deploy-cmd-3">git commit -m "your message" && git push</span></div>
-        <button class="copy-btn" onclick="copyDeployCmd(3, this)">Copy</button>
-      </div>
+      <button class="btn-launch" id="launch-btn" onclick="copyLaunchCmd()">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="3.5" y="3.5" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 3.5V2.5a1 1 0 011-1h5a1 1 0 011 1v5a1 1 0 01-1 1H10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Copy launch command
+      </button>
     </div>
   </div>
 
-  <!-- NEXT STEPS -->
-  <div class="section-label">Next steps</div>
-  <div class="notes-card">
-    <div class="note-item">
-      <span class="note-num">01</span>
-      <span class="note-text"><strong>Add Stripe to BioMate</strong> — payment gate for external IB Biology teachers. ~1 day of Claude Code work. This is what turns BioMate into income.</span>
+  <!-- ── HTML TOOLS ── -->
+  <div class="panel">
+    <div class="panel-label">HTML tools — shareable files</div>
+    <div class="card-grid grid-4">
+
+      <a class="app-card" href="./BSJ_IA_Batch_Tracker.html" target="_blank">
+        <div class="card-status">
+          <span class="status-dot dot-status-green"></span>
+          <span class="label-green">Available</span>
+        </div>
+        <div class="card-icon">📋</div>
+        <div class="card-title">IA Batch Tracker</div>
+        <div class="card-desc">Upload multiple student IA PDFs → batch criterion scores, flags, ManageBac comments, CSV export. API key saved automatically.</div>
+        <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </a>
+
+      <a class="app-card" href="./BSJ_Investment_Onboarding.html" target="_blank">
+        <div class="card-status">
+          <span class="status-dot dot-status-green"></span>
+          <span class="label-green">Available</span>
+        </div>
+        <div class="card-icon">💰</div>
+        <div class="card-title">Investment Onboarding</div>
+        <div class="card-desc">Self-paced investing guide for teachers — asset classes, risk profiling, Binance/Indodax setup. No server needed.</div>
+        <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </a>
+
+      <a class="app-card" href="./bsj_formtime_generator.html" target="_blank">
+        <div class="card-status">
+          <span class="status-dot dot-status-green"></span>
+          <span class="label-green">Available</span>
+        </div>
+        <div class="card-icon">📅</div>
+        <div class="card-title">Form Time Generator</div>
+        <div class="card-desc">Year 11 Tutor &amp; Wellbeing</div>
+        <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </a>
+
+      <a class="app-card" href="./career_pathway_explorer.html" target="_blank">
+        <div class="card-status">
+          <span class="status-dot dot-status-green"></span>
+          <span class="label-green">Available</span>
+        </div>
+        <div class="card-icon">🧭</div>
+        <div class="card-title">Career Explorer</div>
+        <div class="card-desc">IBDP subject and career pathway tool</div>
+        <div class="card-action">Open app <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </a>
+
     </div>
-    <div class="note-item">
-      <span class="note-num">02</span>
-      <span class="note-text"><strong>Rebuild the HTML tools</strong> — ask Claude to rebuild the IA Batch Tracker and Investment Onboarding files. Both are single sessions.</span>
+  </div>
+
+  <!-- ── QUICK LINKS ── -->
+  <div class="panel">
+    <div class="panel-label">Quick links</div>
+    <div class="quick-links">
+      <a class="quick-link" href="https://github.com/TMetters/ibdp-bio-ia-grader" target="_blank">GitHub — IA Workspace</a>
+      <a class="quick-link" href="https://github.com/TMetters/biomate-app" target="_blank">GitHub — BioMate</a>
+      <a class="quick-link" href="https://github.com/TMetters/bsj-tools" target="_blank">GitHub — Tools</a>
+      <a class="quick-link" href="https://vercel.com/tmetters-projects" target="_blank">Vercel Dashboard</a>
+      <a class="quick-link" href="https://supabase.com/dashboard" target="_blank">Supabase Dashboard</a>
+      <a class="quick-link" href="https://console.anthropic.com" target="_blank">Anthropic Console</a>
+      <a class="quick-link" href="https://managebac.com" target="_blank">ManageBac</a>
+      <a class="quick-link" href="https://github.com/TMetters/bsj-tools/compare" target="_blank">Deploy update</a>
     </div>
-    <div class="note-item">
-      <span class="note-num">03</span>
-      <span class="note-text"><strong>Re-pilot BioMate</strong> — it works now. Send it to your three pilot teachers again and get written feedback and testimonials.</span>
+  </div>
+
+  <!-- ── DEPLOY ── -->
+  <div class="panel">
+    <div class="panel-label">Deploy to bsj-tools.vercel.app</div>
+    <div class="terminal-card" style="margin:0;">
+      <div class="terminal-header">
+        <div class="terminal-dots">
+          <span class="tdot-red"></span>
+          <span class="tdot-amber"></span>
+          <span class="tdot-green"></span>
+        </div>
+        <div class="terminal-title">Deploy to bsj-tools.vercel.app</div>
+      </div>
+      <div class="terminal-body">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <div><span class="t-prompt">~ </span><span class="t-cmd" id="deploy-cmd-1">cd ~/Desktop/bsj-tools</span></div>
+          <button class="copy-btn" onclick="copyDeployCmd(1, this)">Copy</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px;">
+          <div><span class="t-prompt">~ </span><span class="t-cmd" id="deploy-cmd-2">git add .</span></div>
+          <button class="copy-btn" onclick="copyDeployCmd(2, this)">Copy</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px;">
+          <div><span class="t-prompt">~ </span><span class="t-cmd" id="deploy-cmd-3">git commit -m "your message" && git push</span></div>
+          <button class="copy-btn" onclick="copyDeployCmd(3, this)">Copy</button>
+        </div>
+      </div>
     </div>
-    <div class="note-item">
-      <span class="note-num">04</span>
-      <span class="note-text"><strong>Fix Bloomberg Terminal JSON error</strong> — one tab returns bad data. Low urgency, personal use only.</span>
-    </div>
-    <div class="note-item">
-      <span class="note-num">05</span>
-      <span class="note-text"><strong>Post on LinkedIn/X</strong> — you've built two working EdTech apps. That's content. Write one post about BioMate this week.</span>
+  </div>
+
+  <!-- ── NEXT STEPS ── -->
+  <div class="panel">
+    <div class="panel-label">Next steps</div>
+    <ul class="todo-list" id="todo-list"></ul>
+    <div class="todo-add-row">
+      <input class="todo-input" id="todo-input" type="text" placeholder="Add a new task…"/>
+      <button class="todo-btn-add" onclick="addTodo()">Add task</button>
+      <button class="todo-btn-clear" onclick="clearCompleted()">Clear completed</button>
     </div>
   </div>
 
 </main>
 
 <script>
+  // ── CLOCK ────────────────────────────────────────────────────────────────────
   function updateClock() {
     const now = new Date();
-    const time = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-    const date = now.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-    document.getElementById('time').textContent = time;
-    document.getElementById('datestr').textContent = date;
+    document.getElementById('time').textContent =
+      now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    document.getElementById('datestr').textContent =
+      now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   }
   updateClock();
   setInterval(updateClock, 1000);
 
-  function copyCmd() {
+  // ── STATUS INDICATORS ────────────────────────────────────────────────────────
+  function setStatus(id, state) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const dot = el.querySelector('.status-dot');
+    const lbl = el.querySelector('span:last-child');
+    const map = {
+      live:     { dot: 'dot-status-green', lbl: 'label-green', text: 'Live' },
+      offline:  { dot: 'dot-status-red',   lbl: 'label-red',   text: 'Offline' },
+      running:  { dot: 'dot-status-green', lbl: 'label-green', text: 'Running' },
+      stopped:  { dot: 'dot-status-grey',  lbl: 'label-grey',  text: 'Not started' },
+      checking: { dot: 'dot-status-grey',  lbl: 'label-grey',  text: 'Checking' },
+    };
+    const s = map[state] || map.checking;
+    dot.className = 'status-dot ' + s.dot;
+    lbl.className = s.lbl;
+    lbl.textContent = s.text;
+  }
+
+  async function pingVercel(id, url) {
+    try {
+      await fetch(url, { method: 'HEAD', mode: 'no-cors', cache: 'no-cache' });
+      setStatus(id, 'live');
+    } catch {
+      setStatus(id, 'offline');
+    }
+  }
+
+  async function pingBloomberg() {
+    try {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 2000);
+      await fetch('http://127.0.0.1:5001', { method: 'HEAD', mode: 'no-cors', signal: ctrl.signal });
+      clearTimeout(t);
+      setStatus('status-bloomberg', 'running');
+    } catch {
+      setStatus('status-bloomberg', 'stopped');
+    }
+  }
+
+  pingVercel('status-ia', 'https://ibdp-bio-ia-grader.vercel.app');
+  pingVercel('status-biomate', 'https://biomate-app.vercel.app');
+  pingBloomberg();
+
+  // ── BLOOMBERG LAUNCH BUTTON ──────────────────────────────────────────────────
+  function copyLaunchCmd() {
     const cmd = document.getElementById('terminal-cmd').textContent;
+    const btn = document.getElementById('launch-btn');
     navigator.clipboard.writeText(cmd).then(() => {
-      const btn = document.querySelector('.copy-btn');
       btn.textContent = 'Copied!';
-      setTimeout(() => btn.textContent = 'Copy command', 2000);
+      setTimeout(() => {
+        btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="3.5" y="3.5" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 3.5V2.5a1 1 0 011-1h5a1 1 0 011 1v5a1 1 0 01-1 1H10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg> Copy launch command';
+      }, 2000);
     });
   }
 
+  // ── DEPLOY COPY BUTTONS ──────────────────────────────────────────────────────
   function copyDeployCmd(n, btn) {
-    const cmd = document.getElementById('deploy-cmd-' + n).textContent;
-    navigator.clipboard.writeText(cmd).then(() => {
+    navigator.clipboard.writeText(document.getElementById('deploy-cmd-' + n).textContent).then(() => {
       btn.textContent = 'Copied!';
       setTimeout(() => btn.textContent = 'Copy', 2000);
     });
   }
+
+  // ── TODO LIST ────────────────────────────────────────────────────────────────
+  const DEFAULT_TODOS = [
+    { id: 0, text: '<strong>Add Stripe to BioMate</strong> — payment gate for external IB Biology teachers. ~1 day of Claude Code work. This is what turns BioMate into income.', done: false },
+    { id: 1, text: '<strong>Rebuild the HTML tools</strong> — ask Claude to rebuild the IA Batch Tracker and Investment Onboarding files. Both are single sessions.', done: false },
+    { id: 2, text: '<strong>Re-pilot BioMate</strong> — it works now. Send it to your three pilot teachers again and get written feedback and testimonials.', done: false },
+    { id: 3, text: '<strong>Fix Bloomberg Terminal JSON error</strong> — one tab returns bad data. Low urgency, personal use only.', done: false },
+    { id: 4, text: '<strong>Post on LinkedIn/X</strong> — you\'ve built two working EdTech apps. That\'s content. Write one post about BioMate this week.', done: false },
+  ];
+
+  function loadTodos() {
+    try {
+      const saved = localStorage.getItem('tm-cc-todos');
+      return saved ? JSON.parse(saved) : DEFAULT_TODOS;
+    } catch { return DEFAULT_TODOS; }
+  }
+
+  function saveTodos(todos) {
+    localStorage.setItem('tm-cc-todos', JSON.stringify(todos));
+  }
+
+  function renderTodos() {
+    const todos = loadTodos();
+    const list = document.getElementById('todo-list');
+    list.innerHTML = '';
+    todos.forEach((todo, i) => {
+      const li = document.createElement('li');
+      li.className = 'todo-item' + (todo.done ? ' done' : '');
+      li.innerHTML =
+        '<span class="todo-num">' + String(i + 1).padStart(2, '0') + '</span>' +
+        '<input type="checkbox" class="todo-check"' + (todo.done ? ' checked' : '') + ' onchange="toggleTodo(' + todo.id + ')">' +
+        '<span class="todo-text">' + todo.text + '</span>';
+      list.appendChild(li);
+    });
+  }
+
+  function toggleTodo(id) {
+    const todos = loadTodos();
+    const t = todos.find(x => x.id === id);
+    if (t) { t.done = !t.done; saveTodos(todos); renderTodos(); }
+  }
+
+  function addTodo() {
+    const input = document.getElementById('todo-input');
+    const text = input.value.trim();
+    if (!text) return;
+    const todos = loadTodos();
+    const newId = todos.length ? Math.max(...todos.map(t => t.id)) + 1 : 0;
+    todos.push({ id: newId, text, done: false });
+    saveTodos(todos);
+    input.value = '';
+    renderTodos();
+  }
+
+  function clearCompleted() {
+    saveTodos(loadTodos().filter(t => !t.done));
+    renderTodos();
+  }
+
+  document.getElementById('todo-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addTodo();
+  });
+
+  renderTodos();
 </script>
 
 </body>
