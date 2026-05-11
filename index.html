@@ -497,13 +497,13 @@
       </a>
 
       <a class="app-card" href="https://ibdp-bio-ia-grader.vercel.app/teacher" target="_blank">
-        <div class="card-status" id="status-ia-teacher">
+        <div class="card-status" id="status-teacher">
           <span class="status-dot dot-status-grey"></span>
           <span class="label-grey">Checking</span>
         </div>
         <div class="card-icon">👨‍🏫</div>
         <div class="card-title">IA Teacher View</div>
-        <div class="card-desc">Teacher supervision panel — view all student IAs, leave inline comments and criterion feedback.</div>
+        <div class="card-desc">Teacher supervision panel — view all student IAs, leave inline comments and criterion-level feedback. Login with your BSJ Google account.</div>
         <div class="card-url">ibdp-bio-ia-grader.vercel.app/teacher</div>
         <div class="card-action">
           Open app
@@ -719,6 +719,7 @@
   }
 
   pingVercel('status-ia', 'https://ibdp-bio-ia-grader.vercel.app');
+  pingVercel('status-teacher', 'https://ibdp-bio-ia-grader.vercel.app/teacher');
   pingVercel('status-biomate', 'https://biomate-app.vercel.app');
   pingBloomberg();
 
