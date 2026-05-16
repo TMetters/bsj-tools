@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IBDP Biology — Statistics Tool</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.6/jstat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+/* ── Reset & base ── */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;color:#1a1a1a;background:#f0f0ee;min-height:100vh;padding:1.5rem 1rem}
+.page-wrap{max-width:860px;margin:0 auto}
+.page-title{font-size:22px;font-weight:700;margin-bottom:.25rem;color:#111}
+.page-sub{font-size:13px;color:#666;margin-bottom:1.25rem;line-height:1.5}
+
+/* ── Step bar ── */
+.step-bar{display:flex;gap:5px;margin-bottom:1.25rem}
+.step-dot{flex:1;height:5px;border-radius:3px;background:#ddd;transition:background .3s}
+.step-dot.done{background:#1D9E75}
+.step-dot.active{background:#7F77DD}
+
+/* ── Cards ── */
+.card{background:#fff;border:1px solid #e4e4e2;border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:.875rem;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card-title{font-size:16px;font-weight:700;margin-bottom:.875rem;color:#111}
+
+/* ── Choice buttons ── */
+.btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:.5rem}
+.opt{padding:10px 16px;border-radius:10px;border:1.5px solid #d4d4d2;background:#fff;color:#1a1a1a;font-size:13px;cursor:pointer;text-align:left;line-height:1.4;transition:all .15s}
+.opt:hover{background:#f5f5f3;border-color:#aaa}
+.opt.sel{border-color:#7F77DD;background:#EEEDFE;color:#3C3489}
+.opt-sub{display:block;font-size:11px;color:#888;margin-top:3px}
+.opt.sel .opt-sub{color:#7168C0}
+
+/* ── Buttons ── */
+.btn-primary{padding:9px 22px;border-radius:9px;border:none;background:#7F77DD;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
+.btn-primary:hover{background:#534AB7}
+.btn-secondary{padding:9px 18px;border-radius:9px;border:1.5px solid #d4d4d2;background:#fff;color:#1a1a1a;font-size:13px;cursor:pointer;transition:all .15s}
+.btn-secondary:hover{background:#f5f5f3}
+.btn-copy{padding:8px 14px;border-radius:8px;border:1.5px solid #d4d4d2;background:#f5f5f3;color:#1a1a1a;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+.btn-copy:hover{background:#fff;border-color:#aaa}
+.add-btn{font-size:12px;color:#534AB7;cursor:pointer;background:none;border:none;padding:5px 0;text-decoration:underline;display:inline-block}
+
+/* ── Nav row ── */
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.25rem;padding-top:1rem;border-top:1px solid #f0f0ee}
+
+/* ── Form labels & inputs ── */
+.lbl{display:block;font-size:11px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem}
+input[type=text],input[type=number],select{padding:8px 11px;border-radius:8px;border:1.5px solid #d4d4d2;background:#fff;color:#1a1a1a;font-size:13px;font-family:inherit;width:100%}
+input[type=text]:focus,input[type=number]:focus,select:focus{outline:2px solid #7F77DD;outline-offset:1px;border-color:#7F77DD}
+.err{color:#A32D2D;font-size:12px;margin-top:6px;min-height:18px}
+.notice{background:#E1F5EE;border:1px solid #1D9E75;border-radius:8px;padding:.5rem .875rem;font-size:12px;color:#085041;margin:.5rem 0}
+.divider{display:flex;align-items:center;gap:.75rem;margin:.75rem 0;font-size:12px;color:#aaa}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#e8e8e6}
+
+/* ── Unit picker ── */
+.unit-picker{position:relative}
+.unit-custom{display:none;margin-top:5px}
+.unit-custom.show{display:block}
+
+/* ── Upload zone ── */
+.upload-zone{border:2px dashed #c8c8c6;border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;transition:all .2s;background:#fafafa;margin-bottom:.75rem}
+.upload-zone:hover,.upload-zone.drag{border-color:#7F77DD;background:#EEEDFE}
+.upload-zone p{font-size:13px;color:#555;line-height:1.6;pointer-events:none}
+.upload-zone small{font-size:11px;color:#999}
+.uz-icon{font-size:28px;display:block;margin-bottom:.4rem;pointer-events:none}
+
+/* ── Data grid (spreadsheet) ── */
+.dg-wrap{overflow-x:auto;border:1px solid #d8d8d6;border-radius:10px;margin-bottom:.75rem;background:#fff}
+.dg{border-collapse:collapse;font-size:13px;min-width:100%;table-layout:auto}
+.dg th{background:#f5f5f3;border:1px solid #e2e2e0;padding:0;white-space:nowrap;font-weight:600;color:#555;text-align:center}
+.dg th:first-child{font-size:11px;font-weight:500;color:#888;padding:8px 12px;min-width:90px;text-align:left}
+.gni{border:none;background:transparent;font-size:13px;font-weight:700;color:#1a1a1a;text-align:center;padding:8px 6px;width:100%;outline:none;min-width:110px}
+.gni:focus{background:#EEEDFE}
+.dg td{border:1px solid #e8e8e6;padding:0}
+.dg td.rl{background:#f5f5f3;font-size:12px;color:#666;padding:6px 10px;text-align:center;white-space:nowrap;font-weight:500}
+.dg td input[type=number]{border:none;background:transparent;color:#1a1a1a;font-size:13px;padding:6px 8px;text-align:right;outline:none;width:100%;display:block;min-width:80px}
+.dg td input[type=number]:focus{background:#EEEDFE}
+.dg td.stl{background:#eeeeed;font-size:11px;font-weight:600;color:#555;padding:5px 10px;text-align:left;border-top:2px solid #c8c8c6}
+.dg td.stv{background:#eeeeed;font-size:12px;font-weight:700;color:#1a1a1a;padding:5px 10px;text-align:right;border-top:2px solid #c8c8c6;white-space:nowrap}
+
+/* ── Stat cards ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.75rem;margin-bottom:.875rem}
+.stat-card{background:#fff;border:1px solid #e4e4e2;border-radius:12px;padding:.875rem 1rem}
+.group-label{font-size:13px;font-weight:700;margin-bottom:.5rem}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(72px,1fr));gap:6px}
+.stat-box{background:#f5f5f3;border-radius:7px;padding:.4rem .6rem}
+.stat-box .lbl{font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;display:block}
+.stat-box .val{font-size:14px;font-weight:700;color:#1a1a1a}
+
+/* ── Result / interpretation ── */
+.badge{display:inline-block;padding:4px 12px;border-radius:8px;font-size:12px;font-weight:700;background:#EEEDFE;color:#3C3489;margin-bottom:.625rem;letter-spacing:.01em}
+.badge.badge-purple{background:#EEEDFE;color:#3C3489}
+.interp{border-left:3px solid #7F77DD;padding:.75rem 1rem;border-radius:0 9px 9px 0;font-size:13px;line-height:1.75;margin-top:.75rem}
+.interp.sig{background:#E1F5EE;color:#085041;border-color:#1D9E75}
+.interp.ns{background:#FAECE7;color:#712B13;border-color:#D85A30}
+
+/* ── Post-hoc table ── */
+.ph-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:.5rem}
+.ph-table th{padding:7px 10px;background:#f5f5f3;font-weight:600;font-size:11px;color:#666;border:1px solid #e4e4e2;text-align:left;text-transform:uppercase;letter-spacing:.04em}
+.ph-table td{padding:7px 10px;border:1px solid #e4e4e2;color:#1a1a1a}
+.ph-table td.yes{color:#085041;font-weight:700}
+.ph-table td.no{color:#aaa}
+
+/* ── Correlation pair table ── */
+.corr-mini{display:flex;flex-wrap:wrap;gap:8px;margin:.625rem 0}
+.corr-box{background:#f5f5f3;border-radius:8px;padding:.4rem .75rem;min-width:80px}
+.corr-box .lbl{font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:2px}
+.corr-box .val{font-size:15px;font-weight:700;color:#1a1a1a}
+
+/* ── Step label ── */
+.q-label{font-size:14px;font-weight:700;margin-bottom:.625rem;color:#1a1a1a}
+.sub{font-size:12px;color:#777;line-height:1.5}
+
+/* ── Misc ── */
+canvas{max-width:100%;display:block}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="page-title">IBDP Biology — Statistics Tool</div>
+  <div class="page-sub">Guided test selection · Spreadsheet-style data entry or file upload · 95% CI error bars · Plain-English interpretation</div>
+  <div class="step-bar" id="stepBar"></div>
+  <div id="app"></div>
+</div>
+
+<script>
+const COLORS = ['#7F77DD','#1D9E75','#D85A30','#378ADD','#BA7517','#D4537E','#639922','#534AB7'];
+
+const IB_UNITS = {
+  'Time':         ['s','min','h','days'],
+  'Length':       ['mm','cm','m','km','\u00b5m','nm'],
+  'Mass':         ['mg','g','kg','\u00b5g'],
+  'Volume':       ['\u00b5l','ml','l','cm\u00b3','dm\u00b3','m\u00b3'],
+  'Temperature':  ['\u00b0C','\u00b0K'],
+  'Concentration':['mol dm\u207b\u00b3','mmol dm\u207b\u00b3','\u00b5mol dm\u207b\u00b3','g dm\u207b\u00b3','mg dm\u207b\u00b3','%','ppm','ppb','mg l\u207b\u00b9'],
+  'Rate':         ['\u00b5mol min\u207b\u00b9','mmol min\u207b\u00b9','\u00b5mol s\u207b\u00b9','mg min\u207b\u00b9','cm min\u207b\u00b9','mm min\u207b\u00b9','ml min\u207b\u00b9','AU min\u207b\u00b9','beats min\u207b\u00b9','breaths min\u207b\u00b9'],
+  'Amount':       ['\u00b5mol','mmol','mol','\u00b5g','mg','g'],
+  'Absorbance':   ['AU','nm'],
+  'pH':           ['pH units'],
+  'Pressure':     ['kPa','Pa','atm','mmHg'],
+  'Light':        ['lux','\u00b5mol m\u207b\u00b2 s\u207b\u00b9','klux'],
+  'Percentage':   ['%','% change'],
+  'Count':        ['cells ml\u207b\u00b9','cells mm\u207b\u00b2','individuals m\u207b\u00b2','colonies','mm\u00b3'],
+  'Other':        ['arbitrary units','none']
+};
+
+let S = {
+  step:0, dataType:null, ivType:null, purpose:null,
+  nG:3, nR:5, gNames:[], gData:[],
+  xL:'', yL:'', ivU:'', dvU:'',
+  pX:[], pY:[],
+  chiObs:[], chiExp:[], chiCats:[], chiMode:null, chiRatio:'',
+  chiRV:'', chiCV:'', chiRows:[], chiCols:[], chiGrid:[],
+  corrPairs:null, chart:null
+};
+
+// ── helpers ──────────────────────────────────────────────────────────────────
+function mk(tag, cls) {
+  var el = document.createElement(tag);
+  if (cls) el.className = cls;
+  return el;
+}
+function card() { return mk('div','card'); }
+
+function totalSteps() { return S.dataType === 'freq' ? 4 : 5; }
+
+function renderBar() {
+  var bar = document.getElementById('stepBar');
+  bar.innerHTML = '';
+  var t = totalSteps();
+  for (var i = 0; i < t; i++) {
+    var d = mk('div','step-dot' + (i < S.step ? ' done' : i === S.step ? ' active' : ''));
+    bar.appendChild(d);
+  }
+}
+
+function render() {
+  renderBar();
+  var app = document.getElementById('app');
+  app.innerHTML = '';
+  var fns = [step0, step1, step2, step3, step4];
+  fns[S.step](app);
+}
+
+function choiceCard(label, opts, key, onSel, onBack) {
+  var c = card();
+  var titleEl = mk('div','card-title');
+  titleEl.textContent = label;
+  c.appendChild(titleEl);
+  var row = mk('div','btn-row');
+  opts.forEach(function(o) {
+    var b = mk('button','opt' + (S[key] === o.v ? ' sel' : ''));
+    var t = mk('span'); t.textContent = o.l; b.appendChild(t);
+    if (o.s) { var s = mk('span','opt-sub'); s.textContent = o.s; b.appendChild(s); }
+    b.addEventListener('click', function() {
+      S[key] = o.v;
+      row.querySelectorAll('.opt').forEach(function(x){ x.classList.remove('sel'); });
+      b.classList.add('sel');
+      setTimeout(onSel, 200);
+    });
+    row.appendChild(b);
+  });
+  c.appendChild(row);
+  var nav = mk('div','nav');
+  var bk = mk('button','btn-secondary'); bk.textContent = '\u2190 Back';
+  bk.addEventListener('click', onBack);
+  nav.appendChild(bk);
+  nav.appendChild(mk('span'));
+  c.appendChild(nav);
+  return c;
+}
+
+function unitPicker(id, currentVal) {
+  var allUnits = [];
+  Object.values(IB_UNITS).forEach(function(arr){ arr.forEach(function(u){ allUnits.push(u); }); });
+  var isCustom = currentVal && allUnits.indexOf(currentVal) === -1;
+
+  var wrap = mk('div','unit-picker');
+  var sel = mk('select');
+  sel.id = id + '_sel';
+  var blank = mk('option'); blank.value = ''; blank.textContent = '\u2014 select unit \u2014';
+  sel.appendChild(blank);
+  Object.keys(IB_UNITS).forEach(function(cat) {
+    var grp = document.createElement('optgroup');
+    grp.label = cat;
+    IB_UNITS[cat].forEach(function(u) {
+      var opt = mk('option');
+      opt.value = u;
+      opt.textContent = u;
+      if (u === currentVal) opt.selected = true;
+      grp.appendChild(opt);
+    });
+    sel.appendChild(grp);
+  });
+  var customOpt = mk('option');
+  customOpt.value = '__custom__';
+  customOpt.textContent = 'Other (type below)\u2026';
+  if (isCustom) customOpt.selected = true;
+  sel.appendChild(customOpt);
+  wrap.appendChild(sel);
+
+  var custDiv = mk('div','unit-custom' + (isCustom ? ' show' : ''));
+  custDiv.id = id + '_cust';
+  var txt = mk('input','');
+  txt.type = 'text';
+  txt.placeholder = 'Type your unit\u2026';
+  txt.id = id + '_txt';
+  if (isCustom) txt.value = currentVal;
+  custDiv.appendChild(txt);
+  wrap.appendChild(custDiv);
+  return wrap;
+}
+
+function wireUnitPicker(container, selId, stateKey) {
+  var sel = container.querySelector('#' + selId + '_sel');
+  var custDiv = container.querySelector('#' + selId + '_cust');
+  var txt = container.querySelector('#' + selId + '_txt');
+  if (!sel) return;
+  sel.addEventListener('change', function() {
+    if (sel.value === '__custom__') {
+      custDiv.classList.add('show');
+      S[stateKey] = txt.value;
+    } else {
+      custDiv.classList.remove('show');
+      S[stateKey] = sel.value;
+    }
+  });
+  if (txt) txt.addEventListener('input', function() { S[stateKey] = txt.value; });
+}
+
+// ── stats ────────────────────────────────────────────────────────────────────
+function smean(a) { return a.reduce(function(s,x){return s+x;},0)/a.length; }
+function sstd(a) { var m=smean(a); return Math.sqrt(a.reduce(function(s,x){return s+(x-m)*(x-m);},0)/(a.length-1)); }
+function sse(a) { return sstd(a)/Math.sqrt(a.length); }
+function sci(a) { return sse(a)*jStat.studentt.inv(0.975,a.length-1); }
+
+function pearsonR(xs,ys) {
+  var mx=smean(xs), my=smean(ys);
+  var n=0, d1=0, d2=0;
+  xs.forEach(function(x,i){ n+=(x-mx)*(ys[i]-my); d1+=(x-mx)*(x-mx); d2+=(ys[i]-my)*(ys[i]-my); });
+  return n/Math.sqrt(d1*d2);
+}
+function spearmanR(xs,ys) {
+  function rank(a) {
+    var s = a.slice().sort(function(x,y){return x-y;});
+    return a.map(function(x){return s.indexOf(x)+1;});
+  }
+  return pearsonR(rank(xs),rank(ys));
+}
+
+function tTestP(a,b) {
+  var na=a.length, nb=b.length;
+  var sp=Math.sqrt(((na-1)*sstd(a)*sstd(a)+(nb-1)*sstd(b)*sstd(b))/(na+nb-2));
+  var t=(smean(a)-smean(b))/(sp*Math.sqrt(1/na+1/nb));
+  return 2*(1-jStat.studentt.cdf(Math.abs(t),na+nb-2));
+}
+function welchP(a,b) {
+  var na=a.length, nb=b.length;
+  var va=sstd(a)*sstd(a)/na, vb=sstd(b)*sstd(b)/nb;
+  var t=(smean(a)-smean(b))/Math.sqrt(va+vb);
+  var df=(va+vb)*(va+vb)/(va*va/(na-1)+vb*vb/(nb-1));
+  return 2*(1-jStat.studentt.cdf(Math.abs(t),df));
+}
+function leveneSig(groups) {
+  var zg=groups.map(function(g){ var m=smean(g); return g.map(function(x){return Math.abs(x-m);}); });
+  var allZ=[].concat.apply([],zg), gM=smean(allZ), k=groups.length, N=allZ.length;
+  var gMs=zg.map(smean);
+  var num=(N-k)/(k-1)*zg.reduce(function(a,g,i){return a+g.length*(gMs[i]-gM)*(gMs[i]-gM);},0);
+  var den=zg.reduce(function(a,g,i){return a+g.reduce(function(b,z){return b+(z-gMs[i])*(z-gMs[i]);},0);},0);
+  return 1-jStat.centralF.cdf(num/den,k-1,N-k)>0.05;
+}
+function anovaCalc(groups) {
+  var all=[].concat.apply([],groups), N=all.length, k=groups.length, gM=smean(all);
+  var SSB=groups.reduce(function(a,g){return a+g.length*(smean(g)-gM)*(smean(g)-gM);},0);
+  var SSW=groups.reduce(function(a,g){var m=smean(g);return a+g.reduce(function(b,x){return b+(x-m)*(x-m);},0);},0);
+  var MSW=SSW/(N-k), F=SSB/(k-1)/MSW;
+  return {F:F, MSW:MSW, N:N, k:k, p:1-jStat.centralF.cdf(F,k-1,N-k)};
+}
+function qCritical(k,df) {
+  var T={2:{5:3.64,10:3.15,20:2.95,30:2.89,60:2.83,120:2.80},3:{5:4.60,10:3.88,20:3.58,30:3.49,60:3.40,120:3.36},4:{5:5.22,10:4.33,20:3.96,30:3.85,60:3.74,120:3.68},5:{5:5.67,10:4.65,20:4.23,30:4.10,60:3.98,120:3.92},6:{5:6.03,10:4.91,20:4.45,30:4.30,60:4.16,120:4.10},7:{5:6.33,10:5.12,20:4.62,30:4.46,60:4.31,120:4.24},8:{5:6.58,10:5.30,20:4.77,30:4.60,60:4.44,120:4.36}};
+  var kk=Math.min(8,Math.max(2,k));
+  var dfs=Object.keys(T[kk]).map(Number);
+  var cl=dfs.reduce(function(a,b){return Math.abs(b-df)<Math.abs(a-df)?b:a;});
+  return T[kk][cl]||3.64;
+}
+function tukeyHSD(groups,names,MSW,N,k) {
+  var qc=qCritical(k,N-k), res=[];
+  for (var i=0;i<k;i++) for (var j=i+1;j<k;j++) {
+    var diff=Math.abs(smean(groups[i])-smean(groups[j]));
+    var se_t=Math.sqrt(MSW/2*(1/groups[i].length+1/groups[j].length));
+    var q=diff/se_t;
+    res.push({a:names[i],b:names[j],diff:diff.toFixed(3),q:q.toFixed(3),sig:q>qc});
+  }
+  return res;
+}
+function kwP(groups) {
+  var all=[].concat.apply([],groups.map(function(g,i){return g.map(function(v){return {v:v,g:i};});}));
+  all.sort(function(a,b){return a.v-b.v;});
+  all.forEach(function(x,i){x.rank=i+1;});
+  var N=all.length, k=groups.length, rs=[];
+  for(var i=0;i<k;i++) rs.push(0);
+  all.forEach(function(x){rs[x.g]+=x.rank;});
+  var H=12/(N*(N+1))*groups.reduce(function(a,g,i){return a+rs[i]*rs[i]/g.length;},0)-3*(N+1);
+  return 1-jStat.chisquare.cdf(H,k-1);
+}
+function dunnTest(groups,names) {
+  var all=[].concat.apply([],groups.map(function(g,i){return g.map(function(v){return {v:v,g:i};});}));
+  all.sort(function(a,b){return a.v-b.v;});
+  all.forEach(function(x,i){x.rank=i+1;});
+  var N=all.length, k=groups.length, ns=groups.map(function(g){return g.length;}), rs=[];
+  for(var i=0;i<k;i++) rs.push(0);
+  all.forEach(function(x){rs[x.g]+=x.rank;});
+  var mR=rs.map(function(r,i){return r/ns[i];}), m=k*(k-1)/2, res=[];
+  for(var i=0;i<k;i++) for(var j=i+1;j<k;j++) {
+    var z=Math.abs(mR[i]-mR[j])/Math.sqrt(N*(N+1)/12*(1/ns[i]+1/ns[j]));
+    var p=Math.min(1,2*(1-jStat.normal.cdf(z,0,1))*m);
+    res.push({a:names[i],b:names[j],z:z.toFixed(3),p:p.toFixed(4),sig:p<0.05});
+  }
+  return res;
+}
+function chiGP(obs,exp) {
+  var chi=obs.reduce(function(a,o,i){return a+(o-exp[i])*(o-exp[i])/exp[i];},0);
+  return 1-jStat.chisquare.cdf(chi,obs.length-1);
+}
+function chiIP(grid) {
+  var rows=grid.length, cols=grid[0].length;
+  var rS=grid.map(function(r){return r.reduce(function(a,b){return a+b;},0);});
+  var cS=[]; for(var j=0;j<cols;j++){var s=0;grid.forEach(function(r){s+=r[j];}); cS.push(s);}
+  var tot=rS.reduce(function(a,b){return a+b;},0), chi=0;
+  for(var i=0;i<rows;i++) for(var j=0;j<cols;j++){var e=rS[i]*cS[j]/tot; chi+=(grid[i][j]-e)*(grid[i][j]-e)/e;}
+  return 1-jStat.chisquare.cdf(chi,(rows-1)*(cols-1));
+}
+
+// ── step 0 ───────────────────────────────────────────────────────────────────
+function step0(app) {
+  app.appendChild(choiceCard(
+    'What type of data did you collect?',
+    [{v:'measure',l:'Measurements',s:'length, mass, absorbance, rate\u2026'},
+     {v:'freq',   l:'Frequencies / counts',s:'number of organisms, phenotypes\u2026'}],
+    'dataType',
+    function(){ S.step=1; render(); },
+    function(){ }
+  ));
+}
+
+// ── step 1 ───────────────────────────────────────────────────────────────────
+function step1(app) {
+  if (S.dataType === 'freq') {
+    app.appendChild(choiceCard(
+      'What is your chi-squared question?',
+      [{v:'goodness',    l:'Comparing observed vs expected',   s:'e.g. Mendelian ratios, equal distribution'},
+       {v:'independence',l:'Testing association between two categorical groups',s:'e.g. habitat type vs species found'}],
+      'chiMode',
+      function(){ S.step=2; render(); },
+      function(){ S.step=0; render(); }
+    ));
+  } else {
+    app.appendChild(choiceCard(
+      'What is your independent variable (IV) type?',
+      [{v:'continuous',l:'Continuous',s:'temperature, concentration, time\u2026'},
+       {v:'discrete',  l:'Discrete / categorical',s:'species, treatment group, diet\u2026'}],
+      'ivType',
+      function(){ S.step=2; render(); },
+      function(){ S.step=0; render(); }
+    ));
+  }
+}
+
+// ── step 2 ───────────────────────────────────────────────────────────────────
+function step2(app) {
+  if (S.dataType === 'freq') { freqSetup(app); return; }
+  app.appendChild(choiceCard(
+    'What is your statistical question?',
+    [{v:'diff', l:'Testing for a difference between groups',      s:'e.g. comparing means at different concentrations'},
+     {v:'assoc',l:'Testing for a correlation between two variables',s:'e.g. does rate increase as temperature increases?'}],
+    'purpose',
+    function(){ S.step=3; render(); },
+    function(){ S.step=1; render(); }
+  ));
+}
+
+// ── step 3 ───────────────────────────────────────────────────────────────────
+function step3(app) {
+  if (S.purpose === 'assoc') { corrSetup(app); return; }
+
+  if (!S.nG || S.nG < 2) S.nG = 3;
+  if (!S.nR || S.nR < 2) S.nR = 5;
+  if (S.gNames.length !== S.nG) {
+    S.gNames = [];
+    for (var i=0; i<S.nG; i++) S.gNames.push('Group ' + (i+1));
+  }
+  if (S.gData.length !== S.nG) {
+    S.gData = [];
+    for (var i=0; i<S.nG; i++) {
+      var col = [];
+      for (var j=0; j<S.nR; j++) col.push('');
+      S.gData.push(col);
+    }
+  }
+
+  var c = card();
+
+  // Title
+  var title = mk('div','card-title'); title.textContent = 'Enter your data'; c.appendChild(title);
+
+  // Label / unit grid
+  var grid = mk('div','grid2');
+
+  var d1=mk('div'); var l1=mk('label','lbl'); l1.textContent='IV label';
+  var xl=mk('input',''); xl.type='text'; xl.id='xl'; xl.placeholder='e.g. H\u2082SO\u2084 concentration'; xl.value=S.xL; xl.style.width='100%';
+  xl.addEventListener('input', function(){ S.xL=xl.value; });
+  d1.appendChild(l1); d1.appendChild(xl); grid.appendChild(d1);
+
+  var d2=mk('div'); var l2=mk('label','lbl'); l2.textContent='IV unit';
+  var xup=unitPicker('xu',S.ivU); d2.appendChild(l2); d2.appendChild(xup); grid.appendChild(d2);
+
+  var d3=mk('div'); var l3=mk('label','lbl'); l3.textContent='DV label';
+  var yl=mk('input',''); yl.type='text'; yl.id='yl'; yl.placeholder='e.g. Root length'; yl.value=S.yL; yl.style.width='100%';
+  yl.addEventListener('input', function(){ S.yL=yl.value; });
+  d3.appendChild(l3); d3.appendChild(yl); grid.appendChild(d3);
+
+  var d4=mk('div'); var l4=mk('label','lbl'); l4.textContent='DV unit';
+  var yup=unitPicker('yu',S.dvU); d4.appendChild(l4); d4.appendChild(yup); grid.appendChild(d4);
+
+  c.appendChild(grid);
+
+  // Upload zone
+  var uz=mk('div','upload-zone'); uz.id='uz';
+  uz.innerHTML='<span class="uz-icon">\ud83d\udcc2</span><p><strong>Upload CSV or Excel</strong> to fill the table automatically<br><small>First row = column headers (IV levels) \u00b7 Each column = one group \u00b7 Each row = one replicate</small></p>';
+  var fi=mk('input',''); fi.type='file'; fi.id='fi'; fi.accept='.csv,.xlsx,.xls'; fi.style.display='none';
+  uz.appendChild(fi);
+  uz.addEventListener('click', function(e){ if(e.target===uz||e.target.tagName==='P'||e.target.tagName==='SPAN'||e.target.tagName==='SMALL'||e.target.tagName==='STRONG') fi.click(); });
+  uz.addEventListener('dragover', function(e){ e.preventDefault(); uz.classList.add('drag'); });
+  uz.addEventListener('dragleave', function(){ uz.classList.remove('drag'); });
+  uz.addEventListener('drop', function(e){ e.preventDefault(); uz.classList.remove('drag'); if(e.dataTransfer.files[0]) handleGroupFile(e.dataTransfer.files[0],c); });
+  fi.addEventListener('change', function(){ if(fi.files[0]) handleGroupFile(fi.files[0],c); });
+  c.appendChild(uz);
+
+  var uerr=mk('div','err'); uerr.id='uerr'; c.appendChild(uerr);
+  var unotice=mk('div','notice'); unotice.id='unotice'; unotice.style.display='none'; c.appendChild(unotice);
+
+  // Table
+  var gw=mk('div'); gw.id='gw'; c.appendChild(gw);
+
+  // Add/remove buttons
+  var btnBar=mk('div'); btnBar.style.cssText='display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap;align-items:center';
+  function addBtn(label, color, handler) {
+    var b=mk('button','btn-secondary');
+    b.textContent=label; b.style.cssText='padding:6px 12px;font-size:12px;'+(color?'color:'+color+';':'');
+    b.addEventListener('click', function(e){ e.stopPropagation(); handler(); });
+    return b;
+  }
+  var colLabel=mk('span'); colLabel.textContent='Columns (groups):'; colLabel.style.cssText='font-size:11px;color:var(--gray-600)';
+  btnBar.appendChild(colLabel);
+  btnBar.appendChild(addBtn('+ Add group','',function(){
+    S.nG++;
+    S.gNames.push('Group '+S.nG);
+    var col=[]; for(var j=0;j<S.nR;j++) col.push('');
+    S.gData.push(col);
+    buildGrid(c);
+  }));
+  btnBar.appendChild(addBtn('\u2212 Remove group','#A32D2D',function(){
+    if(S.nG<=2){showErr(c,'derr','Need at least 2 groups.');return;}
+    S.nG--; S.gNames.pop(); S.gData.pop(); buildGrid(c);
+  }));
+  var sp=mk('span'); sp.style.marginLeft='.5rem'; btnBar.appendChild(sp);
+  var rowLabel=mk('span'); rowLabel.textContent='Rows (replicates):'; rowLabel.style.cssText='font-size:11px;color:var(--gray-600)';
+  btnBar.appendChild(rowLabel);
+  btnBar.appendChild(addBtn('+ Add replicate','',function(){
+    S.nR++;
+    S.gData.forEach(function(g){ g.push(''); });
+    buildGrid(c);
+  }));
+  btnBar.appendChild(addBtn('\u2212 Remove replicate','#A32D2D',function(){
+    if(S.nR<=2){showErr(c,'derr','Need at least 2 replicates.');return;}
+    S.nR--;
+    S.gData.forEach(function(g){ g.pop(); });
+    buildGrid(c);
+  }));
+  c.appendChild(btnBar);
+
+  var derr=mk('div','err'); derr.id='derr'; c.appendChild(derr);
+
+  // Nav
+  var nav=mk('div','nav');
+  var bk=mk('button','btn-secondary'); bk.textContent='\u2190 Back';
+  bk.addEventListener('click', function(e){ e.stopPropagation(); S.step--; render(); });
+  var calc=mk('button','btn-primary'); calc.textContent='Calculate \u2192';
+  calc.addEventListener('click', function(e){
+    e.stopPropagation();
+    derr.textContent='';
+    for(var g=0;g<S.nG;g++){
+      if(S.gData[g].filter(function(x){return x!=='';}).length<2){
+        derr.textContent='"'+S.gNames[g]+'" needs at least 2 values.'; return;
+      }
+    }
+    S.step=4; render();
+  });
+  nav.appendChild(bk); nav.appendChild(calc);
+  c.appendChild(nav);
+
+  wireUnitPicker(c,'xu','ivU');
+  wireUnitPicker(c,'yu','dvU');
+  buildGrid(c);
+  app.appendChild(c);
+}
+
+function showErr(c, id, msg) {
+  var el=c.querySelector('#'+id);
+  if(el) el.textContent=msg;
+}
+
+function buildGrid(c) {
+  var gw=c.querySelector('#gw');
+  if(!gw) return;
+  gw.innerHTML='';
+  var ng=S.nG, nr=S.nR;
+  var wrap=mk('div','dg-wrap');
+  var tbl=mk('table','dg');
+
+  // Header row
+  var thead=mk('thead');
+  var hr=mk('tr');
+  var th0=mk('th'); th0.textContent='Replication'; th0.style.textAlign='left'; th0.style.minWidth='90px';
+  hr.appendChild(th0);
+  for(var g=0;g<ng;g++){
+    var th=mk('th');
+    var inp=mk('input','gni');
+    inp.dataset.gi=g;
+    inp.value=S.gNames[g]||('Group '+(g+1));
+    inp.placeholder='Group '+(g+1);
+    inp.style.width='110px';
+    (function(gi){ inp.addEventListener('input',function(){ S.gNames[gi]=inp.value; }); })(g);
+    th.appendChild(inp); hr.appendChild(th);
+  }
+  thead.appendChild(hr); tbl.appendChild(thead);
+
+  // Data rows
+  var tbody=mk('tbody');
+  for(var r=0;r<nr;r++){
+    var tr=mk('tr');
+    var td0=mk('td','rl'); td0.textContent=r+1; tr.appendChild(td0);
+    for(var g=0;g<ng;g++){
+      var td=mk('td');
+      var num=mk('input','');
+      num.type='number'; num.step='any';
+      num.value=S.gData[g]&&S.gData[g][r]!==undefined?S.gData[g][r]:'';
+      (function(gi,ri){
+        num.addEventListener('input',function(){
+          if(!S.gData[gi]) S.gData[gi]=[];
+          S.gData[gi][ri]=num.value;
+          refreshStats(tbl,gi);
+        });
+      })(g,r);
+      td.appendChild(num); tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+
+  // Stat footer rows
+  var statRows=[['Mean','mean'],['SD','sd'],['SE','se'],['95% CI','ci']];
+  statRows.forEach(function(pair){
+    var lbl=pair[0], key=pair[1];
+    var tr=mk('tr');
+    var td0=mk('td','stl'); td0.textContent=lbl; tr.appendChild(td0);
+    for(var g=0;g<ng;g++){
+      var td=mk('td','stv'); td.id='st_'+key+'_'+g; td.textContent='\u2014'; tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  });
+
+  tbl.appendChild(tbody); wrap.appendChild(tbl); gw.appendChild(wrap);
+  for(var g=0;g<ng;g++) refreshStats(tbl,g);
+}
+
+function refreshStats(tbl,g) {
+  var vals=(S.gData[g]||[]).filter(function(x){return x!=='';}).map(Number);
+  function setCell(key,v){ var el=tbl.querySelector('#st_'+key+'_'+g); if(el) el.textContent=v; }
+  if(vals.length<2){ ['mean','sd','se','ci'].forEach(function(k){setCell(k,'\u2014');}); return; }
+  var m=smean(vals),s=sstd(vals),sem=s/Math.sqrt(vals.length),ciV=sem*jStat.studentt.inv(0.975,vals.length-1);
+  setCell('mean',m.toFixed(2)); setCell('sd',s.toFixed(2)); setCell('se',sem.toFixed(2)); setCell('ci','\u00b1'+ciV.toFixed(2));
+}
+
+function handleGroupFile(file,c) {
+  var uerr=c.querySelector('#uerr'); uerr.textContent='';
+  var ext=file.name.split('.').pop().toLowerCase();
+  if(['csv','xlsx','xls'].indexOf(ext)===-1){uerr.textContent='Please upload a CSV or Excel file.';return;}
+  var reader=new FileReader();
+  function process(rows) {
+    rows=rows.filter(function(r){return r.some(function(v){return v!==''&&v!==null&&v!==undefined;});});
+    if(rows.length<2){uerr.textContent='Need at least 2 rows (header + data).';return;}
+    var headers=rows[0].map(function(h){return String(h).trim();});
+    var dataRows=rows.slice(1);
+    var numCols=[];
+    headers.forEach(function(_,ci){
+      var vals=dataRows.map(function(r){return r[ci];}).filter(function(v){return v!==''&&v!==null&&v!==undefined;});
+      if(vals.length>0&&vals.every(function(v){return !isNaN(parseFloat(v));})) numCols.push(ci);
+    });
+    if(numCols.length<2){uerr.textContent='Need at least 2 numeric columns.';return;}
+    var groups=numCols.map(function(ci){
+      return dataRows.map(function(r){return r[ci];}).filter(function(v){return v!==''&&v!==null&&v!==undefined&&!isNaN(parseFloat(v));}).map(parseFloat);
+    });
+    var names=numCols.map(function(ci){return headers[ci]||('Group '+(ci+1));});
+    var maxR=Math.max.apply(null,groups.map(function(g){return g.length;}));
+    S.nG=groups.length; S.nR=maxR; S.gNames=names;
+    S.gData=groups.map(function(g){
+      var col=[];
+      for(var i=0;i<maxR;i++) col.push(i<g.length?String(g[i]):'');
+      return col;
+    });
+    buildGrid(c);
+    var unotice=c.querySelector('#unotice');
+    if(unotice){unotice.style.display='block'; unotice.textContent='\u2713 Loaded "'+file.name+'" \u2014 '+groups.length+' groups, up to '+maxR+' replicates.';}
+  }
+  if(ext==='csv'){
+    reader.onload=function(e){
+      var lines=e.target.result.split(/\r?\n/);
+      var parsed=lines.map(function(line){
+        var cells=[],cur='',inQ=false;
+        for(var i=0;i<line.length;i++){var ch=line[i]; if(ch==='"')inQ=!inQ; else if(ch===','&&!inQ){cells.push(cur.trim());cur='';}else cur+=ch;}
+        cells.push(cur.trim()); return cells;
+      });
+      process(parsed);
+    };
+    reader.readAsText(file);
+  } else {
+    reader.onload=function(e){
+      var wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+      process(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''}));
+    };
+    reader.readAsArrayBuffer(file);
+  }
+}
+
+// ── step 4 ───────────────────────────────────────────────────────────────────
+function step4(app) { showResults(app); }
+
+// ── correlation setup ─────────────────────────────────────────────────────────
+function corrSetup(app) {
+  var c=card();
+  var title=mk('div','card-title'); title.textContent='Correlation / association'; c.appendChild(title);
+
+  var grid=mk('div','grid2');
+
+  var d1=mk('div');
+  var l1=mk('label','lbl'); l1.textContent='X variable (IV)';
+  var xl=mk('input',''); xl.type='text'; xl.placeholder='e.g. Temperature'; xl.value=S.xL; xl.style.width='100%';
+  xl.addEventListener('input',function(){ S.xL=xl.value; var t=c.querySelector('#xth'); if(t)t.textContent=xl.value||'X value'; });
+  var l1u=mk('label','lbl'); l1u.textContent='X unit'; l1u.style.marginTop='6px';
+  var xup=unitPicker('xu',S.ivU);
+  d1.appendChild(l1); d1.appendChild(xl); d1.appendChild(l1u); d1.appendChild(xup);
+
+  var d2=mk('div');
+  var l2=mk('label','lbl'); l2.textContent='Y variable (DV)';
+  var yl=mk('input',''); yl.type='text'; yl.placeholder='e.g. Rate of reaction'; yl.value=S.yL; yl.style.width='100%';
+  yl.addEventListener('input',function(){ S.yL=yl.value; var t=c.querySelector('#yth'); if(t)t.textContent=yl.value||'Y value'; });
+  var l2u=mk('label','lbl'); l2u.textContent='Y unit'; l2u.style.marginTop='6px';
+  var yup=unitPicker('yu',S.dvU);
+  d2.appendChild(l2); d2.appendChild(yl); d2.appendChild(l2u); d2.appendChild(yup);
+
+  grid.appendChild(d1); grid.appendChild(d2); c.appendChild(grid);
+
+  // Upload
+  var ql=mk('div','q-label'); ql.style.marginBottom='.4rem';
+  var qlt=document.createTextNode('Upload data ');
+  var qls=mk('span','sub'); qls.textContent='(two columns: X then Y, first row can be a header)';
+  ql.appendChild(qlt); ql.appendChild(qls); c.appendChild(ql);
+
+  var cuz=mk('div','upload-zone'); cuz.id='cuz';
+  cuz.innerHTML='<span class="uz-icon">\ud83d\udcc2</span><p><strong>Click to upload</strong> or drag and drop<br><small>CSV or Excel</small></p>';
+  var cfi=mk('input',''); cfi.type='file'; cfi.accept='.csv,.xlsx,.xls'; cfi.style.display='none';
+  cuz.appendChild(cfi);
+  cuz.addEventListener('click',function(e){ if(e.target!==cfi) cfi.click(); });
+  cuz.addEventListener('dragover',function(e){e.preventDefault();cuz.classList.add('drag');});
+  cuz.addEventListener('dragleave',function(){cuz.classList.remove('drag');});
+  cuz.addEventListener('drop',function(e){e.preventDefault();cuz.classList.remove('drag');if(e.dataTransfer.files[0])handleCorrFile(e.dataTransfer.files[0],c,rebuildRows);});
+  cfi.addEventListener('change',function(){if(cfi.files[0])handleCorrFile(cfi.files[0],c,rebuildRows);});
+  c.appendChild(cuz);
+
+  var cuerr=mk('div','err'); cuerr.id='cuerr'; c.appendChild(cuerr);
+
+  var div=mk('div','divider'); div.textContent='or enter manually'; c.appendChild(div);
+
+  // Pair table
+  var dgw=mk('div','dg-wrap');
+  var tbl=mk('table','dg');
+  var thead=mk('thead');
+  var hr=mk('tr');
+  var thNum=mk('th'); thNum.textContent='#'; hr.appendChild(thNum);
+  var thX=mk('th'); thX.id='xth'; thX.textContent=S.xL||'X value'; hr.appendChild(thX);
+  var thY=mk('th'); thY.id='yth'; thY.textContent=S.yL||'Y value'; hr.appendChild(thY);
+  thead.appendChild(hr); tbl.appendChild(thead);
+  var tbody=mk('tbody'); tbody.id='ptbl'; tbl.appendChild(tbody);
+  dgw.appendChild(tbl); c.appendChild(dgw);
+
+  if(!S.pX.length){S.pX=[]; S.pY=[]; for(var i=0;i<8;i++){S.pX.push('');S.pY.push('');}}
+
+  function rebuildRows(){
+    tbody.innerHTML='';
+    S.pX.forEach(function(_,i){
+      var tr=mk('tr');
+      var tdN=mk('td','rl'); tdN.textContent=i+1; tr.appendChild(tdN);
+      var tdX=mk('td'); var inX=mk('input',''); inX.type='number'; inX.step='any'; inX.style.width='90px';
+      inX.value=S.pX[i]; (function(idx){inX.addEventListener('input',function(){S.pX[idx]=inX.value;});})(i);
+      tdX.appendChild(inX); tr.appendChild(tdX);
+      var tdY=mk('td'); var inY=mk('input',''); inY.type='number'; inY.step='any'; inY.style.width='90px';
+      inY.value=S.pY[i]; (function(idx){inY.addEventListener('input',function(){S.pY[idx]=inY.value;});})(i);
+      tdY.appendChild(inY); tr.appendChild(tdY);
+      tbody.appendChild(tr);
+    });
+  }
+  rebuildRows();
+
+  var addR=mk('button','add-btn'); addR.textContent='+ add row';
+  addR.addEventListener('click',function(){S.pX.push('');S.pY.push('');rebuildRows();});
+  c.appendChild(addR);
+
+  var cerr=mk('div','err'); cerr.id='cerr'; c.appendChild(cerr);
+
+  var nav=mk('div','nav');
+  var bk=mk('button','btn-secondary'); bk.textContent='\u2190 Back';
+  bk.addEventListener('click',function(){S.step=Math.max(0,S.step-1);render();});
+  var nx=mk('button','btn-primary'); nx.textContent='Calculate \u2192';
+  nx.addEventListener('click',function(){
+    var pairs=[];
+    for(var i=0;i<S.pX.length;i++) if(S.pX[i]!==''&&S.pY[i]!=='') pairs.push([parseFloat(S.pX[i]),parseFloat(S.pY[i])]);
+    if(pairs.length<4){cerr.textContent='Please enter at least 4 data pairs.';return;}
+    S.corrPairs=pairs; S.step=4; render();
+  });
+  nav.appendChild(bk); nav.appendChild(nx); c.appendChild(nav);
+
+  wireUnitPicker(c,'xu','ivU');
+  wireUnitPicker(c,'yu','dvU');
+  app.appendChild(c);
+}
+
+function handleCorrFile(file,c,rebuildRows){
+  var err=c.querySelector('#cuerr'); err.textContent='';
+  var ext=file.name.split('.').pop().toLowerCase();
+  if(['csv','xlsx','xls'].indexOf(ext)===-1){err.textContent='Please upload a CSV or Excel file.';return;}
+  var reader=new FileReader();
+  function process(rows){
+    var start=0;
+    if(rows.length&&isNaN(parseFloat(rows[0][0]))) start=1;
+    var pairs=rows.slice(start).filter(function(r){return r.length>=2&&!isNaN(parseFloat(r[0]))&&!isNaN(parseFloat(r[1]));}).map(function(r){return[parseFloat(r[0]),parseFloat(r[1])];});
+    if(pairs.length<3){err.textContent='Need at least 3 numeric pairs.';return;}
+    S.pX=pairs.map(function(p){return String(p[0]);});
+    S.pY=pairs.map(function(p){return String(p[1]);});
+    rebuildRows();
+    var notice=mk('div','notice'); notice.style.margin='.5rem 0';
+    notice.textContent='\u2713 Loaded '+pairs.length+' pairs from "'+file.name+'"';
+    err.parentNode.insertBefore(notice,err.nextSibling);
+  }
+  if(ext==='csv'){reader.onload=function(e){var lines=e.target.result.trim().split('\n');process(lines.map(function(l){return l.split(',').map(function(v){return v.trim().replace(/^"|"$/g,'');});}));};reader.readAsText(file);}
+  else{reader.onload=function(e){var wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});process(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''}));};reader.readAsArrayBuffer(file);}
+}
+
+// ── frequency setup ───────────────────────────────────────────────────────────
+function freqSetup(app){
+  var c=card();
+  var title=mk('div','card-title');
+  if(S.chiMode==='goodness'){
+    title.textContent='Chi-squared goodness of fit'; c.appendChild(title);
+    var rl=mk('div','q-label'); rl.style.marginBottom='.4rem'; rl.textContent='Expected ratio (e.g. 3:1 \u2014 leave blank for equal)'; c.appendChild(rl);
+    var ri=mk('input',''); ri.type='text'; ri.placeholder='e.g. 3:1'; ri.value=S.chiRatio; ri.style.width='160px';
+    ri.addEventListener('input',function(){S.chiRatio=ri.value;}); c.appendChild(ri);
+    var sp=mk('div'); sp.style.height='.75rem'; c.appendChild(sp);
+
+    var tbl=mk('table','dg'); tbl.style.width='auto';
+    var thead=mk('thead'); var hr=mk('tr');
+    var th1=mk('th'); th1.textContent='Category'; var th2=mk('th'); th2.textContent='Observed count';
+    hr.appendChild(th1); hr.appendChild(th2); thead.appendChild(hr); tbl.appendChild(thead);
+    var tbody=mk('tbody'); tbody.id='ftbl'; tbl.appendChild(tbody); c.appendChild(tbl);
+
+    if(!S.chiCats.length){S.chiCats=['Category 1','Category 2'];S.chiObs=[0,0];}
+    function rebF(){
+      tbody.innerHTML='';
+      S.chiCats.forEach(function(cat,i){
+        var tr=mk('tr');
+        var td1=mk('td'); var ci=mk('input',''); ci.type='text'; ci.value=cat; ci.style.width='140px';
+        (function(idx){ci.addEventListener('input',function(){S.chiCats[idx]=ci.value;});})(i);
+        td1.appendChild(ci); tr.appendChild(td1);
+        var td2=mk('td'); var oi=mk('input',''); oi.type='number'; oi.value=S.chiObs[i]||''; oi.style.width='80px';
+        (function(idx){oi.addEventListener('input',function(){S.chiObs[idx]=parseFloat(oi.value)||0;});})(i);
+        td2.appendChild(oi); tr.appendChild(td2); tbody.appendChild(tr);
+      });
+    }
+    rebF();
+    var ac=mk('button','add-btn'); ac.style.marginTop='8px'; ac.textContent='+ add category';
+    ac.addEventListener('click',function(){S.chiCats.push('Category '+(S.chiCats.length+1));S.chiObs.push(0);rebF();});
+    c.appendChild(ac);
+    var ferr=mk('div','err'); ferr.id='ferr'; c.appendChild(ferr);
+    var nav=mk('div','nav');
+    var bk=mk('button','btn-secondary'); bk.textContent='\u2190 Back'; bk.addEventListener('click',function(){S.step--;render();});
+    var nx=mk('button','btn-primary'); nx.textContent='Calculate \u2192';
+    nx.addEventListener('click',function(){
+      var tot=S.chiObs.reduce(function(a,b){return a+b;},0);
+      if(tot<4||S.chiCats.length<2){ferr.textContent='Need at least 2 categories and total count \u2265 4.';return;}
+      var rp=null;
+      if(S.chiRatio){var p=S.chiRatio.split(':').map(Number); if(p.every(function(x){return !isNaN(x)&&x>0;})&&p.length===S.chiCats.length){var s=p.reduce(function(a,b){return a+b;},0);rp=p.map(function(x){return x/s;});}}
+      S.chiExp=rp?rp.map(function(r){return r*tot;}):S.chiCats.map(function(){return tot/S.chiCats.length;});
+      S.step=4; render();
+    });
+    nav.appendChild(bk); nav.appendChild(nx); c.appendChild(nav);
+  } else {
+    title.textContent='Chi-squared for independence'; c.appendChild(title);
+    var grid=mk('div','grid2'); grid.style.marginBottom='.75rem';
+    var d1=mk('div'); var l1=mk('label','lbl'); l1.textContent='Row variable name';
+    var rv=mk('input',''); rv.type='text'; rv.placeholder='e.g. Flow rate'; rv.value=S.chiRV||''; rv.style.width='100%';
+    rv.addEventListener('input',function(){S.chiRV=rv.value;}); d1.appendChild(l1); d1.appendChild(rv); grid.appendChild(d1);
+    var d2=mk('div'); var l2=mk('label','lbl'); l2.textContent='Column variable name';
+    var cv=mk('input',''); cv.type='text'; cv.placeholder='e.g. Stream bed'; cv.value=S.chiCV||''; cv.style.width='100%';
+    cv.addEventListener('input',function(){S.chiCV=cv.value;}); d2.appendChild(l2); d2.appendChild(cv); grid.appendChild(d2);
+    c.appendChild(grid);
+    var ctblWrap=mk('div','dg-wrap'); var ctbl=mk('table','dg'); ctbl.id='ctbl'; ctblWrap.appendChild(ctbl); c.appendChild(ctblWrap);
+    if(!S.chiRows.length){S.chiRows=['Row 1','Row 2'];S.chiCols=['Col 1','Col 2'];S.chiGrid=[[0,0],[0,0]];}
+    function rebG(){
+      ctbl.innerHTML='';
+      var thead=mk('thead'); var hr=mk('tr'); var th0=mk('th'); hr.appendChild(th0);
+      S.chiCols.forEach(function(col,j){var th=mk('th'); var inp=mk('input','gni'); inp.value=col; inp.dataset.col=j; inp.style.width='70px'; (function(jj){inp.addEventListener('input',function(){S.chiCols[jj]=inp.value;});})(j); th.appendChild(inp); hr.appendChild(th);});
+      var thAdd=mk('th'); var addCol=mk('button','add-btn'); addCol.textContent='+col'; addCol.addEventListener('click',function(){S.chiCols.push('Col '+(S.chiCols.length+1));S.chiGrid.forEach(function(r){r.push(0);});rebG();}); thAdd.appendChild(addCol); hr.appendChild(thAdd);
+      thead.appendChild(hr); ctbl.appendChild(thead);
+      var tbody=mk('tbody');
+      S.chiRows.forEach(function(row,i){
+        var tr=mk('tr'); var td0=mk('td','rl'); var ri=mk('input','gni'); ri.value=row; ri.style.width='65px'; (function(ii){ri.addEventListener('input',function(){S.chiRows[ii]=ri.value;});})(i); td0.appendChild(ri); tr.appendChild(td0);
+        S.chiCols.forEach(function(_,j){var td=mk('td'); var num=mk('input',''); num.type='number'; num.value=S.chiGrid[i][j]||''; num.style.width='60px'; (function(ii,jj){num.addEventListener('input',function(){S.chiGrid[ii][jj]=parseFloat(num.value)||0;});})(i,j); td.appendChild(num); tr.appendChild(td);});
+        var tdE=mk('td'); tr.appendChild(tdE); tbody.appendChild(tr);
+      });
+      var addTr=mk('tr'); var addTd=mk('td'); var addRow=mk('button','add-btn'); addRow.textContent='+row'; addRow.addEventListener('click',function(){S.chiRows.push('Row '+(S.chiRows.length+1));S.chiGrid.push(new Array(S.chiCols.length).fill(0));rebG();}); addTd.appendChild(addRow); addTr.appendChild(addTd); tbody.appendChild(addTr);
+      ctbl.appendChild(tbody);
+    }
+    rebG();
+    var ferr=mk('div','err'); ferr.id='ferr'; c.appendChild(ferr);
+    var nav=mk('div','nav');
+    var bk=mk('button','btn-secondary'); bk.textContent='\u2190 Back'; bk.addEventListener('click',function(){S.step--;render();});
+    var nx=mk('button','btn-primary'); nx.textContent='Calculate \u2192';
+    nx.addEventListener('click',function(){if(S.chiGrid.flat().reduce(function(a,b){return a+b;},0)<4){ferr.textContent='Total count must be \u2265 4.';return;}S.step=4;render();});
+    nav.appendChild(bk); nav.appendChild(nx); c.appendChild(nav);
+  }
+  app.appendChild(c);
+}
+
+// ── results ───────────────────────────────────────────────────────────────────
+function showResults(app){
+  if(S.chart){try{S.chart.destroy();}catch(e){}}S.chart=null;
+  var w=mk('div');
+  var resultText='';
+
+  // ── FREQ ──
+  if(S.dataType==='freq'){
+    var pVal,testName,testDesc,sig,interp,gt;
+    if(S.chiMode==='goodness'){
+      pVal=chiGP(S.chiObs,S.chiExp); testName='Chi-squared goodness of fit'; testDesc='Tests whether observed counts match the expected ratio.'; sig=pVal<0.05;
+      interp=sig?'p = '+pVal.toFixed(4)+' < 0.05. Reject the null hypothesis. Observed frequencies differ significantly from expected.':'p = '+pVal.toFixed(4)+' > 0.05. Accept the null hypothesis. Observed frequencies are consistent with the expected ratio.';
+      gt='cB';
+    } else {
+      pVal=chiIP(S.chiGrid); testName='Chi-squared test for independence'; testDesc='Tests for a significant association between two categorical variables.'; sig=pVal<0.05;
+      interp=sig?'p = '+pVal.toFixed(4)+' < 0.05. Reject the null hypothesis. Significant association found between the variables.':'p = '+pVal.toFixed(4)+' > 0.05. Accept the null hypothesis. No significant association found.';
+      gt='cG';
+    }
+    resultText='Test: '+testName+'\n'+testDesc+'\nResult: '+interp;
+    var tc=card();
+    var badge=mk('span','badge badge-purple'); badge.textContent=testName; tc.appendChild(badge);
+    var desc=mk('p','sub'); desc.style.marginBottom='.5rem'; desc.textContent=testDesc; tc.appendChild(desc);
+    var interpEl=mk('div','interp '+(sig?'sig':'ns')); interpEl.textContent=interp; tc.appendChild(interpEl);
+    var btns=mk('div'); btns.style.cssText='margin-top:1rem;display:flex;gap:8px';
+    var rs=mk('button','btn-secondary'); rs.textContent='\u2190 Start over'; rs.addEventListener('click',resetAll); btns.appendChild(rs);
+    var cb=mk('button','btn-copy'); cb.textContent='\ud83d\udccb Copy result'; cb.addEventListener('click',function(){cpText(resultText,cb);}); btns.appendChild(cb);
+    tc.appendChild(btns); w.appendChild(tc);
+    var gc=card(); var gcTitle=mk('div','card-title'); gcTitle.textContent=gt==='cB'?'Observed vs expected counts':'Grouped count chart'; gc.appendChild(gcTitle);
+    var canvas=mk('canvas'); canvas.id='myChart'; gc.appendChild(canvas);
+    w.appendChild(gc); app.appendChild(w);
+    setTimeout(function(){
+      var ctx=document.getElementById('myChart'); if(!ctx)return;
+      if(gt==='cB'){S.chart=new Chart(ctx,{type:'bar',data:{labels:S.chiCats,datasets:[{label:'Observed',data:S.chiObs,backgroundColor:COLORS[0]+'33',borderColor:COLORS[0],borderWidth:2},{label:'Expected',data:S.chiExp.map(function(x){return+x.toFixed(2);}),backgroundColor:COLORS[1]+'33',borderColor:COLORS[1],borderWidth:2}]},options:{responsive:true,plugins:{legend:{labels:{font:{size:12}}}},scales:{y:{beginAtZero:true,title:{display:true,text:'Count'}}}}});}
+      else{S.chart=new Chart(ctx,{type:'bar',data:{labels:S.chiCols,datasets:S.chiRows.map(function(row,i){return{label:row,data:S.chiGrid[i],backgroundColor:COLORS[i%COLORS.length]+'33',borderColor:COLORS[i%COLORS.length],borderWidth:2};})},options:{responsive:true,plugins:{legend:{labels:{font:{size:12}}}},scales:{y:{beginAtZero:true,title:{display:true,text:'Count'}}}}});}
+    },100);
+    return;
+  }
+
+  // ── CORRELATION ──
+  if(S.purpose==='assoc'){
+    var pairs=S.corrPairs||[], xs=pairs.map(function(p){return p[0];}), ys=pairs.map(function(p){return p[1];});
+    var r=pearsonR(xs,ys), rs=spearmanR(xs,ys), n=pairs.length, norm=n>=5, uR=norm?r:rs;
+    var t2=uR*Math.sqrt(n-2)/Math.sqrt(1-uR*uR), pVal=2*(1-jStat.studentt.cdf(Math.abs(t2),n-2)), sig=pVal<0.05;
+    var testName=norm?'Pearson correlation coefficient':'Spearman rank correlation';
+    var dir=uR>0?'positive':'negative', str=Math.abs(uR)>0.7?'strong':Math.abs(uR)>0.4?'moderate':'weak';
+    var interp=sig?'p = '+pVal.toFixed(4)+' < 0.05. Reject the null hypothesis. There is a significant '+str+' '+dir+' correlation (r = '+uR.toFixed(3)+') between '+S.xL+' and '+S.yL+'.':'p = '+pVal.toFixed(4)+' > 0.05. Accept the null hypothesis. No significant correlation found (r = '+uR.toFixed(3)+').';
+    var sdX=sstd(xs),sdY=sstd(ys),mxv=smean(xs),myv=smean(ys),slope=r*(sdY/sdX),intercept=myv-slope*mxv;
+    resultText='Test: '+testName+'\nn = '+n+' | r = '+r.toFixed(3)+' | r\u209b = '+rs.toFixed(3)+'\nResult: '+interp;
+    var sc=card();
+    var badge=mk('span','badge badge-purple'); badge.textContent=testName; sc.appendChild(badge);
+    var mini=mk('div','corr-mini');
+    function cbox(label,val){var b=mk('div','corr-box');var lb=mk('div','lbl');lb.textContent=label;var v=mk('div','val');v.textContent=val;b.appendChild(lb);b.appendChild(v);return b;}
+    mini.appendChild(cbox('n',n)); mini.appendChild(cbox('r (Pearson)',r.toFixed(3))); mini.appendChild(cbox('r\u209b (Spearman)',rs.toFixed(3))); mini.appendChild(cbox('r\u00b2',(r*r).toFixed(3))); mini.appendChild(cbox('p-value',pVal.toFixed(4)));
+    sc.appendChild(mini);
+    var interpEl=mk('div','interp '+(sig?'sig':'ns')); interpEl.textContent=interp; sc.appendChild(interpEl);
+    var btns=mk('div'); btns.style.cssText='margin-top:1rem;display:flex;gap:8px';
+    var rs2=mk('button','btn-secondary'); rs2.textContent='\u2190 Start over'; rs2.addEventListener('click',resetAll); btns.appendChild(rs2);
+    var cb=mk('button','btn-copy'); cb.textContent='\ud83d\udccb Copy result'; cb.addEventListener('click',function(){cpText(resultText,cb);}); btns.appendChild(cb);
+    sc.appendChild(btns); w.appendChild(sc);
+    var gc=card(); var gcT=mk('div','card-title'); gcT.textContent='Scatter graph with regression line'; gc.appendChild(gcT);
+    var canvas=mk('canvas'); canvas.id='myChart'; gc.appendChild(canvas);
+    w.appendChild(gc); app.appendChild(w);
+    setTimeout(function(){
+      var ctx=document.getElementById('myChart');if(!ctx)return;
+      var xMin=Math.min.apply(null,xs),xMax=Math.max.apply(null,xs);
+      S.chart=new Chart(ctx,{type:'scatter',data:{datasets:[{label:'Data',data:pairs.map(function(p){return{x:p[0],y:p[1]};}),backgroundColor:COLORS[0],pointRadius:5},{label:'y = '+slope.toFixed(3)+'x + '+intercept.toFixed(3),data:[{x:xMin,y:slope*xMin+intercept},{x:xMax,y:slope*xMax+intercept}],type:'line',borderColor:COLORS[1],borderWidth:2,pointRadius:0,fill:false,tension:0}]},options:{responsive:true,plugins:{legend:{labels:{font:{size:12}}}},scales:{x:{title:{display:true,text:S.xL||'X variable'}},y:{title:{display:true,text:S.yL||'Y variable'}}}}});
+    },100);
+    return;
+  }
+
+  // ── GROUP COMPARISON ──
+  var cG=[];
+  for(var g=0;g<S.nG;g++) cG.push((S.gData[g]||[]).filter(function(x){return x!=='';}).map(Number));
+  var names=S.gNames.slice(0,S.nG), k=cG.length;
+  var allN=cG.every(function(g){return g.length>=5;}), eqV=leveneSig(cG);
+  var testName,testDesc,pVal,sig,interp,rationale,phRows=null,phTitle='';
+
+  if(k===2){
+    if(allN&&eqV){pVal=tTestP(cG[0],cG[1]);testName='Independent samples t-test';testDesc='Two groups, normal distribution, equal variances.';rationale='Both groups have 5+ values (normal distribution assumed) and variances are equal (Levene test) \u2192 t-test.';}
+    else if(allN&&!eqV){pVal=welchP(cG[0],cG[1]);testName='Welch t-test';testDesc='Two groups, normal distribution, unequal variances.';rationale='Both groups have 5+ values (normal distribution assumed) but variances are unequal (Levene test) \u2192 Welch t-test.';}
+    else{pVal=kwP(cG);testName='Mann-Whitney U test';testDesc='Two groups, non-parametric.';rationale='At least one group has fewer than 5 values so normal distribution cannot be assumed \u2192 Mann-Whitney U test.';}
+  } else {
+    if(allN&&eqV){var res=anovaCalc(cG);pVal=res.p;testName='One-way ANOVA (F = '+res.F.toFixed(3)+')';testDesc='3+ groups, normal distribution, equal variances.';rationale='All groups have 5+ values and variances are equal \u2192 one-way ANOVA.'+(pVal<0.05?' Significant result triggers Tukey HSD post-hoc test.':'');if(pVal<0.05){phRows=tukeyHSD(cG,names,res.MSW,res.N,res.k);phTitle='Tukey HSD post-hoc test';}}
+    else{pVal=kwP(cG);testName='Kruskal-Wallis test';testDesc='3+ groups, non-parametric.';rationale='At least one group has fewer than 5 values or variances are unequal \u2192 Kruskal-Wallis test.'+(pVal<0.05?' Significant result triggers Dunn post-hoc test.':'');if(pVal<0.05){phRows=dunnTest(cG,names);phTitle='Dunn post-hoc test (Bonferroni-corrected)';}}
+  }
+  sig=pVal<0.05;
+  interp=sig?'p = '+pVal.toFixed(4)+' < 0.05. Reject the null hypothesis. There is a statistically significant difference between at least two groups.':'p = '+pVal.toFixed(4)+' > 0.05. Accept the null hypothesis. No statistically significant difference between groups.';
+
+  var _means=cG.map(smean), _sds=cG.map(sstd);
+  var dvStr=S.yL+(S.dvU?' ('+S.dvU+')':'') || 'Value';
+  var ivStr=S.xL+(S.ivU?' ('+S.ivU+')':'') || 'Group';
+  var autoTitle=(S.yL||'Mean')+' by '+(S.xL||'group')+(S.dvU?' ('+S.dvU+')':'')+' ± SD';
+  var chartTitle=autoTitle, chartYLabel=dvStr, chartXLabel=ivStr;
+
+  var stLines=names.map(function(n,i){var g=cG[i];return n+': mean='+smean(g).toFixed(2)+', SD='+sstd(g).toFixed(2)+', SE='+sse(g).toFixed(2)+', 95%CI=±'+sci(g).toFixed(2)+', n='+g.length;});
+  resultText='Test: '+testName+'\n'+testDesc+'\n\nWhy this test: '+rationale+'\n\nDescriptive stats:\n'+stLines.join('\n')+'\n\nResult: '+interp;
+  if(phRows) resultText+='\n\n'+phTitle+':\n'+phRows.map(function(r){return r.a+' vs '+r.b+': diff='+r.diff+(r.q?', q='+r.q:'')+(r.z?', z='+r.z:'')+', p='+(r.p||'—')+' — '+(r.sig?'SIGNIFICANT':'not significant');}).join('\n');
+
+  var tc=card();
+  var badge=mk('span','badge badge-purple'); badge.textContent=testName; tc.appendChild(badge);
+  var rationaleEl=mk('div'); rationaleEl.style.cssText='background:var(--gray-100);border-radius:var(--radius-sm);padding:.6rem .875rem;font-size:12px;color:var(--gray-600);margin:.5rem 0;line-height:1.6';
+  rationaleEl.textContent='Why this test? '+rationale; tc.appendChild(rationaleEl);
+  var interpEl=mk('div','interp '+(sig?'sig':'ns')); interpEl.textContent=interp; tc.appendChild(interpEl);
+  var btns=mk('div'); btns.style.cssText='margin-top:1rem;display:flex;gap:8px;flex-wrap:wrap';
+  var rsBtn=mk('button','btn-secondary'); rsBtn.textContent='← Start over'; rsBtn.addEventListener('click',resetAll); btns.appendChild(rsBtn);
+  var cbBtn=mk('button','btn-copy'); cbBtn.textContent='Copy result'; cbBtn.addEventListener('click',function(){cpText(resultText,cbBtn);}); btns.appendChild(cbBtn);
+  var xlBtn=mk('button','btn-copy'); xlBtn.textContent='Download data (.xlsx)'; xlBtn.addEventListener('click',function(){downloadExcel(cG,names,dvStr,ivStr);}); btns.appendChild(xlBtn);
+  tc.appendChild(btns); w.appendChild(tc);
+
+  var sg=mk('div','stats-grid');
+  cG.forEach(function(g,i){
+    var m=smean(g),s=sstd(g),sem=sse(g),c2=sci(g);
+    var sc=mk('div','stat-card');
+    var gl=mk('div','group-label'); gl.style.color=COLORS[i%COLORS.length]; gl.textContent=names[i]; sc.appendChild(gl);
+    var sr=mk('div','stat-row');
+    function sbox(lbl,val){var b=mk('div','stat-box');var l=mk('div','lbl');l.textContent=lbl;var v=mk('div','val');v.textContent=val;b.appendChild(l);b.appendChild(v);return b;}
+    sr.appendChild(sbox('Mean',m.toFixed(2))); sr.appendChild(sbox('SD',s.toFixed(2))); sr.appendChild(sbox('SE',sem.toFixed(2))); sr.appendChild(sbox('95% CI','±'+c2.toFixed(2))); sr.appendChild(sbox('n',g.length));
+    sc.appendChild(sr); sg.appendChild(sc);
+  });
+  w.appendChild(sg);
+
+  var gc=card();
+  var editGrid=mk('div'); editGrid.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.75rem';
+  function editField(lbl,val,cb){var d=mk('div');var l=mk('label','lbl');l.textContent=lbl;d.appendChild(l);var inp=mk('input','');inp.type='text';inp.value=val;inp.style.width='100%';inp.addEventListener('input',function(){cb(inp.value);});d.appendChild(inp);return d;}
+  editGrid.appendChild(editField('Chart title',autoTitle,function(v){chartTitle=v;var el=document.getElementById('gcTitle');if(el)el.textContent=v;}));
+  editGrid.appendChild(editField('Y axis label',dvStr,function(v){chartYLabel=v;if(S.chart){S.chart.options.scales.y.title.text=v;S.chart.update();}}));
+  editGrid.appendChild(editField('X axis label',ivStr,function(v){chartXLabel=v;if(S.chart){S.chart.options.scales.x.title.text=v;S.chart.update();}}));
+  gc.appendChild(editGrid);
+  var dlRow=mk('div'); dlRow.style.cssText='display:flex;gap:.5rem;margin-bottom:.75rem';
+  var pngBtn=mk('button','btn-copy'); pngBtn.textContent='Download PNG';
+  pngBtn.addEventListener('click',function(){var cv=document.getElementById('myChart');if(!cv)return;var off=document.createElement('canvas');off.width=cv.width;off.height=cv.height;var oc=off.getContext('2d');oc.fillStyle='#fff';oc.fillRect(0,0,off.width,off.height);oc.drawImage(cv,0,0);var a=document.createElement('a');a.download='chart.png';a.href=off.toDataURL('image/png');a.click();});
+  dlRow.appendChild(pngBtn);
+  var svgBtn=mk('button','btn-copy'); svgBtn.textContent='Download SVG';
+  svgBtn.addEventListener('click',function(){downloadChartSVG(names,_means,_sds,chartTitle,chartXLabel,chartYLabel);});
+  dlRow.appendChild(svgBtn);
+  gc.appendChild(dlRow);
+  var gcTitle=mk('div','card-title'); gcTitle.id='gcTitle'; gcTitle.textContent=autoTitle; gc.appendChild(gcTitle);
+  var canvas=mk('canvas'); canvas.id='myChart'; gc.appendChild(canvas);
+  w.appendChild(gc);
+
+  if(phRows){
+    var ph=card(); var phT=mk('div','card-title'); phT.textContent=phTitle; ph.appendChild(phT);
+    var phSub=mk('p','sub'); phSub.style.marginBottom='.75rem'; phSub.textContent='Pairwise comparisons — which groups specifically differ (α = 0.05)'; ph.appendChild(phSub);
+    var phTbl=mk('table','ph-table'); var phHead=mk('thead'); var phHr=mk('tr');
+    ['Comparison','Mean diff.',phRows[0].q?'q statistic':'z statistic','Adjusted p','Significant?'].forEach(function(h){var th=mk('th');th.textContent=h;phHr.appendChild(th);});
+    phHead.appendChild(phHr); phTbl.appendChild(phHead);
+    var phBody=mk('tbody');
+    phRows.forEach(function(r){var tr=mk('tr');[r.a+' vs '+r.b,r.diff,r.q||r.z,r.p||'—'].forEach(function(v){var td=mk('td');td.textContent=v;tr.appendChild(td);});var tdS=mk('td',r.sig?'yes':'no');tdS.textContent=r.sig?'Yes ✓':'No';tr.appendChild(tdS);phBody.appendChild(tr);});
+    phTbl.appendChild(phBody); ph.appendChild(phTbl); w.appendChild(ph);
+  }
+
+  app.appendChild(w);
+
+  Chart.register({
+    id:'eb_'+Date.now(),
+    afterDatasetsDraw:function(chart){
+      if(chart.canvas.id!=='myChart') return;
+      var c2=chart.ctx, y=chart.scales.y, meta=chart.getDatasetMeta(0);
+      _means.forEach(function(m,i){
+        var bar=meta.data[i]; if(!bar) return;
+        var sd=_sds[i], xp=bar.x, yT=y.getPixelForValue(m+sd), yB=y.getPixelForValue(m-sd), ww=14;
+        c2.save(); c2.strokeStyle=COLORS[i%COLORS.length]; c2.lineWidth=2.5;
+        c2.beginPath(); c2.moveTo(xp,yT); c2.lineTo(xp,yB); c2.moveTo(xp-ww,yT); c2.lineTo(xp+ww,yT); c2.moveTo(xp-ww,yB); c2.lineTo(xp+ww,yB); c2.stroke(); c2.restore();
+      });
+    }
+  });
+
+  setTimeout(function(){
+    var ctx=document.getElementById('myChart'); if(!ctx) return;
+    var yMin=Math.min(0,Math.min.apply(null,_means.map(function(m,i){return m-_sds[i];})) * 1.15);
+    var yMax=Math.max.apply(null,_means.map(function(m,i){return m+_sds[i];})) * 1.1;
+    S.chart=new Chart(ctx,{
+      type:'bar',
+      data:{labels:names,datasets:[{data:_means,backgroundColor:COLORS.slice(0,k).map(function(c){return c+'28';}),borderColor:COLORS.slice(0,k),borderWidth:2}]},
+      options:{responsive:true,animation:{duration:0},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c2){return 'Mean: '+c2.raw.toFixed(2)+', SD: ±'+_sds[c2.dataIndex].toFixed(2);}}}},scales:{y:{title:{display:true,text:chartYLabel,font:{size:12}},min:yMin,suggestedMax:yMax},x:{title:{display:true,text:chartXLabel,font:{size:12}}}}}
+    });
+  },100);
+}
+
+function downloadExcel(cG,names,dvStr,ivStr){
+  var wb=XLSX.utils.book_new();
+  var maxR=Math.max.apply(null,cG.map(function(g){return g.length;}));
+  var raw=[[''].concat(names)];
+  for(var r=0;r<maxR;r++){var row=[r+1];cG.forEach(function(g){row.push(r<g.length?g[r]:'');});raw.push(row);}
+  raw.push([]); raw.push([''].concat(names));
+  [['Mean',smean],['SD',sstd],['SE',sse],['95% CI',sci],['n',function(g){return g.length;}]].forEach(function(pair){
+    var row=[pair[0]]; cG.forEach(function(g){var v=pair[1](g);row.push(typeof v==='number'?+v.toFixed(4):v);}); raw.push(row);
+  });
+  var ws1=XLSX.utils.aoa_to_sheet(raw); XLSX.utils.book_append_sheet(wb,ws1,'Raw Data');
+  var sum=[['Group','n','Mean','SD','SE','95% CI']];
+  names.forEach(function(n,i){var g=cG[i];sum.push([n,g.length,+smean(g).toFixed(4),+sstd(g).toFixed(4),+sse(g).toFixed(4),+sci(g).toFixed(4)]);});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(sum),'Summary Stats');
+  XLSX.writeFile(wb,'data_export.xlsx');
+}
+
+function downloadChartSVG(names,means,sds,title,xLabel,yLabel){
+  var W=700,H=440,pad={top:60,right:30,bottom:120,left:70};
+  var plotW=W-pad.left-pad.right,plotH=H-pad.top-pad.bottom;
+  var step=plotW/names.length,barW=Math.min(60,step*0.6);
+  var yMin=Math.min(0,Math.min.apply(null,means.map(function(m,i){return m-sds[i];})) * 1.1);
+  var yMax=Math.max.apply(null,means.map(function(m,i){return m+sds[i];})) * 1.15;
+  var yRange=yMax-yMin;
+  function ypx(v){return pad.top+plotH-(v-yMin)/yRange*plotH;}
+  function xpx(i){return pad.left+step*i+step/2;}
+  var ticks=[]; for(var t=0;t<=5;t++) ticks.push(yMin+t*yRange/5);
+  var p=['<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" style="font-family:sans-serif;background:#fff">'];
+  p.push('<text x="'+(W/2)+'" y="30" text-anchor="middle" font-size="14" font-weight="bold">'+esc(title)+'</text>');
+  p.push('<text x="16" y="'+(H/2)+'" text-anchor="middle" font-size="12" fill="#555" transform="rotate(-90,16,'+(H/2)+')">'+esc(yLabel)+'</text>');
+  p.push('<text x="'+(pad.left+plotW/2)+'" y="'+(H-8)+'" text-anchor="middle" font-size="12" fill="#555">'+esc(xLabel)+'</text>');
+  ticks.forEach(function(v){var y=ypx(v);p.push('<line x1="'+pad.left+'" y1="'+y+'" x2="'+(pad.left+plotW)+'" y2="'+y+'" stroke="#e0e0e0" stroke-width="1"/>');p.push('<text x="'+(pad.left-6)+'" y="'+(y+4)+'" text-anchor="end" font-size="10" fill="#666">'+v.toFixed(1)+'</text>');});
+  p.push('<line x1="'+pad.left+'" y1="'+pad.top+'" x2="'+pad.left+'" y2="'+(pad.top+plotH)+'" stroke="#aaa" stroke-width="1.5"/>');
+  p.push('<line x1="'+pad.left+'" y1="'+(pad.top+plotH)+'" x2="'+(pad.left+plotW)+'" y2="'+(pad.top+plotH)+'" stroke="#aaa" stroke-width="1.5"/>');
+  names.forEach(function(name,i){
+    var x=xpx(i),m=means[i],sd=sds[i],col=COLORS[i%COLORS.length];
+    var yTop=ypx(Math.max(m,0)),yBase=ypx(Math.min(m,0)),bh=Math.abs(yBase-yTop);
+    p.push('<rect x="'+(x-barW/2)+'" y="'+yTop+'" width="'+barW+'" height="'+bh+'" fill="'+col+'33" stroke="'+col+'" stroke-width="1.5"/>');
+    var et=ypx(m+sd),eb=ypx(m-sd),ww=10;
+    p.push('<line x1="'+x+'" y1="'+et+'" x2="'+x+'" y2="'+eb+'" stroke="'+col+'" stroke-width="2"/>');
+    p.push('<line x1="'+(x-ww)+'" y1="'+et+'" x2="'+(x+ww)+'" y2="'+et+'" stroke="'+col+'" stroke-width="2"/>');
+    p.push('<line x1="'+(x-ww)+'" y1="'+eb+'" x2="'+(x+ww)+'" y2="'+eb+'" stroke="'+col+'" stroke-width="2"/>');
+    p.push('<text x="'+x+'" y="'+(pad.top+plotH+14)+'" text-anchor="end" font-size="10" fill="#444" transform="rotate(-40,'+x+','+(pad.top+plotH+14)+')">'+esc(name)+'</text>');
+  });
+  p.push('</svg>');
+  var blob=new Blob([p.join('\n')],{type:'image/svg+xml'});
+  var a=document.createElement('a'); a.download='chart.svg'; a.href=URL.createObjectURL(blob); a.click();
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ── utilities ─────────────────────────────────────────────────────────────────
+function resetAll(){
+  if(S.chart){try{S.chart.destroy();}catch(e){}}
+  S={step:0,dataType:null,ivType:null,purpose:null,nG:3,nR:5,gNames:[],gData:[],xL:'',yL:'',ivU:'',dvU:'',pX:[],pY:[],chiObs:[],chiExp:[],chiCats:[],chiMode:null,chiRatio:'',chiRV:'',chiCV:'',chiRows:[],chiCols:[],chiGrid:[],corrPairs:null,chart:null};
+  render();
+}
+function cpText(text,btn){
+  navigator.clipboard.writeText(text).catch(function(){var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);});
+  var o=btn.textContent; btn.textContent='\u2713 Copied!'; setTimeout(function(){btn.textContent=o;},2000);
+}
+
+render();
+
+</script>
+</body>
+</html>
