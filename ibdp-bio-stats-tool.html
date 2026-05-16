@@ -694,7 +694,7 @@ canvas { max-width: 100%; display: block; }
 </div>
 
 <script>
-const COLORS = ['#7F77DD','#1D9E75','#D85A30','#378ADD','#BA7517','#D4537E','#639922','#534AB7'];
+const COLORS = ['#0099d6','#0d2240','#0078a8','#1a5c8a','#2e86ab','#006494','#023e8a','#0077b6'];
 
 const IB_UNITS = {
   'Time':         ['s','min','h','days'],
@@ -1100,8 +1100,8 @@ function step3(app) {
     e.stopPropagation();
     derr.textContent='';
     for(var g=0;g<S.nG;g++){
-      if(S.gData[g].filter(function(x){return x!=='';}).length<2){
-        derr.textContent='"'+S.gNames[g]+'" needs at least 2 values.'; return;
+      if(S.gData[g].filter(function(x){return x!=='';}).length<3){
+        derr.textContent='"'+S.gNames[g]+'" needs at least 3 values to run a statistical test. Please add more replicates.'; return;
       }
     }
     S.step=4; render();
@@ -1468,16 +1468,20 @@ function showResults(app){
       interp=sig?'p = '+pVal.toFixed(4)+' < 0.05. Reject the null hypothesis. Significant association found between the variables.':'p = '+pVal.toFixed(4)+' > 0.05. Accept the null hypothesis. No significant association found.';
       gt='cG';
     }
-    resultText='Test: '+testName+'\n'+testDesc+'\nResult: '+interp;
+    resultText='IBDP Biology Statistics Result\n================================\nTest: '+testName+'\n'+testDesc+'\nResult: '+interp;
     var tc=card();
     var badge=mk('span','badge badge-purple'); badge.textContent=testName; tc.appendChild(badge);
     var desc=mk('p','sub'); desc.style.marginBottom='.5rem'; desc.textContent=testDesc; tc.appendChild(desc);
     var interpEl=mk('div','interp '+(sig?'sig':'ns')); interpEl.textContent=interp; tc.appendChild(interpEl);
-    var btns=mk('div'); btns.style.cssText='margin-top:1rem;display:flex;gap:8px';
-    var rs=mk('button','btn-secondary'); rs.textContent='\u2190 Start over'; rs.addEventListener('click',resetAll); btns.appendChild(rs);
-    var cb=mk('button','btn-copy'); cb.textContent='\ud83d\udccb Copy result'; cb.addEventListener('click',function(){cpText(resultText,cb);}); btns.appendChild(cb);
+    var btns=mk('div'); btns.style.cssText='margin-top:1rem;display:flex;gap:8px;flex-wrap:wrap';
+    var bkBtnF=mk('button','btn-secondary'); bkBtnF.textContent='\u2190 Back'; bkBtnF.addEventListener('click',function(){S.step=Math.max(0,S.step-1);render();}); btns.appendChild(bkBtnF);
+    var rs=mk('button','btn-secondary'); rs.textContent='Start over'; rs.addEventListener('click',resetAll); btns.appendChild(rs);
+    var cb=mk('button','btn-copy'); cb.textContent='Copy result'; cb.addEventListener('click',function(){cpText(resultText,cb);}); btns.appendChild(cb);
     tc.appendChild(btns); w.appendChild(tc);
     var gc=card(); var gcTitle=mk('div','card-title'); gcTitle.textContent=gt==='cB'?'Observed vs expected counts':'Grouped count chart'; gc.appendChild(gcTitle);
+    var dlRowF=mk('div'); dlRowF.style.cssText='display:flex;gap:.5rem;margin-bottom:.75rem';
+    var pngBtnF=mk('button','btn-copy'); pngBtnF.textContent='Download PNG'; pngBtnF.addEventListener('click',downloadChartPNG); dlRowF.appendChild(pngBtnF);
+    gc.appendChild(dlRowF);
     var canvas=mk('canvas'); canvas.id='myChart'; gc.appendChild(canvas);
     w.appendChild(gc); app.appendChild(w);
     setTimeout(function(){
@@ -1497,7 +1501,7 @@ function showResults(app){
     var dir=uR>0?'positive':'negative', str=Math.abs(uR)>0.7?'strong':Math.abs(uR)>0.4?'moderate':'weak';
     var interp=sig?'p = '+pVal.toFixed(4)+' < 0.05. Reject the null hypothesis. There is a significant '+str+' '+dir+' correlation (r = '+uR.toFixed(3)+') between '+S.xL+' and '+S.yL+'.':'p = '+pVal.toFixed(4)+' > 0.05. Accept the null hypothesis. No significant correlation found (r = '+uR.toFixed(3)+').';
     var sdX=sstd(xs),sdY=sstd(ys),mxv=smean(xs),myv=smean(ys),slope=r*(sdY/sdX),intercept=myv-slope*mxv;
-    resultText='Test: '+testName+'\nn = '+n+' | r = '+r.toFixed(3)+' | r\u209b = '+rs.toFixed(3)+'\nResult: '+interp;
+    resultText='IBDP Biology Statistics Result\n================================\nTest: '+testName+'\nn = '+n+' | r (Pearson) = '+r.toFixed(3)+' | r\u209b (Spearman) = '+rs.toFixed(3)+' | r\u00b2 = '+(r*r).toFixed(3)+' | p = '+pVal.toFixed(4)+'\nResult: '+interp;
     var sc=card();
     var badge=mk('span','badge badge-purple'); badge.textContent=testName; sc.appendChild(badge);
     var mini=mk('div','corr-mini');
@@ -1505,11 +1509,15 @@ function showResults(app){
     mini.appendChild(cbox('n',n)); mini.appendChild(cbox('r (Pearson)',r.toFixed(3))); mini.appendChild(cbox('r\u209b (Spearman)',rs.toFixed(3))); mini.appendChild(cbox('r\u00b2',(r*r).toFixed(3))); mini.appendChild(cbox('p-value',pVal.toFixed(4)));
     sc.appendChild(mini);
     var interpEl=mk('div','interp '+(sig?'sig':'ns')); interpEl.textContent=interp; sc.appendChild(interpEl);
-    var btns=mk('div'); btns.style.cssText='margin-top:1rem;display:flex;gap:8px';
-    var rs2=mk('button','btn-secondary'); rs2.textContent='\u2190 Start over'; rs2.addEventListener('click',resetAll); btns.appendChild(rs2);
-    var cb=mk('button','btn-copy'); cb.textContent='\ud83d\udccb Copy result'; cb.addEventListener('click',function(){cpText(resultText,cb);}); btns.appendChild(cb);
+    var btns=mk('div'); btns.style.cssText='margin-top:1rem;display:flex;gap:8px;flex-wrap:wrap';
+    var bkBtnC=mk('button','btn-secondary'); bkBtnC.textContent='\u2190 Back'; bkBtnC.addEventListener('click',function(){S.step=Math.max(0,S.step-1);render();}); btns.appendChild(bkBtnC);
+    var rs2=mk('button','btn-secondary'); rs2.textContent='Start over'; rs2.addEventListener('click',resetAll); btns.appendChild(rs2);
+    var cb=mk('button','btn-copy'); cb.textContent='Copy result'; cb.addEventListener('click',function(){cpText(resultText,cb);}); btns.appendChild(cb);
     sc.appendChild(btns); w.appendChild(sc);
     var gc=card(); var gcT=mk('div','card-title'); gcT.textContent='Scatter graph with regression line'; gc.appendChild(gcT);
+    var dlRowC=mk('div'); dlRowC.style.cssText='display:flex;gap:.5rem;margin-bottom:.75rem';
+    var pngBtnC=mk('button','btn-copy'); pngBtnC.textContent='Download PNG'; pngBtnC.addEventListener('click',downloadChartPNG); dlRowC.appendChild(pngBtnC);
+    gc.appendChild(dlRowC);
     var canvas=mk('canvas'); canvas.id='myChart'; gc.appendChild(canvas);
     w.appendChild(gc); app.appendChild(w);
     setTimeout(function(){
@@ -1524,6 +1532,20 @@ function showResults(app){
   var cG=[];
   for(var g=0;g<S.nG;g++) cG.push((S.gData[g]||[]).filter(function(x){return x!=='';}).map(Number));
   var names=S.gNames.slice(0,S.nG), k=cG.length;
+
+  // ── Validation ──
+  var thinGroups=[];
+  cG.forEach(function(g,i){ if(g.length<3) thinGroups.push('"'+names[i]+'" ('+g.length+' value'+(g.length===1?'':'s')+')'); });
+  if(thinGroups.length>0){
+    var errCard=card();
+    var errTitle=mk('div','card-title'); errTitle.textContent='Cannot run the test — not enough data'; errCard.appendChild(errTitle);
+    var errMsg=mk('div'); errMsg.style.cssText='color:var(--red);font-size:0.88rem;font-weight:600;margin-bottom:1.375rem;line-height:1.7';
+    errMsg.textContent='The following groups need at least 3 values each: '+thinGroups.join(', ')+'. Go back and add more replicates.';
+    errCard.appendChild(errMsg);
+    var bkErrBtn=mk('button','btn-secondary'); bkErrBtn.textContent='← Back to data entry'; bkErrBtn.addEventListener('click',function(){S.step=3;render();}); errCard.appendChild(bkErrBtn);
+    app.appendChild(errCard); return;
+  }
+
   var allN=cG.every(function(g){return g.length>=5;}), eqV=leveneSig(cG);
   var testName,testDesc,pVal,sig,interp,rationale,phRows=null,phTitle='';
 
@@ -1544,8 +1566,14 @@ function showResults(app){
   var autoTitle=(S.yL||'Mean')+' by '+(S.xL||'group')+(S.dvU?' ('+S.dvU+')':'')+' ± SD';
   var chartTitle=autoTitle, chartYLabel=dvStr, chartXLabel=ivStr;
 
-  var stLines=names.map(function(n,i){var g=cG[i];return n+': mean='+smean(g).toFixed(2)+', SD='+sstd(g).toFixed(2)+', SE='+sse(g).toFixed(2)+', 95%CI=±'+sci(g).toFixed(2)+', n='+g.length;});
-  resultText='Test: '+testName+'\n'+testDesc+'\n\nWhy this test: '+rationale+'\n\nDescriptive stats:\n'+stLines.join('\n')+'\n\nResult: '+interp;
+  var rawLines=names.map(function(n,i){return n+': '+cG[i].join(', ');});
+  var stLines=names.map(function(n,i){var g=cG[i];return n+': mean='+smean(g).toFixed(2)+', SD='+sstd(g).toFixed(2)+', SE='+sse(g).toFixed(2)+', 95% CI=±'+sci(g).toFixed(2)+', n='+g.length;});
+  resultText='IBDP Biology Statistics Result\n================================\n'
+    +'Test: '+testName+'\n'+testDesc+'\n\n'
+    +'Raw data:\n'+rawLines.join('\n')+'\n\n'
+    +'Descriptive statistics:\n'+stLines.join('\n')+'\n\n'
+    +'Why this test: '+rationale+'\n\n'
+    +'Result: '+interp;
   if(phRows) resultText+='\n\n'+phTitle+':\n'+phRows.map(function(r){return r.a+' vs '+r.b+': diff='+r.diff+(r.q?', q='+r.q:'')+(r.z?', z='+r.z:'')+', p='+(r.p||'—')+' — '+(r.sig?'SIGNIFICANT':'not significant');}).join('\n');
 
   var tc=card();
@@ -1554,9 +1582,10 @@ function showResults(app){
   rationaleEl.textContent='Why this test? '+rationale; tc.appendChild(rationaleEl);
   var interpEl=mk('div','interp '+(sig?'sig':'ns')); interpEl.textContent=interp; tc.appendChild(interpEl);
   var btns=mk('div'); btns.style.cssText='margin-top:1rem;display:flex;gap:8px;flex-wrap:wrap';
-  var rsBtn=mk('button','btn-secondary'); rsBtn.textContent='← Start over'; rsBtn.addEventListener('click',resetAll); btns.appendChild(rsBtn);
+  var bkBtnG=mk('button','btn-secondary'); bkBtnG.textContent='← Back'; bkBtnG.addEventListener('click',function(){S.step=3;render();}); btns.appendChild(bkBtnG);
+  var rsBtn=mk('button','btn-secondary'); rsBtn.textContent='Start over'; rsBtn.addEventListener('click',resetAll); btns.appendChild(rsBtn);
   var cbBtn=mk('button','btn-copy'); cbBtn.textContent='Copy result'; cbBtn.addEventListener('click',function(){cpText(resultText,cbBtn);}); btns.appendChild(cbBtn);
-  var xlBtn=mk('button','btn-copy'); xlBtn.textContent='Download data (.xlsx)'; xlBtn.addEventListener('click',function(){downloadExcel(cG,names,dvStr,ivStr);}); btns.appendChild(xlBtn);
+  var csvBtn=mk('button','btn-copy'); csvBtn.textContent='Download data (CSV)'; csvBtn.addEventListener('click',function(){downloadCSV(cG,names,dvStr,ivStr);}); btns.appendChild(csvBtn);
   tc.appendChild(btns); w.appendChild(tc);
 
   var sg=mk('div','stats-grid');
@@ -1580,11 +1609,8 @@ function showResults(app){
   gc.appendChild(editGrid);
   var dlRow=mk('div'); dlRow.style.cssText='display:flex;gap:.5rem;margin-bottom:.75rem';
   var pngBtn=mk('button','btn-copy'); pngBtn.textContent='Download PNG';
-  pngBtn.addEventListener('click',function(){var cv=document.getElementById('myChart');if(!cv)return;var off=document.createElement('canvas');off.width=cv.width;off.height=cv.height;var oc=off.getContext('2d');oc.fillStyle='#fff';oc.fillRect(0,0,off.width,off.height);oc.drawImage(cv,0,0);var a=document.createElement('a');a.download='chart.png';a.href=off.toDataURL('image/png');a.click();});
+  pngBtn.addEventListener('click',downloadChartPNG);
   dlRow.appendChild(pngBtn);
-  var svgBtn=mk('button','btn-copy'); svgBtn.textContent='Download SVG';
-  svgBtn.addEventListener('click',function(){downloadChartSVG(names,_means,_sds,chartTitle,chartXLabel,chartYLabel);});
-  dlRow.appendChild(svgBtn);
   gc.appendChild(dlRow);
   var gcTitle=mk('div','card-title'); gcTitle.id='gcTitle'; gcTitle.textContent=autoTitle; gc.appendChild(gcTitle);
   var canvas=mk('canvas'); canvas.id='myChart'; gc.appendChild(canvas);
@@ -1629,54 +1655,25 @@ function showResults(app){
   },100);
 }
 
-function downloadExcel(cG,names,dvStr,ivStr){
-  var wb=XLSX.utils.book_new();
+function downloadCSV(cG,names,dvStr,ivStr){
   var maxR=Math.max.apply(null,cG.map(function(g){return g.length;}));
-  var raw=[[''].concat(names)];
-  for(var r=0;r<maxR;r++){var row=[r+1];cG.forEach(function(g){row.push(r<g.length?g[r]:'');});raw.push(row);}
-  raw.push([]); raw.push([''].concat(names));
-  [['Mean',smean],['SD',sstd],['SE',sse],['95% CI',sci],['n',function(g){return g.length;}]].forEach(function(pair){
-    var row=[pair[0]]; cG.forEach(function(g){var v=pair[1](g);row.push(typeof v==='number'?+v.toFixed(4):v);}); raw.push(row);
+  var lines=[['Replicate'].concat(names).join(',')];
+  for(var r=0;r<maxR;r++){var row=[r+1];cG.forEach(function(g){row.push(r<g.length?g[r]:'');});lines.push(row.join(','));}
+  lines.push('');
+  lines.push(['Statistic'].concat(names).join(','));
+  [['Mean',function(g){return smean(g).toFixed(4);}],['SD',function(g){return sstd(g).toFixed(4);}],['SE',function(g){return sse(g).toFixed(4);}],['95% CI',function(g){return sci(g).toFixed(4);}],['n',function(g){return g.length;}]].forEach(function(pair){
+    var row=[pair[0]];cG.forEach(function(g){row.push(pair[1](g));});lines.push(row.join(','));
   });
-  var ws1=XLSX.utils.aoa_to_sheet(raw); XLSX.utils.book_append_sheet(wb,ws1,'Raw Data');
-  var sum=[['Group','n','Mean','SD','SE','95% CI']];
-  names.forEach(function(n,i){var g=cG[i];sum.push([n,g.length,+smean(g).toFixed(4),+sstd(g).toFixed(4),+sse(g).toFixed(4),+sci(g).toFixed(4)]);});
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(sum),'Summary Stats');
-  XLSX.writeFile(wb,'data_export.xlsx');
+  var blob=new Blob([lines.join('\n')],{type:'text/csv'});
+  var a=document.createElement('a');a.download='data_export.csv';a.href=URL.createObjectURL(blob);a.click();
 }
 
-function downloadChartSVG(names,means,sds,title,xLabel,yLabel){
-  var W=700,H=440,pad={top:60,right:30,bottom:120,left:70};
-  var plotW=W-pad.left-pad.right,plotH=H-pad.top-pad.bottom;
-  var step=plotW/names.length,barW=Math.min(60,step*0.6);
-  var yMin=Math.min(0,Math.min.apply(null,means.map(function(m,i){return m-sds[i];})) * 1.1);
-  var yMax=Math.max.apply(null,means.map(function(m,i){return m+sds[i];})) * 1.15;
-  var yRange=yMax-yMin;
-  function ypx(v){return pad.top+plotH-(v-yMin)/yRange*plotH;}
-  function xpx(i){return pad.left+step*i+step/2;}
-  var ticks=[]; for(var t=0;t<=5;t++) ticks.push(yMin+t*yRange/5);
-  var p=['<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" style="font-family:sans-serif;background:#fff">'];
-  p.push('<text x="'+(W/2)+'" y="30" text-anchor="middle" font-size="14" font-weight="bold">'+esc(title)+'</text>');
-  p.push('<text x="16" y="'+(H/2)+'" text-anchor="middle" font-size="12" fill="#555" transform="rotate(-90,16,'+(H/2)+')">'+esc(yLabel)+'</text>');
-  p.push('<text x="'+(pad.left+plotW/2)+'" y="'+(H-8)+'" text-anchor="middle" font-size="12" fill="#555">'+esc(xLabel)+'</text>');
-  ticks.forEach(function(v){var y=ypx(v);p.push('<line x1="'+pad.left+'" y1="'+y+'" x2="'+(pad.left+plotW)+'" y2="'+y+'" stroke="#e0e0e0" stroke-width="1"/>');p.push('<text x="'+(pad.left-6)+'" y="'+(y+4)+'" text-anchor="end" font-size="10" fill="#666">'+v.toFixed(1)+'</text>');});
-  p.push('<line x1="'+pad.left+'" y1="'+pad.top+'" x2="'+pad.left+'" y2="'+(pad.top+plotH)+'" stroke="#aaa" stroke-width="1.5"/>');
-  p.push('<line x1="'+pad.left+'" y1="'+(pad.top+plotH)+'" x2="'+(pad.left+plotW)+'" y2="'+(pad.top+plotH)+'" stroke="#aaa" stroke-width="1.5"/>');
-  names.forEach(function(name,i){
-    var x=xpx(i),m=means[i],sd=sds[i],col=COLORS[i%COLORS.length];
-    var yTop=ypx(Math.max(m,0)),yBase=ypx(Math.min(m,0)),bh=Math.abs(yBase-yTop);
-    p.push('<rect x="'+(x-barW/2)+'" y="'+yTop+'" width="'+barW+'" height="'+bh+'" fill="'+col+'33" stroke="'+col+'" stroke-width="1.5"/>');
-    var et=ypx(m+sd),eb=ypx(m-sd),ww=10;
-    p.push('<line x1="'+x+'" y1="'+et+'" x2="'+x+'" y2="'+eb+'" stroke="'+col+'" stroke-width="2"/>');
-    p.push('<line x1="'+(x-ww)+'" y1="'+et+'" x2="'+(x+ww)+'" y2="'+et+'" stroke="'+col+'" stroke-width="2"/>');
-    p.push('<line x1="'+(x-ww)+'" y1="'+eb+'" x2="'+(x+ww)+'" y2="'+eb+'" stroke="'+col+'" stroke-width="2"/>');
-    p.push('<text x="'+x+'" y="'+(pad.top+plotH+14)+'" text-anchor="end" font-size="10" fill="#444" transform="rotate(-40,'+x+','+(pad.top+plotH+14)+')">'+esc(name)+'</text>');
-  });
-  p.push('</svg>');
-  var blob=new Blob([p.join('\n')],{type:'image/svg+xml'});
-  var a=document.createElement('a'); a.download='chart.svg'; a.href=URL.createObjectURL(blob); a.click();
+function downloadChartPNG(){
+  var cv=document.getElementById('myChart');if(!cv)return;
+  var off=document.createElement('canvas');off.width=cv.width;off.height=cv.height;
+  var oc=off.getContext('2d');oc.fillStyle='#fff';oc.fillRect(0,0,off.width,off.height);oc.drawImage(cv,0,0);
+  var a=document.createElement('a');a.download='chart.png';a.href=off.toDataURL('image/png');a.click();
 }
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 // ── utilities ─────────────────────────────────────────────────────────────────
 function resetAll(){
