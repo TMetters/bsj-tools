@@ -148,7 +148,7 @@ body{background:var(--bg);min-height:100vh;}
 
 /* CARD TABS */
 .cc-tabs{display:flex;border-top:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;}
-.cc-tab{flex:1;min-width:68px;padding:10px 4px;font-size:0.68rem;font-weight:700;text-align:center;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.15s;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;user-select:none;}
+.cc-tab{flex:1;min-width:90px;padding:10px 6px;font-size:0.65rem;font-weight:700;text-align:center;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.15s;text-transform:uppercase;letter-spacing:0.03em;white-space:nowrap;user-select:none;}
 .cc-tab.on{color:var(--indigo);border-bottom-color:var(--indigo);}
 .cc-pan{display:none;padding:14px 18px 16px;}
 .cc-pan.on{display:block;}
@@ -557,9 +557,11 @@ function buildPrompt(item) {
   const rNames = {uk:'United Kingdom',au:'Australia',eu:'Europe (Germany, Netherlands, France — English-taught where possible)',us:'United States'};
   const regions = selRegions.map(r => rNames[r]).join(', ');
   const ee = document.getElementById('ee-input').value.trim();
+  const degreeTarget = document.getElementById('degree-input')?.value.trim() || '';
   const context = [
     `All the student's selected subjects/interests: ${selItems.join(', ')}`,
     ee ? `Extended Essay: ${ee}` : '',
+    degreeTarget ? `Student already knows they want to study: ${degreeTarget} — prioritise pathways leading to this` : '',
   ].filter(Boolean).join('. ');
 
   return `You are an honest, direct careers advisor for a 17-year-old international student completing the IBDP at British School Jakarta, Indonesia. He is researching universities across: ${regions}.
@@ -577,7 +579,7 @@ Return ONLY valid compact JSON (no markdown, no extra text):
 Only include region keys for: ${selRegions.join(',')}. Remove other region keys entirely.`;
 }
 
-// ===== EXPLORE: SEQUENTIAL =====
+// ===== EXPLORE: PARALLEL =====
 async function runExplore() {
   if (!getKey()) { alert('Add your Anthropic API key via the ⚙ button.'); return; }
   if (!selItems.length || !selRegions.length) return;
@@ -592,8 +594,29 @@ async function runExplore() {
   const rLabel = {uk:'🇬🇧 UK',au:'🇦🇺 Australia',eu:'🇪🇺 Europe',us:'🇺🇸 USA'};
   document.getElementById('r-badges').innerHTML = selRegions.map(r => `<span class="rb rb-${r}">${rLabel[r]}</span>`).join('');
 
-  for (const item of selItems) {
+  // Add legend at top
+  document.getElementById('res-content').innerHTML = `
+    <div class="legend" id="legend-box" style="margin-bottom:24px;">
+      <div class="legend-toggle" onclick="toggleLegend()">
+        <h3>📖 How to read your results</h3>
+        <span id="legend-arrow">Show ▾</span>
+      </div>
+      <div class="legend-body" id="legend-body" style="display:none;">
+        <div class="legend-item"><span class="legend-badge b-excellent">Excellent</span><div class="legend-text"><strong>Outlook: Excellent</strong>High demand, strong job market, good long-term prospects.</div></div>
+        <div class="legend-item"><span class="legend-badge b-good">Good</span><div class="legend-text"><strong>Outlook: Good</strong>Solid career path with steady opportunities.</div></div>
+        <div class="legend-item"><span class="legend-badge b-moderate">Moderate</span><div class="legend-text"><strong>Outlook: Moderate</strong>Competitive field — passion and effort matter more.</div></div>
+        <div class="legend-item"><span class="legend-badge b-varies">Varies</span><div class="legend-text"><strong>Outlook: Varies</strong>Depends heavily on specialisation or location.</div></div>
+        <div class="legend-item"><span class="legend-badge b-deg">Degree Route</span><div class="legend-text"><strong>Degree Route</strong>A university degree is typically required.</div></div>
+        <div class="legend-item"><span class="legend-badge b-nodeg">No Degree Needed</span><div class="legend-text"><strong>No Degree Needed</strong>Alternative routes exist — apprenticeships, portfolios.</div></div>
+        <div class="legend-item" style="grid-column:1/-1;"><div class="legend-text"><strong>📑 Tabs:</strong> Degrees = what to study · Unis = where to apply · Salary = what to expect · Apprentice = non-degree routes · Day in Life = a real Tuesday · Do it Now = actions this week · Scholarships = funding sources</div></div>
+      </div>
+    </div>`;
+
+  // Create placeholders for all items first
+  const pids = {};
+  selItems.forEach(item => {
     const pid = 'ph' + Math.random().toString(36).slice(2, 9);
+    pids[item] = pid;
     document.getElementById('res-content').insertAdjacentHTML('beforeend', `
       <div class="subj-block" id="${pid}">
         <div class="subj-block-hdr">
@@ -605,16 +628,22 @@ async function runExplore() {
           <p>Researching <strong>${esc(item)}</strong>…</p>
         </div>
       </div>`);
+  });
 
-    try {
-      const result = await callApi(item);
-      allResults.push(result);
-      renderBlock(pid, result);
-    } catch(e) {
-      document.getElementById(`ld-${pid}`).outerHTML = `<div class="err-box">Could not load pathways for ${esc(item)}: ${esc(e.message)}</div>`;
-      document.getElementById(`meta-${pid}`).textContent = 'Error';
-    }
-  }
+  // Fire all API calls in parallel
+  const promises = selItems.map(item =>
+    callApi(item)
+      .then(result => {
+        allResults.push(result);
+        renderBlock(pids[item], result);
+      })
+      .catch(e => {
+        document.getElementById(`ld-${pids[item]}`).outerHTML = `<div class="err-box">Could not load pathways for ${esc(item)}: ${esc(e.message)}</div>`;
+        document.getElementById(`meta-${pids[item]}`).textContent = 'Error';
+      })
+  );
+
+  await Promise.all(promises);
   document.getElementById('exp-bar').style.display = 'flex';
 }
 
@@ -704,7 +733,15 @@ function renderCard(c) {
     ${c.honest_bit?`<div class="day-honest"><strong>⚠ The honest bit</strong>${esc(c.honest_bit)}</div>`:''}`;
 
   const nowHtml = `<div class="now-items">
-    ${(c.do_it_now||[]).map(n=>`<div class="now-item"><div class="now-icon">${n.icon||'→'}</div><div class="now-text">${esc(n.text)}</div></div>`).join('')}
+    ${(c.do_it_now||[]).length ? (c.do_it_now||[]).map(n=>`<div class="now-item"><div class="now-icon">${n.icon||'→'}</div><div class="now-text">${esc(n.text)}</div></div>`).join('') : '<div class="now-item"><div class="now-text">No actions available.</div></div>'}
+  </div>`;
+
+  const schHtml = `<div class="now-items">
+    ${selRegions.includes('uk') ? `<div class="now-item"><div class="now-icon">🇬🇧</div><div class="now-text"><strong>UK:</strong> Check <a href="https://www.chevening.org" target="_blank" style="color:var(--teal)">Chevening Scholarships</a>, university-specific bursaries on each institution's financial support page, and the <a href="https://www.scholarship-search.org.uk" target="_blank" style="color:var(--teal)">Scholarship Search UK</a> database.</div></div>` : ''}
+    ${selRegions.includes('au') ? `<div class="now-item"><div class="now-icon">🇦🇺</div><div class="now-text"><strong>Australia:</strong> Explore <a href="https://www.australiaawards.gov.au" target="_blank" style="color:var(--teal)">Australia Awards</a> and each university's international student scholarship page — search "[university name] international scholarship".</div></div>` : ''}
+    ${selRegions.includes('eu') ? `<div class="now-item"><div class="now-icon">🇪🇺</div><div class="now-text"><strong>Europe:</strong> Explore <a href="https://erasmus-plus.ec.europa.eu" target="_blank" style="color:var(--teal)">Erasmus+</a>, <a href="https://www.daad.de/en/" target="_blank" style="color:var(--teal)">DAAD (Germany)</a>, and <a href="https://www.studyinholland.nl/finances/scholarships" target="_blank" style="color:var(--teal)">Holland Scholarships</a>.</div></div>` : ''}
+    ${selRegions.includes('us') ? `<div class="now-item"><div class="now-icon">🇺🇸</div><div class="now-text"><strong>USA:</strong> Search <a href="https://collegeboard.org/scholarship-search" target="_blank" style="color:var(--teal)">College Board Scholarship Search</a> and each university's financial aid page. Many US universities offer merit aid — always check the Common App portal.</div></div>` : ''}
+    <div class="now-item"><div class="now-icon">💡</div><div class="now-text"><strong>Tip:</strong> Always go directly to the university's official website for the most accurate and up-to-date scholarship information. Search "[university name] scholarships for international students".</div></div>
   </div>`;
 
   return `
@@ -724,6 +761,7 @@ function renderCard(c) {
       <div class="cc-tab"    onclick="tab(this,'${uid}','app')">Apprentice</div>
       <div class="cc-tab"    onclick="tab(this,'${uid}','day')">Day in life</div>
       <div class="cc-tab"    onclick="tab(this,'${uid}','now')">Do it now</div>
+      <div class="cc-tab"    onclick="tab(this,'${uid}','sch')">Scholarships</div>
     </div>
     <div class="cc-pan on" id="${uid}-deg">${degsHtml}</div>
     <div class="cc-pan"    id="${uid}-uni">${unisHtml}</div>
@@ -731,6 +769,7 @@ function renderCard(c) {
     <div class="cc-pan"    id="${uid}-app">${appHtml}</div>
     <div class="cc-pan"    id="${uid}-day">${dayHtml}</div>
     <div class="cc-pan"    id="${uid}-now">${nowHtml}</div>
+    <div class="cc-pan"    id="${uid}-sch">${schHtml}</div>
   </div>`;
 }
 
@@ -739,6 +778,15 @@ function tab(el, uid, pan) {
   el.classList.add('on');
   el.closest('.cc').querySelectorAll('.cc-pan').forEach(p => p.classList.remove('on'));
   document.getElementById(`${uid}-${pan}`)?.classList.add('on');
+}
+
+function toggleLegend() {
+  const body = document.getElementById('legend-body');
+  const arrow = document.getElementById('legend-arrow');
+  if (!body) return;
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'grid' : 'none';
+  arrow.textContent = isHidden ? 'Hide ▴' : 'Show ▾';
 }
 
 function goBack() {
