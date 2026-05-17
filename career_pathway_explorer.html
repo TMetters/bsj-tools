@@ -264,7 +264,11 @@ body{background:var(--bg);min-height:100vh;}
         </div>
         <div style="display:flex;gap:10px;align-items:flex-start;">
           <span style="background:var(--teal);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;flex-shrink:0;margin-top:1px;">3</span>
-          <span style="font-size:0.84rem;color:rgba(255,255,255,0.85);line-height:1.5;"><strong style="color:white;">Click Explore My Pathways</strong> — AI will map out real careers across UK, Australia, Europe and USA.</span>
+          <span style="font-size:0.84rem;color:rgba(255,255,255,0.85);line-height:1.5;"><strong style="color:white;">Optional: type a degree</strong> — if you already know what you want to study, type it in the blue box to focus your results.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="background:var(--teal);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;flex-shrink:0;margin-top:1px;">4</span>
+          <span style="font-size:0.84rem;color:rgba(255,255,255,0.85);line-height:1.5;"><strong style="color:white;">Click Explore My Pathways</strong> — AI maps out real careers across UK, Australia, Europe and USA with salaries, universities and scholarships.</span>
         </div>
       </div>
     </div>
@@ -323,8 +327,11 @@ body{background:var(--bg);min-height:100vh;}
     <div class="chip core" onclick="togChip(this)">CAS — leadership / organising events</div>
   </div>
   <div style="margin-top:10px;">
-    <div class="sec-head" style="margin-top:0;"><div class="sec-dot" style="background:#0099d6"></div>Already know what degree you want?<span class="sec-note">Optional — we'll prioritise pathways leading to it</span></div>
-    <input class="ee-input" id="degree-input" type="text" placeholder="e.g. Medicine, Architecture, Game Design, Law… (leave blank if unsure)" style="margin-bottom:20px;font-size:1rem;padding:14px 16px;"/>
+    <div style="background:#e8f6fc;border:2px solid #0099d6;border-radius:12px;padding:18px 22px;margin-bottom:24px;">
+      <div style="font-size:0.78rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#0099d6;margin-bottom:10px;">🎯 Already know what degree you want?</div>
+      <div style="font-size:0.88rem;color:var(--text-dim);margin-bottom:12px;line-height:1.5;">Type it below and we'll prioritise career pathways that lead to it. Leave blank if you're unsure — that's exactly what this tool is for.</div>
+      <input class="ee-input" id="degree-input" type="text" placeholder="e.g. Medicine, Architecture, Game Design, Law, Engineering…" style="font-size:1rem;padding:14px 16px;border-color:#0099d6;"/>
+    </div>
 
     <input class="ee-input" id="ee-input" type="text" placeholder="Extended Essay subject/topic — e.g. 'Economics: price elasticity of street food in Jakarta' (or leave blank)"/>
   </div>
