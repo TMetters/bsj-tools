@@ -388,53 +388,87 @@ function updateBtn() {
 function buildPrompt() {
   const ctx = document.getElementById('context-input').value.trim();
   lastContext = ctx;
-  return `You are an experienced pastoral tutor at British School Jakarta (BSJ), an international school in Indonesia. You are creating form time sessions for a Year 11 tutor group (ages 15-16, MYP5, preparing for the IBDP next year).
 
-Generate a single, complete, ready-to-run form time session with the following specifications:
+  const scopeAndSequence = `BSJ YEAR 10/11 WELLBEING SCOPE AND SEQUENCE
+Phase 1 ENGAGE AND CONNECT: Upstanders, Meta-Awareness, Communication, ACR (Active Constructive Responding)
+Phase 2 ADAPT AND ELEVATE: Essential Exchanges (Crucial Conversations), Values, Systems Awareness
+Phase 3 RECONNECT AND TRANSFER: Meaning, Neuroplasticity, Health (Sleep, Nutrition, Movement), Eudaimonic Wellbeing
+
+FOUR STRANDS:
+HEAD/Metacognition: thinking about thinking, cognitive biases, self-regulation, meta-awareness, growth mindset
+HEART/Compassion: empathy, moral courage, upstanders, ACR, ethical decision-making, justice
+SELF/Awareness: emotional self-awareness, emotional regulation, personal values, authenticity, purpose
+SYSTEM/Social Awareness: systems thinking, global citizenship, advocacy, interconnectedness
+
+KEY CONCEPTS BY THEME:
+UPSTANDERS: bystander vs upstander, moral courage, historical examples, recognising injustice, personal responsibility
+META-AWARENESS/STUDY SKILLS: metacognition, cognitive biases, self-questioning, self-regulation, adapting study habits
+COMMUNICATION/ACR: Active Constructive Responding, four response styles, active listening, paraphrasing, open questions
+EXAM PRESSURE AND STRESS: neuroplasticity, growth mindset, self-regulation techniques, eudaimonic wellbeing as stress buffer
+IBDP PREPARATION: systems awareness, values and decision-making, eudaimonic wellbeing, neuroplasticity, goal-setting
+UNIVERSITY AWARENESS: meaning and purpose, eudaimonic vs hedonic wellbeing, personal values, global citizenship
+DIGITAL WELLBEING: meta-awareness of digital habits, systems thinking, values in digital contexts, neuroplasticity and habits
+RELATIONSHIPS AND COMMUNICATION: crucial conversations, empathy, assertive communication, emotional regulation, I-statements
+GOAL SETTING AND MOTIVATION: values, eudaimonic wellbeing, neuroplasticity, authenticity, strengths
+GLOBAL CITIZENSHIP: systems thinking, compassionate systems thinking, systemic injustice, personal responsibility
+HEALTH AND WELLBEING: sleep and memory consolidation, nutrition and cognitive function, physical activity and mood, personalised health strategies`;
+
+  return `You are an experienced pastoral tutor at British School Jakarta (BSJ), an international school in Indonesia. You create form time sessions for Year 11 (ages 15-16, MYP5, preparing for IBDP).
+
+BSJ WELLBEING FRAMEWORK — YOU MUST USE THIS:
+${scopeAndSequence}
+
+CRITICAL: Ground every part of this session in the BSJ framework above. Use BSJ's exact language and concepts for the selected theme. Do not produce generic wellbeing content.
+
+SESSION SPECIFICATIONS:
 - Theme: ${selectedTheme}
 - Duration: ${selectedDuration} minutes
 - Tone: ${selectedTone}
-- Context from tutor: ${ctx || 'No specific context provided.'}
+- Tutor context: ${ctx || 'None provided'}
 
-The session must be culturally sensitive and appropriate for an international school context (students are from diverse backgrounds).
-It must be practical — tutor needs NO preparation, NO materials unless clearly specified.
-Tone should be age-appropriate for 15-16 year olds — not condescending, not overly academic.
+RULES:
+- Culturally sensitive for a diverse international school
+- No preparation or materials needed unless clearly specified
+- Age-appropriate for 15-16 year olds — direct, not condescending
+- Use BSJ terminology throughout: upstanders, ACR, eudaimonic wellbeing, neuroplasticity, crucial conversations, meta-awareness
 
-Return ONLY a valid JSON object with exactly this structure (no markdown fences, no preamble):
+Return ONLY valid JSON, no markdown fences, no preamble:
 {
-  "title": "Short, engaging session title (5-8 words)",
+  "title": "Short engaging session title 5-8 words",
   "theme_display": "${selectedTheme}",
   "duration": "${selectedDuration} minutes",
+  "bsj_framework": "One sentence: which BSJ phase and strand this addresses",
   "hook": {
     "time": "X min",
-    "question": "A single, thought-provoking opening question (not yes/no)",
-    "facilitator_note": "How the tutor should pose this and manage initial responses (2-3 sentences)"
+    "question": "Thought-provoking opening question using BSJ framework language — not yes/no",
+    "facilitator_note": "How to pose this and manage responses 2-3 sentences"
   },
   "discussion": {
     "time": "X min",
     "prompts": [
-      "First discussion prompt",
-      "Second discussion prompt",
-      "Third discussion prompt"
+      "First prompt grounded in BSJ Scope and Sequence concepts",
+      "Second prompt",
+      "Third prompt"
     ],
-    "facilitator_note": "How to facilitate the discussion, what to watch for, how to manage quieter students (2-3 sentences)"
+    "facilitator_note": "How to facilitate, what to watch for, managing quieter students 2-3 sentences"
   },
   "activity": {
     "time": "X min",
     "title": "Activity name",
-    "instructions": "Clear step-by-step instructions for students (3-5 sentences)",
-    "materials": "None needed OR specific simple materials required"
+    "instructions": "Clear step-by-step instructions 3-5 sentences",
+    "materials": "None needed OR specific simple materials"
   },
   "takeaway": {
     "time": "1 min",
-    "task": "A specific, achievable task students commit to before the next form time",
-    "reflection": "A closing reflection question the tutor reads aloud to end the session"
+    "task": "Specific achievable task connected to BSJ success criteria",
+    "reflection": "Closing reflection question tutor reads aloud"
   },
-  "tutor_notes": "2-3 sentences of practical advice: what to watch for, how to differentiate, any pastoral follow-up to consider"
+  "tutor_notes": "Practical advice on differentiation and pastoral follow-up. Note how this connects to the BSJ wellbeing programme."
 }
 
-Time allocations must add up to exactly ${selectedDuration} minutes. Make the session genuinely useful and engaging — not generic.`;
+Time allocations must total exactly ${selectedDuration} minutes.`;
 }
+
 
 // ===== GENERATE =====
 async function generate() {
