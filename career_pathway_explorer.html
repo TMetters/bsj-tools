@@ -630,20 +630,23 @@ async function runExplore() {
       </div>`);
   });
 
-  // Fire all API calls in parallel
-  const promises = selItems.map(item =>
-    callApi(item)
-      .then(result => {
-        allResults.push(result);
-        renderBlock(pids[item], result);
-      })
-      .catch(e => {
-        document.getElementById(`ld-${pids[item]}`).outerHTML = `<div class="err-box">Could not load pathways for ${esc(item)}: ${esc(e.message)}</div>`;
-        document.getElementById(`meta-${pids[item]}`).textContent = 'Error';
-      })
-  );
-
-  await Promise.all(promises);
+  // Fire API calls in batches of 2 to avoid rate limits
+  const batchSize = 2;
+  for (let i = 0; i < selItems.length; i += batchSize) {
+    const batch = selItems.slice(i, i + batchSize);
+    await Promise.all(batch.map(item =>
+      callApi(item)
+        .then(result => {
+          allResults.push(result);
+          renderBlock(pids[item], result);
+        })
+        .catch(e => {
+          document.getElementById(`ld-${pids[item]}`).outerHTML = `<div class="err-box">Could not load pathways for ${esc(item)}: ${esc(e.message)}</div>`;
+          document.getElementById(`meta-${pids[item]}`).textContent = 'Error';
+        })
+    ));
+    if (i + batchSize < selItems.length) await new Promise(r => setTimeout(r, 1000));
+  }
   document.getElementById('exp-bar').style.display = 'flex';
 }
 
