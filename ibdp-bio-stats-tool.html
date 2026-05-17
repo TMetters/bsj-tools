@@ -1586,6 +1586,7 @@ function showResults(app){
   var rsBtn=mk('button','btn-secondary'); rsBtn.textContent='Start over'; rsBtn.addEventListener('click',resetAll); btns.appendChild(rsBtn);
   var cbBtn=mk('button','btn-copy'); cbBtn.textContent='Copy result'; cbBtn.addEventListener('click',function(){cpText(resultText,cbBtn);}); btns.appendChild(cbBtn);
   var csvBtn=mk('button','btn-copy'); csvBtn.textContent='Download data (CSV)'; csvBtn.addEventListener('click',function(){downloadCSV(cG,names,dvStr,ivStr);}); btns.appendChild(csvBtn);
+  var gsBtn=mk('button','btn-copy'); gsBtn.textContent='Copy for Google Sheets'; gsBtn.addEventListener('click',function(){copyForSheets(cG,names,gsBtn);}); btns.appendChild(gsBtn);
   tc.appendChild(btns); w.appendChild(tc);
 
   var sg=mk('div','stats-grid');
@@ -1603,7 +1604,7 @@ function showResults(app){
   var gc=card();
   var editGrid=mk('div'); editGrid.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.75rem';
   function editField(lbl,val,cb){var d=mk('div');var l=mk('label','lbl');l.textContent=lbl;d.appendChild(l);var inp=mk('input','');inp.type='text';inp.value=val;inp.style.width='100%';inp.addEventListener('input',function(){cb(inp.value);});d.appendChild(inp);return d;}
-  editGrid.appendChild(editField('Chart title',autoTitle,function(v){chartTitle=v;var el=document.getElementById('gcTitle');if(el)el.textContent=v;}));
+  editGrid.appendChild(editField('Chart title',autoTitle,function(v){chartTitle=v;if(S.chart){S.chart.options.plugins.title.text=v;S.chart.update();}}));
   editGrid.appendChild(editField('Y axis label',dvStr,function(v){chartYLabel=v;if(S.chart){S.chart.options.scales.y.title.text=v;S.chart.update();}}));
   editGrid.appendChild(editField('X axis label',ivStr,function(v){chartXLabel=v;if(S.chart){S.chart.options.scales.x.title.text=v;S.chart.update();}}));
   gc.appendChild(editGrid);
@@ -1612,7 +1613,6 @@ function showResults(app){
   pngBtn.addEventListener('click',downloadChartPNG);
   dlRow.appendChild(pngBtn);
   gc.appendChild(dlRow);
-  var gcTitle=mk('div','card-title'); gcTitle.id='gcTitle'; gcTitle.textContent=autoTitle; gc.appendChild(gcTitle);
   var canvas=mk('canvas'); canvas.id='myChart'; gc.appendChild(canvas);
   w.appendChild(gc);
 
@@ -1650,7 +1650,7 @@ function showResults(app){
     S.chart=new Chart(ctx,{
       type:'bar',
       data:{labels:names,datasets:[{data:_means,backgroundColor:COLORS.slice(0,k).map(function(c){return c+'28';}),borderColor:COLORS.slice(0,k),borderWidth:2}]},
-      options:{responsive:true,animation:{duration:0},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c2){return 'Mean: '+c2.raw.toFixed(2)+', SD: ±'+_sds[c2.dataIndex].toFixed(2);}}}},scales:{y:{title:{display:true,text:chartYLabel,font:{size:12}},min:yMin,suggestedMax:yMax},x:{title:{display:true,text:chartXLabel,font:{size:12}}}}}
+      options:{responsive:true,animation:{duration:0},plugins:{legend:{display:false},title:{display:true,text:chartTitle,align:'center',color:'#0d2240',font:{size:16,weight:'700'}},tooltip:{callbacks:{label:function(c2){return 'Mean: '+c2.raw.toFixed(2)+', SD: ±'+_sds[c2.dataIndex].toFixed(2);}}}},scales:{y:{title:{display:true,text:chartYLabel,font:{size:12}},min:yMin,suggestedMax:yMax},x:{title:{display:true,text:chartXLabel,font:{size:12}}}}}
     });
   },100);
 }
@@ -1673,6 +1673,20 @@ function downloadChartPNG(){
   var off=document.createElement('canvas');off.width=cv.width;off.height=cv.height;
   var oc=off.getContext('2d');oc.fillStyle='#fff';oc.fillRect(0,0,off.width,off.height);oc.drawImage(cv,0,0);
   var a=document.createElement('a');a.download='chart.png';a.href=off.toDataURL('image/png');a.click();
+}
+
+function copyForSheets(cG,names,btn){
+  var maxR=Math.max.apply(null,cG.map(function(g){return g.length;}));
+  var lines=[['Replicate'].concat(names).join('\t')];
+  for(var r=0;r<maxR;r++){var row=[r+1];cG.forEach(function(g){row.push(r<g.length?g[r]:'');});lines.push(row.join('\t'));}
+  lines.push('');
+  lines.push(['Statistic'].concat(names).join('\t'));
+  [['Mean',function(g){return smean(g).toFixed(4);}],['SD',function(g){return sstd(g).toFixed(4);}],['SE',function(g){return sse(g).toFixed(4);}],['95% CI',function(g){return sci(g).toFixed(4);}],['n',function(g){return g.length;}]].forEach(function(pair){
+    var row=[pair[0]];cG.forEach(function(g){row.push(pair[1](g));});lines.push(row.join('\t'));
+  });
+  var tsv=lines.join('\n');
+  navigator.clipboard.writeText(tsv).catch(function(){var ta=document.createElement('textarea');ta.value=tsv;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);});
+  var o=btn.textContent;btn.textContent='✓ Copied — paste with Ctrl+V / Cmd+V';setTimeout(function(){btn.textContent=o;},3000);
 }
 
 // ── utilities ─────────────────────────────────────────────────────────────────
