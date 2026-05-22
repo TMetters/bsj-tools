@@ -3,1241 +3,1605 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Invest Smarter — Financial Onboarding</title>
-<link rel="stylesheet" href="./bsj-style.css"/>
+<title>Invest Smarter — BSJ Financial Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
+:root {
+  /* BSJ Brand Colours */
+  --navy: #0d2240;
+  --navy-mid: #163260;
+  --navy-light: #1e4080;
+  --blue: #0099d6;
+  --blue-light: #33b3e8;
+  --blue-dim: #007bb5;
+  --red: #cc0011;
+  /* UI colours */
+  --bg: #ffffff;
+  --bg2: #f5f7fa;
+  --bg3: #edf1f7;
+  --border: #dde3eb;
+  --text: #0d2240;
+  --text-dim: #3d5a7a;
+  --muted: #8898aa;
+  --green: #00875a;
+  --green-bg: #e3f9f0;
+  --amber: #b45309;
+  --amber-bg: #fef3c7;
+  --warn: #cc0011;
+  --warn-bg: #fff0f0;
+  --sidebar-w: 268px;
+  /* Aliases for components that used old vars */
+  --gold: var(--blue);
+  --gold-light: var(--blue-light);
+  --gold-dim: var(--blue-dim);
+  --cream: var(--text);
+  --cream-dim: var(--text-dim);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
 body {
-  background: var(--white);
-  min-height: 100vh;
-}
-
-/* ── MOBILE HEADER ── */
-.mobile-header {
-  display: none;
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  border-left: 4px solid var(--blue);
-  padding: 14px 20px;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 200;
-}
-
-.hamburger-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 2px;
-  display: flex;
-  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
   color: var(--text);
-}
-
-.mobile-title {
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: var(--text);
-}
-
-/* ── OVERLAY ── */
-.sidebar-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.2);
-  z-index: 299;
-}
-
-.sidebar-overlay.open { display: block; }
-
-/* ── LAYOUT ── */
-.layout {
-  display: flex;
   min-height: 100vh;
+  display: flex;
+  overflow-x: hidden;
 }
 
-/* ── SIDEBAR ── */
-.sidebar {
-  width: 260px;
-  background: var(--white);
-  border-left: 4px solid var(--blue);
-  border-right: 1px solid var(--border);
+/* ===== SIDEBAR ===== */
+#sidebar {
+  width: var(--sidebar-w);
+  background: var(--navy);
+  border-right: none;
   position: fixed;
   top: 0; left: 0; bottom: 0;
   display: flex;
   flex-direction: column;
-  z-index: 100;
-  overflow-y: auto;
+  z-index: 200;
+  transition: transform 0.3s ease;
 }
-
+.sidebar-header {
+  padding: 24px 22px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  background: var(--navy);
+}
 .sidebar-logo {
-  padding: 24px 20px 18px;
-  border-bottom: 1px solid var(--border);
-}
-
-.logo-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  display: block;
   margin-bottom: 4px;
 }
 
-.logo-mark {
-  width: 36px; height: 36px;
-  background: var(--blue);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+.sidebar-logo-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-
-.logo-mark svg { width: 18px; height: 18px; }
-
-.logo-name {
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: var(--text);
+.bsj-logo-img {
+  height: 38px;
+  width: auto;
+  max-width: 190px;
+  display: block;
+  object-fit: contain;
+  object-position: left center;
+  background: #ffffff;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+.sidebar-logo-sub {
+  margin-top: 0;
+}
+.logo-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
   line-height: 1.2;
 }
-
 .logo-sub {
-  font-size: 0.68rem;
-  font-weight: 500;
-  color: var(--muted);
-  margin-top: 2px;
-  padding-left: 46px;
-}
-
-.progress-wrap {
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--border);
-}
-
-.progress-label {
   font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+/* PROGRESS */
+.overall-progress {
+  padding: 16px 22px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.progress-label {
   display: flex;
   justify-content: space-between;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
 }
-
-.progress-bar-outer {
-  background: var(--border);
-  border-radius: 99px;
-  height: 4px;
+.progress-track {
+  height: 3px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
   overflow: hidden;
 }
-
-.progress-bar-inner {
+.progress-fill {
   height: 100%;
   background: var(--blue);
-  border-radius: 99px;
-  transition: width 0.4s ease;
+  border-radius: 2px;
+  transition: width 0.5s ease;
 }
 
-.nav-section {
-  padding: 12px 0;
+/* NAV */
+.sidebar-nav {
   flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
 }
-
 .nav-section-label {
   font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted);
-  padding: 0 20px;
-  margin-bottom: 4px;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.35);
+  padding: 14px 22px 6px;
+  font-weight: 700;
 }
-
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 20px;
+  gap: 12px;
+  padding: 11px 22px;
   cursor: pointer;
-  transition: all 0.15s;
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--muted);
-  border-left: 2px solid transparent;
-  margin-left: -1px;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+  user-select: none;
 }
-
-.nav-item:hover { color: var(--text); background: #fafafa; }
-
+.nav-item:hover { background: rgba(255,255,255,0.06); }
 .nav-item.active {
-  color: var(--blue);
-  background: #f0f9ff;
+  background: rgba(0,153,214,0.15);
   border-left-color: var(--blue);
 }
-
-.nav-item.completed { color: var(--text); }
-
-.nav-check {
-  width: 18px; height: 18px;
+.nav-item.completed .nav-num { background: var(--green); border-color: var(--green); color: white; }
+.nav-num {
+  width: 26px; height: 26px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
   border-radius: 50%;
-  border: 1.5px solid var(--border);
   display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
   flex-shrink: 0;
-  font-size: 10px;
-  color: transparent;
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
-
-.nav-item.completed .nav-check {
-  background: var(--success);
-  border-color: var(--success);
-  color: var(--white);
-}
-
-.nav-item.active .nav-check {
+.nav-item.active .nav-num {
+  background: var(--blue);
+  color: #ffffff;
   border-color: var(--blue);
-  background: #e0f2fe;
-  color: var(--blue);
+}
+.nav-title {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.3;
+}
+.nav-item.active .nav-title { color: #ffffff; font-weight: 700; }
+.nav-item.completed .nav-title { color: rgba(255,255,255,0.8); }
+.nav-check {
+  margin-left: auto;
+  font-size: 0.7rem;
+  color: var(--green);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.nav-item.completed .nav-check { opacity: 1; }
+
+.sidebar-footer {
+  padding: 16px 22px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.6;
+  font-weight: 400;
 }
 
-/* ── CONTENT ── */
-.content {
-  margin-left: 260px;
+/* ===== MAIN ===== */
+#main {
+  margin-left: var(--sidebar-w);
   flex: 1;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
 }
 
-.section-page {
+/* MODULE */
+.module {
   display: none;
+  flex-direction: column;
   min-height: 100vh;
+  animation: fadeUp 0.35s ease;
 }
+.module.active { display: flex; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
-.section-page.active { display: block; }
-
-/* ── HERO ── */
-.hero {
-  background: var(--white);
-  padding: 52px 56px 40px;
-  border-bottom: 1px solid var(--border);
+/* MODULE HERO — BSJ navy style with diagonal detail */
+.module-hero {
+  padding: 52px 64px 44px;
+  background: var(--navy);
+  position: relative;
+  overflow: hidden;
+  border-bottom: none;
 }
-
-.section-num {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--blue);
-  margin-bottom: 12px;
+/* Diagonal blue slice — echoes BSJ template swoosh */
+.module-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 40%;
+  height: 100%;
+  background: var(--navy-mid);
+  clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);
+  pointer-events: none;
 }
-
-.section-title {
-  font-size: 2rem;
+.module-hero::before {
+  content: attr(data-num);
+  position: absolute;
+  right: 48px; top: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 8rem;
   font-weight: 800;
-  color: var(--text);
-  line-height: 1.15;
-  margin-bottom: 12px;
-  letter-spacing: -0.02em;
+  color: rgba(255,255,255,0.05);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
 }
-
-.section-subtitle {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--muted);
-  max-width: 560px;
-  line-height: 1.65;
-}
-
-/* ── CONTENT BODY ── */
-.content-body {
-  padding: 40px 56px;
-  max-width: 820px;
-}
-
-/* ── CARDS ── */
-.card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 24px 28px;
-  margin-bottom: 20px;
-  transition: border-color 0.2s;
-}
-
-.card:hover { border-color: var(--blue); }
-
-.card-title {
-  font-size: 1.05rem;
+.module-tag {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--blue);
   font-weight: 700;
-  color: var(--text);
-  margin-bottom: 10px;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 2;
+}
+.module-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+  max-width: 580px;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 2;
+}
+.module-subtitle {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.65);
+  max-width: 500px;
+  line-height: 1.65;
+  font-weight: 400;
+  position: relative;
+  z-index: 2;
+}
+.module-meta {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+.module-meta span {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.45);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
+  font-weight: 500;
 }
 
-.card-body {
-  font-size: 0.88rem;
-  line-height: 1.75;
-  color: var(--muted);
+/* MODULE BODY */
+.module-body {
+  flex: 1;
+  padding: 44px 64px;
+  max-width: 860px;
+  background: var(--bg);
 }
 
-.card-body strong { color: var(--text); font-weight: 700; }
-
-/* ── HIGHLIGHT BOXES ── */
-.highlight {
-  border-radius: 12px;
-  padding: 16px 20px;
-  margin-bottom: 16px;
-  font-size: 0.86rem;
-  line-height: 1.65;
-  background: var(--white);
-  border: 1px solid var(--border);
-  color: var(--muted);
-}
-
-.highlight-blue  { border-left: 3px solid var(--blue); }
-.highlight-gold  { border-left: 3px solid var(--warn); }
-.highlight-green { border-left: 3px solid var(--success); }
-.highlight-red   { border-left: 3px solid var(--danger); }
-
-.highlight strong { color: var(--text); font-weight: 700; }
-
-/* ── COMPARISON TABLE ── */
-.table-wrap {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-
-.compare-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.84rem;
-}
-
-.compare-table th {
-  background: #fafafa;
-  padding: 10px 14px;
-  text-align: left;
-  font-size: 0.65rem;
+/* CONTENT ELEMENTS */
+h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.45rem;
   font-weight: 700;
-  letter-spacing: 0.07em;
+  color: var(--navy);
+  margin: 36px 0 14px;
+  line-height: 1.2;
+}
+h2:first-child { margin-top: 0; }
+h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 22px 0 8px;
   text-transform: uppercase;
-  color: var(--muted);
-  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.04em;
+}
+p {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+  margin-bottom: 14px;
+  font-weight: 400;
+}
+strong { color: var(--navy); font-weight: 700; }
+
+/* CALLOUT BOXES */
+.callout {
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 18px 0;
+  border-left: 4px solid;
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+.callout-gold { background: rgba(0,153,214,0.07); border-color: var(--blue); color: var(--text-dim); }
+.callout-green { background: var(--green-bg); border-color: var(--green); color: var(--text-dim); }
+.callout-amber { background: var(--amber-bg); border-color: var(--amber); color: var(--text-dim); }
+.callout-red { background: var(--warn-bg); border-color: var(--warn); color: var(--text-dim); }
+.callout strong { display: block; margin-bottom: 4px; color: var(--navy); }
+
+/* STAT CARDS */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 12px;
+  margin: 22px 0;
+}
+.stat-card {
+  background: var(--navy);
+  border: none;
+  border-radius: 8px;
+  padding: 20px 16px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 7px;
+}
+.stat-label {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
 }
 
-.compare-table td {
-  padding: 11px 14px;
-  border-bottom: 1px solid var(--border);
-  color: var(--muted);
-  vertical-align: top;
-  font-size: 0.84rem;
+/* ASSET CARDS */
+.asset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 22px 0;
 }
+.asset-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px;
+  transition: all 0.2s;
+  border-top: 3px solid var(--border);
+}
+.asset-card:hover { border-top-color: var(--blue); box-shadow: 0 4px 16px rgba(0,153,214,0.1); }
+.asset-icon { font-size: 1.6rem; margin-bottom: 10px; }
+.asset-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.asset-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.5; margin-bottom: 10px; font-weight: 400; }
+.asset-risk {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-weight: 700;
+  display: inline-block;
+}
+.risk-low { background: var(--green-bg); color: var(--green); }
+.risk-med { background: var(--amber-bg); color: var(--amber); }
+.risk-high { background: var(--warn-bg); color: var(--warn); }
 
-.compare-table tr:last-child td { border-bottom: none; }
-.compare-table tr:hover td { background: #fafafa; }
-.compare-table td:first-child { color: var(--text); font-weight: 600; }
-
-/* ── STEP LIST ── */
-.step-list { list-style: none; }
-
-.step-item {
+/* STEPS */
+.steps { margin: 18px 0; }
+.step {
   display: flex;
   gap: 16px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+  position: relative;
 }
-
-.step-item:last-child { border-bottom: none; }
-
+.step::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 36px;
+  bottom: -4px;
+  width: 1px;
+  background: var(--border);
+}
+.step:last-child::before { display: none; }
 .step-num {
-  width: 28px; height: 28px;
+  width: 32px; height: 32px;
+  background: var(--navy);
+  border: none;
   border-radius: 50%;
-  background: var(--blue);
   display: flex; align-items: center; justify-content: center;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--white);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffffff;
   flex-shrink: 0;
   margin-top: 2px;
 }
-
-.step-content { flex: 1; }
-
-.step-title {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 4px;
+.step-content { flex: 1; padding-bottom: 22px; }
+.step-title { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+.step-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.65; font-weight: 400; }
+.step-tip {
+  margin-top: 8px;
+  font-size: 0.74rem;
+  color: var(--blue-dim);
+  background: rgba(0,153,214,0.07);
+  border-radius: 4px;
+  padding: 7px 11px;
+  display: inline-block;
+  font-weight: 500;
+  border-left: 3px solid var(--blue);
 }
 
-.step-desc {
-  font-size: 0.83rem;
+/* PLATFORM TABS */
+.platform-tabs {
+  display: flex;
+  gap: 0;
+  margin: 22px 0 0;
+  border-bottom: 2px solid var(--border);
+}
+.platform-tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--muted);
-  line-height: 1.65;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  margin-bottom: -2px;
+  letter-spacing: 0.02em;
 }
+.platform-tab.active { color: var(--navy); border-bottom-color: var(--blue); }
+.platform-tab:hover:not(.active) { color: var(--text-dim); background: var(--bg2); }
+.platform-panel { display: none; padding: 22px 0; }
+.platform-panel.active { display: block; }
 
-/* ── QUIZ ── */
-.quiz-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 24px 28px;
-  margin-bottom: 20px;
+/* QUIZ */
+.quiz-block {
+  background: var(--navy);
+  border: none;
+  border-radius: 8px;
+  padding: 24px;
+  margin: 26px 0;
 }
-
 .quiz-q {
-  font-size: 0.98rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--text);
-  margin-bottom: 18px;
+  color: #ffffff;
+  margin-bottom: 16px;
   line-height: 1.45;
 }
-
-.quiz-options {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-opt {
+  padding: 11px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.75);
+  transition: all 0.2s;
+  text-align: left;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
 }
+.quiz-opt:hover { border-color: var(--blue); color: #ffffff; background: rgba(0,153,214,0.12); }
+.quiz-opt.selected { border-color: var(--blue); color: #ffffff; background: rgba(0,153,214,0.2); }
+.quiz-feedback {
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  display: none;
+  background: var(--green-bg);
+  color: var(--green);
+  border: 1px solid var(--green);
+  font-weight: 500;
+}
+.quiz-feedback.show { display: block; }
 
-.quiz-option {
+/* CALCULATOR */
+.calc-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 26px;
+  margin: 26px 0;
+}
+.calc-card h3 { margin-top: 0; margin-bottom: 18px; }
+.calc-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.calc-label { font-size: 0.8rem; color: var(--text-dim); min-width: 170px; font-weight: 500; }
+.calc-input {
+  padding: 8px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-family: 'Montserrat', monospace;
+  font-size: 0.88rem;
+  color: var(--navy);
+  outline: none;
+  width: 140px;
+  transition: border-color 0.2s;
+  font-weight: 600;
+}
+.calc-input:focus { border-color: var(--blue); }
+.alloc-bar { margin: 18px 0; }
+.alloc-row {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  cursor: pointer;
-  transition: border-color 0.15s;
-  font-size: 0.86rem;
-  font-weight: 500;
-  color: var(--muted);
+  margin-bottom: 10px;
 }
-
-.quiz-option:hover { border-color: var(--blue); color: var(--text); }
-.quiz-option.correct { border-color: #16a34a; background: #f0fdf4; color: #166534; }
-.quiz-option.wrong   { border-color: var(--danger); background: #fef2f2; color: #991b1b; }
-.quiz-option.disabled { pointer-events: none; opacity: 0.55; }
-.quiz-option.disabled.correct,
-.quiz-option.disabled.wrong   { opacity: 1; }
-
-.quiz-radio {
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border);
-  flex-shrink: 0;
+.alloc-label { font-size: 0.76rem; color: var(--text-dim); min-width: 160px; font-weight: 500; }
+.alloc-track {
+  flex: 1;
+  height: 8px;
+  background: var(--bg3);
+  border-radius: 4px;
+  overflow: hidden;
 }
-
-.quiz-feedback {
-  margin-top: 12px;
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 0.84rem;
-  line-height: 1.6;
-  display: none;
+.alloc-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
 }
-
-.quiz-feedback.show    { display: block; }
-.quiz-feedback.correct { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
-.quiz-feedback.wrong   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
-
-/* ── BOTTOM NAV ── */
-.bottom-nav {
-  padding: 28px 56px 44px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid var(--border);
-  margin-top: 16px;
-}
-
-.btn-nav {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 22px;
-  border-radius: 10px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.85rem;
+.alloc-amount {
+  font-family: 'Montserrat', monospace;
+  font-size: 0.76rem;
+  color: var(--navy);
+  min-width: 60px;
+  text-align: right;
   font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s;
-  border: none;
 }
 
-.btn-back {
-  background: var(--white);
-  color: var(--muted);
-  border: 1px solid var(--border);
-}
-
-.btn-back:hover { border-color: var(--blue); color: var(--text); }
-
-.btn-next {
-  background: var(--blue);
-  color: var(--white);
-}
-
-.btn-next:hover { opacity: 0.88; }
-
-.btn-complete {
-  background: var(--blue);
-  color: var(--white);
-}
-
-.btn-complete:hover { opacity: 0.88; }
-.btn-complete:disabled { opacity: 0.4; cursor: not-allowed; }
-
-.page-indicator {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--muted);
-}
-
-/* ── COMPLETION ── */
-.completion-screen {
+/* CHECKLIST */
+.checklist { list-style: none; margin: 18px 0; }
+.check-item {
   display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.check-item:last-child { border-bottom: none; }
+.check-box {
+  width: 20px; height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem;
+  margin-top: 1px;
+  transition: all 0.2s;
+  color: transparent;
+}
+.check-item.done .check-box {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: white;
+}
+.check-text {
+  font-size: 0.84rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  font-weight: 400;
+}
+.check-item.done .check-text {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+/* MODULE FOOTER */
+.module-footer {
+  padding: 24px 64px;
+  border-top: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--bg2);
+}
+.btn {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+.btn-primary {
+  background: var(--blue);
+  color: #ffffff;
+}
+.btn-primary:hover { background: var(--blue-dim); }
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--border);
+  color: var(--text-dim);
+}
+.btn-outline:hover { border-color: var(--navy); color: var(--navy); }
+.btn-outline:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-complete {
+  background: var(--navy);
+  color: white;
+  margin-left: auto;
+}
+.btn-complete:hover { background: var(--navy-mid); }
+.btn-complete.done {
+  background: var(--bg3);
+  color: var(--green);
+  border: 2px solid var(--green);
+  cursor: default;
+  font-weight: 700;
+}
+
+/* HAMBURGER */
+#hamburger {
+  display: none;
+  position: fixed;
+  top: 14px; left: 14px;
+  z-index: 300;
+  background: var(--navy);
+  border: none;
+  border-radius: 5px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(13,34,64,0.6);
+  z-index: 150;
+}
+
+/* COMPLETION SCREEN */
+#completion {
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 70vh;
+  min-height: 100vh;
+  padding: 48px;
   text-align: center;
-  padding: 60px;
+  animation: fadeUp 0.5s ease;
+  background: var(--bg);
 }
-
-.completion-icon {
+.completion-badge {
   width: 80px; height: 80px;
-  background: #f0fdf4;
+  background: var(--navy);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 36px;
-  margin-bottom: 24px;
-  border: 2px solid #bbf7d0;
+  font-size: 2.2rem;
+  margin: 0 auto 24px;
+  box-shadow: 0 0 40px rgba(13,34,64,0.2);
 }
-
-.completion-title {
-  font-size: 2rem;
+#completion h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
   font-weight: 800;
-  color: var(--text);
+  color: var(--navy);
   margin-bottom: 12px;
-  letter-spacing: -0.02em;
 }
-
-.completion-sub {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--muted);
-  max-width: 440px;
-  line-height: 1.7;
-  margin-bottom: 32px;
+#completion p {
+  max-width: 500px;
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  margin: 0 auto 32px;
 }
-
-.score-display {
-  font-size: 3.5rem;
-  font-weight: 800;
+.cert-box {
+  background: var(--navy);
+  border: none;
+  border-radius: 10px;
+  padding: 32px 48px;
+  max-width: 500px;
+  margin: 0 auto 28px;
+  position: relative;
+  overflow: hidden;
+}
+.cert-box::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 40%;
+  height: 100%;
+  background: var(--navy-mid);
+  clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%);
+  pointer-events: none;
+}
+.cert-box h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  margin-bottom: 8px;
   color: var(--blue);
-  margin-bottom: 6px;
-  letter-spacing: -0.04em;
-}
-
-.score-label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.1em;
   text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  position: relative;
+  z-index: 2;
+}
+.cert-box p {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+  position: relative;
+  z-index: 2;
+}
+.cert-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 10px 0;
+  position: relative;
+  z-index: 2;
 }
 
-/* ── ANIMATIONS ── */
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(12px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-
-.section-page.active .hero         { animation: fadeUp 0.3s ease both; }
-.section-page.active .content-body { animation: fadeUp 0.35s ease 0.04s both; }
-
-/* ── RESPONSIVE ── */
-@media (max-width: 800px) {
-  .sidebar {
-    transform: translateX(-260px);
-    transition: transform 0.25s ease;
-    position: fixed;
-    top: 0;
-    z-index: 300;
-  }
-  .sidebar.open { transform: translateX(0); }
-  .mobile-header { display: flex; }
-  .content { margin-left: 0; }
-  .hero { padding: 32px 24px 28px; }
-  .content-body { padding: 28px 24px; }
-  .bottom-nav { padding: 24px; }
-  .section-title { font-size: 1.6rem; }
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  #sidebar { transform: translateX(-100%); }
+  #sidebar.open { transform: translateX(0); }
+  #main { margin-left: 0; }
+  .module-hero { padding: 60px 24px 32px; }
+  .module-hero::after { display: none; }
+  .module-title { font-size: 1.8rem; }
+  .module-body { padding: 28px 24px; }
+  .module-footer { padding: 20px 24px; }
+  #hamburger { display: flex; }
+  .overlay.show { display: block; }
 }
 </style>
 </head>
 <body>
 
-<!-- MOBILE HEADER -->
-<div class="mobile-header" id="mobile-header">
-  <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="Open menu">
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-      <path d="M3 6h16M3 11h16M3 16h16" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-  </button>
-  <span class="mobile-title">Invest Smarter</span>
-  <span style="width:26px"></span>
-</div>
-
-<!-- SIDEBAR OVERLAY -->
-<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
-
-<div class="layout">
+<button id="hamburger" onclick="toggleSidebar()">☰</button>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
 <!-- SIDEBAR -->
-<nav class="sidebar" id="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-row">
-      <div class="logo-mark">
-        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M2 13l4-5 3 3 5-7" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-wrap">
+        <img src="data:image/jpeg;base64,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" alt="British School Jakarta" class="bsj-logo-img"/>
+        <div class="sidebar-logo-sub">
+          <div class="logo-text">Invest Smarter</div>
+          <div class="logo-sub">Financial Onboarding</div>
+        </div>
       </div>
-      <div class="logo-name">Invest Smarter</div>
     </div>
-    <div class="logo-sub">Financial Onboarding</div>
   </div>
-
-  <div class="progress-wrap">
+  <div class="overall-progress">
     <div class="progress-label">
-      <span>Your progress</span>
+      <span>Your Progress</span>
       <span id="progress-pct">0%</span>
     </div>
-    <div class="progress-bar-outer">
-      <div class="progress-bar-inner" id="progress-bar" style="width:0%"></div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
     </div>
   </div>
-
-  <div class="nav-section">
+  <nav class="sidebar-nav">
     <div class="nav-section-label">Modules</div>
-    <div class="nav-item active" id="nav-0" onclick="goTo(0)">
-      <div class="nav-check" id="check-0"></div>
-      Why Invest?
+    <div class="nav-item active" onclick="goTo(0)" id="nav-0">
+      <div class="nav-num">1</div>
+      <div class="nav-title">Why You Need to Invest</div>
+      <div class="nav-check">✓</div>
     </div>
-    <div class="nav-item" id="nav-1" onclick="goTo(1)">
-      <div class="nav-check" id="check-1"></div>
-      Asset Classes
+    <div class="nav-item" onclick="goTo(1)" id="nav-1">
+      <div class="nav-num">2</div>
+      <div class="nav-title">The Asset Landscape</div>
+      <div class="nav-check">✓</div>
     </div>
-    <div class="nav-item" id="nav-2" onclick="goTo(2)">
-      <div class="nav-check" id="check-2"></div>
-      Risk Profile
+    <div class="nav-item" onclick="goTo(2)" id="nav-2">
+      <div class="nav-num">3</div>
+      <div class="nav-title">The Case for Bitcoin</div>
+      <div class="nav-check">✓</div>
     </div>
-    <div class="nav-item" id="nav-3" onclick="goTo(3)">
-      <div class="nav-check" id="check-3"></div>
-      Setting Up: Binance
+    <div class="nav-item" onclick="goTo(3)" id="nav-3">
+      <div class="nav-num">4</div>
+      <div class="nav-title">Setting Up Your Accounts</div>
+      <div class="nav-check">✓</div>
     </div>
-    <div class="nav-item" id="nav-4" onclick="goTo(4)">
-      <div class="nav-check" id="check-4"></div>
-      Setting Up: Indodax
+    <div class="nav-item" onclick="goTo(4)" id="nav-4">
+      <div class="nav-num">5</div>
+      <div class="nav-title">Your Action Plan</div>
+      <div class="nav-check">✓</div>
     </div>
-    <div class="nav-item" id="nav-5" onclick="goTo(5)">
-      <div class="nav-check" id="check-5"></div>
-      Your First Investment
-    </div>
-    <div class="nav-item" id="nav-6" onclick="goTo(6)">
-      <div class="nav-check" id="check-6"></div>
-      Knowledge Check
-    </div>
+  </nav>
+  <div class="sidebar-footer">
+    British School Jakarta<br/>
+    This is educational content, not financial advice.<br/>
+    Always do your own research.
   </div>
 </nav>
 
-<!-- MAIN CONTENT -->
-<div class="content">
+<!-- MAIN -->
+<main id="main">
 
-  <!-- PAGE 0: WHY INVEST -->
-  <div class="section-page active" id="page-0">
-    <div class="hero">
-      <div class="section-num">Module 01 of 07</div>
-      <div class="section-title">Why Should You Invest?</div>
-      <div class="section-subtitle">Your salary is a starting point, not a destination. Here's why sitting on cash is the riskiest thing you can do.</div>
-    </div>
-    <div class="content-body">
-      <div class="highlight highlight-red">
-        <strong>The uncomfortable truth:</strong> If your money is sitting in a bank account earning 1–2% interest, you are losing purchasing power every year. Indonesian inflation runs at 2–4% annually. UK inflation has averaged 3–4% over the last decade. You are getting poorer in real terms.
+  <!-- ===== MODULE 1 ===== -->
+  <section class="module active" id="module-0">
+    <div class="module-hero" data-num="1">
+      <div class="module-tag">Module 1 of 5</div>
+      <h1 class="module-title">Why You Need to Invest</h1>
+      <p class="module-subtitle">Keeping money in a savings account feels safe. The numbers say otherwise.</p>
+      <div class="module-meta">
+        <span>⏱ 8 minutes</span>
+        <span>📖 Reading + reflection</span>
       </div>
+    </div>
+    <div class="module-body">
 
-      <div class="card">
-        <div class="card-title">💡 The Power of Compounding</div>
-        <div class="card-body">
-          Compounding is when your returns generate their own returns. A $10,000 investment at 10% annual return becomes <strong>$67,275 in 20 years</strong> — without adding another penny. At 15%, it becomes <strong>$163,665</strong>. Time in the market is your most powerful asset.
+      <h2>The invisible tax on your savings</h2>
+      <p>Every year, inflation quietly reduces what your money can buy. In Indonesia, annual inflation has averaged around <strong>3–4%</strong> over the past decade. Globally, the US dollar — which many international salaries are benchmarked against — has lost significant purchasing power too.</p>
+      <p>If your savings sit in a standard Indonesian bank account earning 2–3% interest, and inflation runs at 3–4%, you are effectively <strong>losing money in real terms every single year</strong> — even while your balance technically grows.</p>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-num">3.5%</div>
+          <div class="stat-label">Avg. IDR inflation / year</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2.5%</div>
+          <div class="stat-label">Typical bank savings rate</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">−1%</div>
+          <div class="stat-label">Real return (after inflation)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">10 yrs</div>
+          <div class="stat-label">To erode ~10% of real value</div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">📊 BSJ Context — Where You Actually Are</div>
-        <div class="card-body">
-          On your monthly salary, most teachers have enough to invest meaningfully after living costs. The question isn't whether you can afford to invest — it's whether you can afford not to. Jakarta's low cost of living relative to salary is a genuine advantage most expats underuse.
+      <h2>The compounding argument</h2>
+      <p>Compounding is the process of earning returns on your returns. It starts slowly and then accelerates dramatically. The single most important variable is <strong>time</strong> — which is why starting now matters far more than starting perfectly.</p>
+
+      <div class="callout callout-gold">
+        <strong>The numbers speak for themselves</strong>
+        Someone who invests $500/month at an average 10% annual return, starting at age 30, will have approximately <strong>$1.13 million</strong> by age 60. Starting at 40 instead yields only <strong>$380,000</strong> — less than a third — for the same monthly contribution.
+      </div>
+
+      <h2>What "financial independence" actually means</h2>
+      <p>Financial independence does not mean being rich. It means your <strong>passive income covers your living expenses</strong>, so work becomes a choice rather than a necessity. For most BSJ teachers, a realistic passive income target is around <strong>$3,000–6,000/month</strong>, depending on your lifestyle.</p>
+      <p>Achieving that through investments is entirely realistic over a 15–20 year horizon if you start now — even on a teacher's salary.</p>
+
+      <div class="callout callout-green">
+        <strong>The BSJ advantage</strong>
+        Living in Jakarta with a package that includes housing and health benefits means your cost of living is significantly lower than your income. That gap — the difference between what you earn and what you spend — is your most powerful financial tool. It is investable capital.
+      </div>
+
+      <div class="quiz-block">
+        <div class="quiz-q">If your bank account earns 3% interest and inflation runs at 4%, what is happening to your real purchasing power?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="selectOpt(this, 'm1q1', false)">It is growing by 3%</button>
+          <button class="quiz-opt" onclick="selectOpt(this, 'm1q1', false)">It is staying the same</button>
+          <button class="quiz-opt" onclick="selectOpt(this, 'm1q1', true)">It is shrinking by approximately 1% per year</button>
+          <button class="quiz-opt" onclick="selectOpt(this, 'm1q1', false)">It depends on the exchange rate</button>
+        </div>
+        <div class="quiz-feedback" id="m1q1-fb">
+          Correct. Real return = nominal interest rate minus inflation. At 3% interest and 4% inflation, your money buys 1% less each year. This is why a savings account alone is not a strategy.
         </div>
       </div>
 
-      <div class="highlight highlight-gold">
-        <strong>The goal:</strong> Build passive income streams that eventually replace your need to work. Even $500/month in passive income changes your options significantly. $3,000–5,000/month gives you genuine freedom.
+      <div class="callout callout-amber">
+        <strong>⚠ A word of honesty</strong>
+        Investing carries risk. Markets go up and markets go down. Nothing in this guide is financial advice — it is education. Before committing significant funds, speak to a licensed financial advisor or, at minimum, do thorough research on each product.
       </div>
 
-      <div class="card">
-        <div class="card-title">⚠️ What Investing Is NOT</div>
-        <div class="card-body">
-          Investing is not gambling — though it can become that without discipline. It is not a get-rich-quick scheme. It is not complicated once you understand the basics. And it is not something to defer until you feel "ready." The best time to start was 10 years ago. The second best time is now.
+    </div>
+    <div class="module-footer">
+      <button class="btn btn-outline" disabled>← Previous</button>
+      <button class="btn btn-primary" onclick="goTo(1)">Next Module →</button>
+      <button class="btn btn-complete" id="complete-0" onclick="markComplete(0)">Mark Complete ✓</button>
+    </div>
+  </section>
+
+  <!-- ===== MODULE 2 ===== -->
+  <section class="module" id="module-1">
+    <div class="module-hero" data-num="2">
+      <div class="module-tag">Module 2 of 5</div>
+      <h1 class="module-title">The Asset Landscape</h1>
+      <p class="module-subtitle">Not all investments are equal. Understanding your options is the first step.</p>
+      <div class="module-meta">
+        <span>⏱ 10 minutes</span>
+        <span>📊 Overview + allocation</span>
+      </div>
+    </div>
+    <div class="module-body">
+
+      <h2>The main asset classes</h2>
+      <p>An asset class is a category of investment with similar characteristics and behaviour. Every serious investor holds a mix — the exact proportions depend on your age, goals, and risk tolerance.</p>
+
+      <div class="asset-grid">
+        <div class="asset-card">
+          <div class="asset-icon">📈</div>
+          <div class="asset-name">Equities</div>
+          <div class="asset-desc">Ownership stakes in companies. ETFs (exchange-traded funds) let you own hundreds of companies at once, cheaply.</div>
+          <span class="asset-risk risk-med">Medium risk</span>
         </div>
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <div class="page-indicator">1 / 7</div>
-      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="next()">Next: Asset Classes →</button>
-    </div>
-  </div>
-
-  <!-- PAGE 1: ASSET CLASSES -->
-  <div class="section-page" id="page-1">
-    <div class="hero">
-      <div class="section-num">Module 02 of 07</div>
-      <div class="section-title">Asset Classes</div>
-      <div class="section-subtitle">Not all investments are the same. Here's what exists, what it does, and where it fits in your portfolio.</div>
-    </div>
-    <div class="content-body">
-      <div class="table-wrap">
-        <table class="compare-table">
-          <thead>
-            <tr><th>Asset</th><th>Risk</th><th>Potential Return</th><th>BSJ Relevance</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Cash / Savings</td><td>Very Low</td><td>1–3% p.a.</td><td>Emergency fund only</td></tr>
-            <tr><td>Bonds / Fixed Income</td><td>Low–Medium</td><td>3–7% p.a.</td><td>IDR gov bonds available via Indodax</td></tr>
-            <tr><td>Stocks / Equities</td><td>Medium–High</td><td>7–15% p.a.</td><td>MSTR, ETFs via Saxo/IBKR</td></tr>
-            <tr><td>ETFs</td><td>Medium</td><td>7–12% p.a.</td><td>MSTY (yield-focused), index ETFs</td></tr>
-            <tr><td>Cryptocurrency</td><td>Very High</td><td>-90% to +1000%</td><td>BTC, ETH, SOL via Binance/Indodax</td></tr>
-            <tr><td>Angel Investment</td><td>Extreme</td><td>0x to 100x</td><td>High conviction only — illiquid</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="card">
-        <div class="card-title">₿ Crypto — The BSJ Teacher Advantage</div>
-        <div class="card-body">
-          Crypto is high risk but has produced the highest returns of any asset class over the last decade. Bitcoin specifically has outperformed every other asset over 1, 3, 5, and 10 year periods. The key is <strong>position sizing</strong> — never put more in crypto than you can afford to lose entirely, but don't put so little that a 10x move doesn't change your life.
+        <div class="asset-card">
+          <div class="asset-icon">🏠</div>
+          <div class="asset-name">Real Estate</div>
+          <div class="asset-desc">Physical property or REITs. Good inflation hedge, but illiquid and requires significant capital to enter.</div>
+          <span class="asset-risk risk-med">Medium risk</span>
         </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">📈 Yield-Generating Assets</div>
-        <div class="card-body">
-          Some assets pay you while you hold them. MSTY pays monthly distributions. Staking SOL or ETH on Binance generates ~5–8% APY. Government bonds pay fixed interest. These are the building blocks of passive income — the goal is to build a portfolio that pays you monthly without selling anything.
+        <div class="asset-card">
+          <div class="asset-icon">₿</div>
+          <div class="asset-name">Crypto</div>
+          <div class="asset-desc">Digital assets including Bitcoin, Ethereum, and others. High volatility — high risk, high potential reward.</div>
+          <span class="asset-risk risk-high">High risk</span>
         </div>
-      </div>
-
-      <div class="highlight highlight-blue">
-        <strong>Diversification reality:</strong> Owning 5 different cryptocurrencies is NOT diversification — they are all highly correlated. True diversification means holding assets that move independently: stocks, crypto, bonds, and real assets (property, gold) respond differently to economic events.
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <button class="btn-nav btn-back" onclick="back()">← Back</button>
-      <div class="page-indicator">2 / 7</div>
-      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="next()">Next: Risk Profile →</button>
-    </div>
-  </div>
-
-  <!-- PAGE 2: RISK PROFILE -->
-  <div class="section-page" id="page-2">
-    <div class="hero">
-      <div class="section-num">Module 03 of 07</div>
-      <div class="section-title">Your Risk Profile</div>
-      <div class="section-subtitle">Before you invest a single dollar, you need to know yourself as an investor. Answer honestly.</div>
-    </div>
-    <div class="content-body">
-
-      <div class="card">
-        <div class="card-title">🎯 The Three Questions</div>
-        <div class="card-body">
-          <p style="margin-bottom:12px"><strong>1. Time horizon:</strong> When will you need this money? If the answer is less than 3 years, keep it in cash or low-risk assets. If 5+ years, you can take more risk — time smooths volatility.</p>
-          <p style="margin-bottom:12px"><strong>2. Income stability:</strong> BSJ employment is relatively stable. You have a fixed salary, no dependents on your investment income (yet), and low fixed costs in Jakarta. This means you can tolerate more risk than a freelancer or someone with high fixed expenses.</p>
-          <p><strong>3. Emotional tolerance:</strong> Can you watch your portfolio drop 50% and not panic-sell? Bitcoin dropped 80% in 2018 and 65% in 2022 — people who held are wealthy. People who sold at the bottom locked in permanent losses.</p>
+        <div class="asset-card">
+          <div class="asset-icon">💵</div>
+          <div class="asset-name">Income Assets</div>
+          <div class="asset-desc">Dividend ETFs and covered-call funds that pay monthly cash. Generate passive income while holding.</div>
+          <span class="asset-risk risk-med">Medium risk</span>
+        </div>
+        <div class="asset-card">
+          <div class="asset-icon">📋</div>
+          <div class="asset-name">Bonds</div>
+          <div class="asset-desc">Government or corporate debt. Low risk, low return. Useful for capital preservation, not growth.</div>
+          <span class="asset-risk risk-low">Low risk</span>
+        </div>
+        <div class="asset-card">
+          <div class="asset-icon">💰</div>
+          <div class="asset-name">Cash & FDIC</div>
+          <div class="asset-desc">Savings, deposits, money market funds. Essential emergency buffer, but not a long-term strategy.</div>
+          <span class="asset-risk risk-low">Very low risk</span>
         </div>
       </div>
 
-      <div class="highlight highlight-gold">
-        <strong>BSJ Teacher Profile (typical):</strong> Stable income, low living costs, 10–20 year horizon, moderate-to-high risk tolerance. This profile suits a portfolio weighted toward growth assets (crypto, equities) with some yield generation (MSTY, staking).
+      <h2>A starter allocation for a BSJ teacher</h2>
+      <p>There is no universal correct allocation. But for a teacher in their 30s–40s, with a stable income, a long time horizon, and no immediate liquidity needs, the following broad split is a reasonable starting point for <em>discussion</em> with a financial advisor:</p>
+
+      <div class="callout callout-gold">
+        <strong>Illustrative allocation — not a recommendation</strong>
+        40% Global ETFs (e.g. VT, QQQ via IBKR) · 20% Bitcoin (held on Binance/Indodax) · 20% Income ETFs (e.g. dividend funds) · 10% Cash buffer · 10% Flexible / opportunities
       </div>
 
-      <div class="table-wrap">
-        <table class="compare-table">
-          <thead><tr><th>Profile</th><th>Suggested Allocation</th><th>Expected Volatility</th></tr></thead>
-          <tbody>
-            <tr><td>Conservative</td><td>60% bonds/cash, 30% stocks, 10% crypto</td><td>Low — may trail inflation</td></tr>
-            <tr><td>Moderate</td><td>40% stocks/ETFs, 30% crypto, 20% bonds, 10% cash</td><td>Medium — steady growth</td></tr>
-            <tr><td>Aggressive</td><td>50% crypto, 30% stocks, 20% yield assets</td><td>High — significant swings</td></tr>
-            <tr><td>Very Aggressive</td><td>70%+ crypto, 20% high-growth stocks, 10% cash</td><td>Very high — not for everyone</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <h2>ETFs: the easiest entry point</h2>
+      <p>An ETF (exchange-traded fund) is a basket of stocks or other assets, traded like a single share. Rather than picking individual companies, you buy the whole basket. The most widely recommended for long-term investors are broad global funds.</p>
 
-      <div class="highlight highlight-blue">
-        <strong>Important:</strong> Your risk profile is not fixed. It changes as your wealth grows, your income changes, and your goals shift. Review it annually.
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <button class="btn-nav btn-back" onclick="back()">← Back</button>
-      <div class="page-indicator">3 / 7</div>
-      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="next()">Next: Binance Setup →</button>
-    </div>
-  </div>
-
-  <!-- PAGE 3: BINANCE -->
-  <div class="section-page" id="page-3">
-    <div class="hero">
-      <div class="section-num">Module 04 of 07</div>
-      <div class="section-title">Setting Up: Binance</div>
-      <div class="section-subtitle">Binance is the world's largest crypto exchange. This is where you'll buy BTC, ETH, SOL and stake your holdings.</div>
-    </div>
-    <div class="content-body">
-      <div class="highlight highlight-gold">
-        <strong>Note:</strong> Access to some platforms may require additional steps depending on your location. Check local regulations and platform availability before signing up.
-      </div>
-
-      <ul class="step-list">
-        <li class="step-item">
-          <div class="step-num">1</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">→</div>
           <div class="step-content">
-            <div class="step-title">Create your account</div>
-            <div class="step-desc">Go to binance.com. Click Register. Use your personal email — not your BSJ email. Choose a strong, unique password and store it in a password manager.</div>
+            <div class="step-title">VT — Vanguard Total World Stock ETF</div>
+            <div class="step-desc">Owns ~9,000 companies across 50+ countries. Maximum diversification in one fund. Extremely low cost (0.07% annual fee).</div>
           </div>
+        </div>
+        <div class="step">
+          <div class="step-num">→</div>
+          <div class="step-content">
+            <div class="step-title">SCHD — Schwab US Dividend Equity ETF</div>
+            <div class="step-desc">High-quality US dividend payers. Combines income with growth. Popular with financially independent investors.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">→</div>
+          <div class="step-content">
+            <div class="step-title">QQQ — Invesco Nasdaq-100 ETF</div>
+            <div class="step-desc">Top 100 Nasdaq companies — predominantly tech and growth. Higher volatility than VT but stronger historical returns.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-block">
+        <div class="quiz-q">What is the key advantage of an ETF over buying individual company shares?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="selectOpt(this, 'm2q1', false)">ETFs always outperform individual stocks</button>
+          <button class="quiz-opt" onclick="selectOpt(this, 'm2q1', true)">Instant diversification across many companies at low cost</button>
+          <button class="quiz-opt" onclick="selectOpt(this, 'm2q1', false)">ETFs are risk-free</button>
+          <button class="quiz-opt" onclick="selectOpt(this, 'm2q1', false)">ETFs pay higher dividends</button>
+        </div>
+        <div class="quiz-feedback" id="m2q1-fb">
+          Correct. An ETF gives you exposure to hundreds or thousands of companies in a single purchase. If one company fails, its impact on the whole fund is minimal. This is diversification — and it is the foundation of sensible long-term investing.
+        </div>
+      </div>
+
+    </div>
+    <div class="module-footer">
+      <button class="btn btn-outline" onclick="goTo(0)">← Previous</button>
+      <button class="btn btn-primary" onclick="goTo(2)">Next Module →</button>
+      <button class="btn btn-complete" id="complete-1" onclick="markComplete(1)">Mark Complete ✓</button>
+    </div>
+  </section>
+
+  <!-- ===== MODULE 3 ===== -->
+  <section class="module" id="module-2">
+    <div class="module-hero" data-num="3">
+      <div class="module-tag">Module 3 of 5</div>
+      <h1 class="module-title">The Case for Bitcoin</h1>
+      <p class="module-subtitle">Why this digital asset deserves a place in a serious investor's portfolio.</p>
+      <div class="module-meta">
+        <span>⏱ 12 minutes</span>
+        <span>₿ Deep dive</span>
+      </div>
+    </div>
+    <div class="module-body">
+
+      <h2>What Bitcoin actually is</h2>
+      <p>Bitcoin is a <strong>decentralised digital currency</strong> — a form of money that exists on a global, distributed network with no central authority (no government, no bank) controlling it. It was created in 2009 and has a hard-coded maximum supply of <strong>21 million coins</strong>, ever.</p>
+      <p>That fixed supply is fundamental to its value proposition. Every major fiat currency (USD, IDR, GBP) can be printed by governments in unlimited quantities, which erodes purchasing power over time. Bitcoin cannot be printed.</p>
+
+      <div class="callout callout-gold">
+        <strong>Think of it as digital gold</strong>
+        Gold has been a store of value for millennia because it is scarce, durable, portable, and hard to counterfeit. Bitcoin shares those properties in digital form — with the additional advantages of being verifiably scarce (you can check the code), globally transferable in minutes, and divisible to eight decimal places.
+      </div>
+
+      <h2>The halving cycle</h2>
+      <p>Approximately every four years, the rate at which new Bitcoin is created (the "mining reward") is cut in half. This event is called the <strong>halving</strong>. Each halving reduces the new supply entering the market. Historically, halvings have preceded significant price appreciation as demand holds steady or grows while supply contracts.</p>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-num">2012</div>
+          <div class="stat-label">1st halving — $12 → $1,200</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2016</div>
+          <div class="stat-label">2nd halving — $650 → $20,000</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2020</div>
+          <div class="stat-label">3rd halving — $8,500 → $69,000</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2024</div>
+          <div class="stat-label">4th halving — cycle ongoing</div>
+        </div>
+      </div>
+
+      <div class="callout callout-amber">
+        <strong>⚠ Past performance is not a guarantee</strong>
+        The halving cycles above illustrate historical patterns. Bitcoin has also had drawdowns of 70–85% from peak to trough. Only invest what you can afford to hold through a prolonged downturn.
+      </div>
+
+      <h2>Institutional adoption</h2>
+      <p>A significant development in 2024 was the approval of <strong>spot Bitcoin ETFs</strong> in the United States, allowing pension funds, insurance companies, and retail brokers to buy Bitcoin directly through regulated products. This opened the asset to trillions of dollars in institutional capital.</p>
+      <p>Companies such as MicroStrategy hold Bitcoin as a primary treasury reserve. Countries including El Salvador have adopted it as legal tender. The institutional legitimisation of Bitcoin over the past three years has fundamentally changed the risk profile of the asset.</p>
+
+      <h2>How much to allocate</h2>
+      <p>Most financial commentators who accept Bitcoin as a legitimate asset class suggest an allocation of <strong>1–10% of a portfolio</strong>, depending on risk tolerance. A common starting point for a cautious investor is 2–5%.</p>
+      <p>The logic: even if Bitcoin went to zero (which remains a possibility, though declining in probability), a 5% allocation would reduce your total portfolio by 5% — a recoverable loss. If Bitcoin performs even moderately well, that 5% can meaningfully improve overall returns.</p>
+
+      <div class="quiz-block">
+        <div class="quiz-q">Why does Bitcoin's fixed supply of 21 million coins matter to its value?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="selectOpt(this, 'm3q1', false)">It makes transactions faster</button>
+          <button class="quiz-opt" onclick="selectOpt(this, 'm3q1', false)">It means Bitcoin is backed by gold</button>
+          <button class="quiz-opt" onclick="selectOpt(this, 'm3q1', true)">Scarcity prevents inflation — unlike government currencies, it cannot be "printed" to erode value</button>
+          <button class="quiz-opt" onclick="selectOpt(this, 'm3q1', false)">It limits how many people can own it</button>
+        </div>
+        <div class="quiz-feedback" id="m3q1-fb">
+          Correct. Scarcity is the foundation of Bitcoin's value proposition. If demand grows over time and supply is fixed, basic economics suggests price rises. This is the opposite of fiat currencies, where supply can be expanded by governments at will.
+        </div>
+      </div>
+
+    </div>
+    <div class="module-footer">
+      <button class="btn btn-outline" onclick="goTo(1)">← Previous</button>
+      <button class="btn btn-primary" onclick="goTo(3)">Next Module →</button>
+      <button class="btn btn-complete" id="complete-2" onclick="markComplete(2)">Mark Complete ✓</button>
+    </div>
+  </section>
+
+  <!-- ===== MODULE 4 ===== -->
+  <section class="module" id="module-3">
+    <div class="module-hero" data-num="4">
+      <div class="module-tag">Module 4 of 5</div>
+      <h1 class="module-title">Setting Up Your Accounts</h1>
+      <p class="module-subtitle">Step-by-step guides for the three platforms most relevant to BSJ teachers in Indonesia.</p>
+      <div class="module-meta">
+        <span>⏱ 15 minutes</span>
+        <span>🔧 Practical setup</span>
+      </div>
+    </div>
+    <div class="module-body">
+
+      <p>You will need accounts on at least two platforms: one Indonesian exchange (for easy IDR deposits) and one global platform (for broader asset access). IBKR is optional but excellent for ETFs.</p>
+
+      <div class="platform-tabs">
+        <div class="platform-tab active" onclick="switchTab(this, 'indodax')">1. Indodax</div>
+        <div class="platform-tab" onclick="switchTab(this, 'binance')">2. Binance</div>
+        <div class="platform-tab" onclick="switchTab(this, 'ibkr')">3. IBKR</div>
+      </div>
+
+      <!-- INDODAX -->
+      <div class="platform-panel active" id="panel-indodax">
+        <div class="callout callout-green">
+          <strong>Start here — easiest for Indonesians</strong>
+          Indodax is Indonesia's largest regulated crypto exchange. IDR deposits via bank transfer, KTP verification, Indonesian-language support. Ideal first step.
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Create your account</div>
+              <div class="step-desc">Go to <strong>indodax.com</strong> or download the Indodax app (iOS/Android). Click "Daftar" and register with your email address and a strong password.</div>
+              <div class="step-tip">💡 Use a unique password you do not use anywhere else. Enable Google Authenticator immediately after registering.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Complete KYC verification</div>
+              <div class="step-desc">Go to Settings → Verifikasi. Upload a photo of your <strong>KTP</strong> (Indonesian national ID) and a clear selfie. Verification typically takes 1–3 business days.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Link your bank account</div>
+              <div class="step-desc">Go to Keuangan → Rekening Bank. Add your Indonesian bank account (BCA, Mandiri, BNI, and most others are supported). This is used for IDR deposits and withdrawals.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Make your first deposit</div>
+              <div class="step-desc">Go to Keuangan → Deposit IDR. Transfer any amount from your bank (minimum usually IDR 10,000). Funds appear within minutes for instant transfer banks.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Make your first purchase</div>
+              <div class="step-desc">Start with <strong>BTC</strong> (Bitcoin) or <strong>USDT</strong> (a USD-pegged stablecoin). Go to the market, enter your IDR amount, and confirm the trade. Consider DCA — buying a fixed amount weekly rather than all at once.</div>
+              <div class="step-tip">💡 DCA (Dollar-Cost Averaging) means buying the same amount regardless of price. It removes the pressure of "timing the market" and is widely recommended for beginners.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BINANCE -->
+      <div class="platform-panel" id="panel-binance">
+        <div class="callout callout-gold">
+          <strong>The global exchange — more assets, more features</strong>
+          Binance is the world's largest crypto exchange by volume. Wider selection of assets, staking features, and lower fees than Indodax. Slightly more complex to set up.
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Register at binance.com</div>
+              <div class="step-desc">Go to <strong>binance.com</strong> and click Register. Use your email or phone number. Note: use the international version, not binance.us (which is US-only).</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Enable 2FA immediately</div>
+              <div class="step-desc">Before doing anything else: go to Security → 2-Factor Authentication. Enable <strong>Google Authenticator</strong>. Write down your backup seed phrase on paper and store it safely. This protects your account from unauthorised access.</div>
+              <div class="step-tip">⚠ If you lose access to your 2FA and seed phrase, Binance cannot recover your account. The paper backup is essential.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Complete KYC</div>
+              <div class="step-desc">Go to Profile → Identification. Upload your <strong>passport</strong> (recommended over KTP for international accounts). Verification takes 1–24 hours.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Fund your account</div>
+              <div class="step-desc">Easiest method: buy USDT on Indodax first, then <strong>withdraw USDT from Indodax to your Binance deposit address</strong>. Use the TRC20 (Tron) network — fastest and cheapest for USDT transfers.</div>
+              <div class="step-tip">💡 Always double-check the receiving address before sending. Crypto transfers cannot be reversed.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Explore staking and Earn</div>
+              <div class="step-desc">Once funded, look at Binance Earn → Simple Earn. You can earn interest on USDT (typically 3–8% APR) while you decide where to invest. SOL staking via "SOL Staking" gives you native staking rewards.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IBKR -->
+      <div class="platform-panel" id="panel-ibkr">
+        <div class="callout callout-amber">
+          <strong>For stocks and ETFs — requires patience to set up</strong>
+          Interactive Brokers (IBKR) is one of the world's best platforms for buying global ETFs at very low cost. Note: IBKR is technically restricted in Indonesia by OJK (the financial regulator). Many expats access it via a VPN — do your own research on the implications.
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Apply at interactivebrokers.com</div>
+              <div class="step-desc">Go to <strong>interactivebrokers.com</strong> → Open Account. Choose "Individual Account". The application takes about 20–30 minutes. You will need your passport, proof of address (utility bill or bank statement), and employment details.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Wait for approval</div>
+              <div class="step-desc">Approval typically takes <strong>1–2 weeks</strong>. IBKR may request additional documentation. This is normal — they are a regulated broker operating globally.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Fund with a USD wire transfer</div>
+              <div class="step-desc">Once approved, fund your account via international wire transfer from your USD account (or convert IDR at your bank first). Minimum deposit is $0, but practical minimum to make fees worthwhile is around $500.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Buy your first ETF</div>
+              <div class="step-desc">Search for <strong>VT</strong> (Vanguard Total World ETF) in the IBKR Trader Workstation or mobile app. Place a market or limit order. Commission is typically $0–1 per trade. This is world-class infrastructure at minimal cost.</div>
+              <div class="step-tip">💡 Start with VT or SCHD. Both are beginner-friendly, extremely well-diversified, and have very low annual fees.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="module-footer">
+      <button class="btn btn-outline" onclick="goTo(2)">← Previous</button>
+      <button class="btn btn-primary" onclick="goTo(4)">Next Module →</button>
+      <button class="btn btn-complete" id="complete-3" onclick="markComplete(3)">Mark Complete ✓</button>
+    </div>
+  </section>
+
+  <!-- ===== MODULE 5 ===== -->
+  <section class="module" id="module-4">
+    <div class="module-hero" data-num="5">
+      <div class="module-tag">Module 5 of 5</div>
+      <h1 class="module-title">Your Action Plan</h1>
+      <p class="module-subtitle">Knowledge without action is worthless. Here is your next 30 days.</p>
+      <div class="module-meta">
+        <span>⏱ 10 minutes</span>
+        <span>✅ Interactive checklist</span>
+      </div>
+    </div>
+    <div class="module-body">
+
+      <h2>Allocation calculator</h2>
+      <p>Enter your investable amount per month to see a suggested starting allocation. These are illustrative — adjust based on your own risk tolerance and personal circumstances.</p>
+
+      <div class="calc-card">
+        <h3>Monthly Investment Planner</h3>
+        <div class="calc-row">
+          <span class="calc-label">Monthly amount (USD)</span>
+          <input type="number" class="calc-input" id="monthly-usd" value="500" min="50" max="50000" oninput="updateCalc()"/>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">Risk profile</span>
+          <select class="calc-input" id="risk-profile" onchange="updateCalc()" style="width:160px">
+            <option value="conservative">Conservative</option>
+            <option value="moderate" selected>Moderate</option>
+            <option value="aggressive">Aggressive</option>
+          </select>
+        </div>
+        <div class="alloc-bar" id="alloc-display">
+          <!-- filled by JS -->
+        </div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:8px">
+          ⓘ This is illustrative only. Not financial advice.
+        </div>
+      </div>
+
+      <h2>Your 30-day checklist</h2>
+      <p>Tick each item as you complete it. Progress is saved in your browser.</p>
+
+      <ul class="checklist" id="checklist">
+        <li class="check-item" onclick="toggleCheck(this, 'c0')" id="ci-c0">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>Week 1:</strong> Open an Indodax account and complete KYC</div>
         </li>
-        <li class="step-item">
-          <div class="step-num">2</div>
-          <div class="step-content">
-            <div class="step-title">Complete KYC verification</div>
-            <div class="step-desc">Binance requires identity verification (Know Your Customer). Submit your passport photo and a selfie. This takes 10–30 minutes. Use your British passport for the cleanest verification experience.</div>
-          </div>
+        <li class="check-item" onclick="toggleCheck(this, 'c1')" id="ci-c1">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>Week 1:</strong> Enable 2FA (Google Authenticator) on Indodax</div>
         </li>
-        <li class="step-item">
-          <div class="step-num">3</div>
-          <div class="step-content">
-            <div class="step-title">Enable 2FA (Google Authenticator)</div>
-            <div class="step-desc">Download Google Authenticator on your phone. Go to Security → Two-Factor Authentication → Google Authenticator. Scan the QR code. Never disable this — it's your primary account protection.</div>
-          </div>
+        <li class="check-item" onclick="toggleCheck(this, 'c2')" id="ci-c2">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>Week 1:</strong> Make your first deposit to Indodax (any amount — even IDR 100,000)</div>
         </li>
-        <li class="step-item">
-          <div class="step-num">4</div>
-          <div class="step-content">
-            <div class="step-title">Deposit funds</div>
-            <div class="step-desc">The easiest method from Indonesia: buy USDT on Indodax with IDR, then transfer USDT to your Binance wallet. Alternatively, use a credit/debit card (higher fees). Avoid bank transfer directly — it's complex from Indonesia.</div>
-          </div>
+        <li class="check-item" onclick="toggleCheck(this, 'c3')" id="ci-c3">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>Week 2:</strong> Buy your first Bitcoin — even a small amount. The psychological barrier of owning it is important.</div>
         </li>
-        <li class="step-item">
-          <div class="step-num">5</div>
-          <div class="step-content">
-            <div class="step-title">Make your first purchase</div>
-            <div class="step-desc">Go to Trade → Spot. Search BTC/USDT. Start with a small amount ($50–100) to learn the interface. Use a Limit order rather than Market order to control your entry price.</div>
-          </div>
+        <li class="check-item" onclick="toggleCheck(this, 'c4')" id="ci-c4">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>Week 2:</strong> Open a Binance account and complete KYC</div>
         </li>
-        <li class="step-item">
-          <div class="step-num">6</div>
-          <div class="step-content">
-            <div class="step-title">Set up Earn / Staking</div>
-            <div class="step-desc">Go to Earn → Simple Earn. You can stake ETH (~3–4% APY) and SOL (~6–8% APY) directly on Binance. This generates passive income on holdings you plan to hold long-term anyway.</div>
-          </div>
+        <li class="check-item" onclick="toggleCheck(this, 'c5')" id="ci-c5">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>Week 2:</strong> Enable 2FA on Binance and write down your backup codes on paper</div>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this, 'c6')" id="ci-c6">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>Week 3:</strong> Transfer USDT from Indodax to Binance</div>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this, 'c7')" id="ci-c7">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>Week 3:</strong> Set up a monthly recurring purchase (DCA) on Indodax or Binance</div>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this, 'c8')" id="ci-c8">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>Week 4:</strong> Begin IBKR application (takes 1–2 weeks to process)</div>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this, 'c9')" id="ci-c9">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>Week 4:</strong> Calculate your monthly investable surplus and set it aside automatically each payday</div>
         </li>
       </ul>
 
-      <div class="highlight highlight-red">
-        <strong>Security rules:</strong> Never share your seed phrase or private keys with anyone. Binance staff will never ask for your password. Enable withdrawal whitelist — only your known wallet addresses can receive funds. Use the Binance app only on your personal devices.
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <button class="btn-nav btn-back" onclick="back()">← Back</button>
-      <div class="page-indicator">4 / 7</div>
-      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="next()">Next: Indodax Setup →</button>
-    </div>
-  </div>
-
-  <!-- PAGE 4: INDODAX -->
-  <div class="section-page" id="page-4">
-    <div class="hero">
-      <div class="section-num">Module 05 of 07</div>
-      <div class="section-title">Setting Up: Indodax</div>
-      <div class="section-subtitle">Indodax is Indonesia's largest crypto exchange. It's your bridge between IDR and crypto — essential if you're earning in rupiah.</div>
-    </div>
-    <div class="content-body">
-      <div class="highlight highlight-blue">
-        <strong>Why Indodax?</strong> Indodax accepts IDR bank transfers directly, which makes it the easiest way to convert your rupiah salary into crypto. You can buy USDT on Indodax and transfer it to Binance for a wider range of assets and lower trading fees.
+      <div class="callout callout-green">
+        <strong>The most important thing</strong>
+        Do not wait until you understand everything perfectly. That moment never comes. Start small, learn by doing, and increase your positions gradually as your confidence grows. Time in the market beats timing the market.
       </div>
 
-      <ul class="step-list">
-        <li class="step-item">
-          <div class="step-num">1</div>
+      <h2>Recommended resources</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">📖</div>
           <div class="step-content">
-            <div class="step-title">Create your account</div>
-            <div class="step-desc">Go to indodax.com. Register with your email. You will need your Indonesian KTP or passport for verification. The process takes 1–2 business days for approval.</div>
+            <div class="step-title">The Psychology of Money — Morgan Housel</div>
+            <div class="step-desc">The best introduction to long-term investing mindset. Short, readable, and applicable to anyone regardless of income level.</div>
           </div>
-        </li>
-        <li class="step-item">
-          <div class="step-num">2</div>
+        </div>
+        <div class="step">
+          <div class="step-num">📖</div>
           <div class="step-content">
-            <div class="step-title">Link your Indonesian bank account</div>
-            <div class="step-desc">Go to Profile → Bank Account. Add your BCA, Mandiri, BNI, or other Indonesian bank. This is how you deposit IDR. Transfers are processed within a few hours during business hours.</div>
+            <div class="step-title">The Bitcoin Standard — Saifedean Ammous</div>
+            <div class="step-desc">The definitive economic case for Bitcoin. Dense but rewarding. Read after you understand the basics.</div>
           </div>
-        </li>
-        <li class="step-item">
-          <div class="step-num">3</div>
+        </div>
+        <div class="step">
+          <div class="step-num">🎙</div>
           <div class="step-content">
-            <div class="step-title">Deposit IDR and buy USDT</div>
-            <div class="step-desc">Transfer IDR from your bank to your Indodax account. Once confirmed, go to Markets → USDT/IDR and buy USDT. This is your stable base currency for moving funds to Binance.</div>
+            <div class="step-title">We Study Billionaires (podcast)</div>
+            <div class="step-desc">Long-form investment education covering equities, macro, and crypto. Suitable for beginners and intermediates.</div>
           </div>
-        </li>
-        <li class="step-item">
-          <div class="step-num">4</div>
+        </div>
+        <div class="step">
+          <div class="step-num">🌐</div>
           <div class="step-content">
-            <div class="step-title">Transfer USDT to Binance</div>
-            <div class="step-desc">In Indodax, go to Withdraw → USDT. Enter your Binance USDT deposit address (found in Binance → Wallet → Deposit → USDT → TRC20 network). Always double-check the network — use TRC20 for lowest fees.</div>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-num">5</div>
-          <div class="step-content">
-            <div class="step-title">Government bonds (optional)</div>
-            <div class="step-desc">Indodax also offers Indonesian government bonds (ORI, SBR). These are low-risk IDR-denominated instruments paying 5–7% annually. A useful home for any IDR you want to keep in Indonesia long-term.</div>
-          </div>
-        </li>
-      </ul>
-
-      <div class="highlight highlight-green">
-        <strong>Monthly workflow:</strong> Salary arrives → transfer portion to Indodax → buy USDT → transfer to Binance → buy your chosen assets. This takes about 15 minutes once set up. Automate what you can.
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <button class="btn-nav btn-back" onclick="back()">← Back</button>
-      <div class="page-indicator">5 / 7</div>
-      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="next()">Next: First Investment →</button>
-    </div>
-  </div>
-
-  <!-- PAGE 5: FIRST INVESTMENT -->
-  <div class="section-page" id="page-5">
-    <div class="hero">
-      <div class="section-num">Module 06 of 07</div>
-      <div class="section-title">Your First Investment</div>
-      <div class="section-subtitle">Practical guidance on what to buy first, how much, and the habits that separate successful investors from everyone else.</div>
-    </div>
-    <div class="content-body">
-      <div class="card">
-        <div class="card-title">🏁 Start Simple</div>
-        <div class="card-body">
-          Your first investment should be Bitcoin. Not because it's the most exciting, but because it's the most understood, the most liquid, and the most proven store of value in crypto. Once you have Bitcoin and understand how it behaves, you can diversify into ETH, SOL, and others.
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">📅 Dollar Cost Averaging (DCA)</div>
-        <div class="card-body">
-          DCA means investing a fixed amount at regular intervals regardless of price. Instead of trying to time the market (which professionals consistently fail to do), you invest $200 every month whether BTC is at $50,000 or $80,000. Over time, this averages your cost basis and removes emotion from the equation. <strong>It is the single most effective strategy for most investors.</strong>
-        </div>
-      </div>
-
-      <div class="highlight highlight-gold">
-        <strong>Suggested starting allocation (moderate risk):</strong> 50% BTC, 25% ETH, 15% SOL, 10% cash reserve. As your confidence grows and you understand each asset, adjust. Never invest money you need in the next 12 months.
-      </div>
-
-      <div class="card">
-        <div class="card-title">🔒 The Habits That Matter</div>
-        <div class="card-body">
-          <p style="margin-bottom:8px"><strong>1. Never sell in a panic.</strong> Every major crypto crash has been followed by a new all-time high. The losers are people who sold.</p>
-          <p style="margin-bottom:8px"><strong>2. Keep records.</strong> Track every purchase date, amount, and price. You'll need this for tax purposes and to understand your actual returns.</p>
-          <p style="margin-bottom:8px"><strong>3. Don't check prices hourly.</strong> Set a weekly review time. Obsessive price-checking leads to poor decisions.</p>
-          <p><strong>4. Cold storage for significant holdings.</strong> Once you hold more than $5,000 in crypto, move the majority to a hardware wallet (Ledger, Trezor). Exchange hacks do happen.</p>
-        </div>
-      </div>
-
-      <div class="highlight highlight-red">
-        <strong>Never do this:</strong> Don't invest borrowed money. Don't buy obscure altcoins based on Telegram tips. Don't share your account details or seed phrase with anyone. Don't invest your emergency fund.
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <button class="btn-nav btn-back" onclick="back()">← Back</button>
-      <div class="page-indicator">6 / 7</div>
-      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="next()">Next: Knowledge Check →</button>
-    </div>
-  </div>
-
-  <!-- PAGE 6: QUIZ -->
-  <div class="section-page" id="page-6">
-    <div class="hero">
-      <div class="section-num">Module 07 of 07</div>
-      <div class="section-title">Knowledge Check</div>
-      <div class="section-subtitle">Let's make sure the key concepts have landed. Answer all five questions to complete the course.</div>
-    </div>
-    <div class="content-body">
-
-      <div class="quiz-card">
-        <div class="quiz-q">1. What is the main problem with keeping all your savings in a bank account?</div>
-        <div class="quiz-options">
-          <div class="quiz-option" onclick="answer(0,0,false,'Bank accounts are actually quite useful for short-term savings — the issue is that inflation erodes your real purchasing power over time.')">
-            <div class="quiz-radio"></div>Bank accounts are too complicated to use
-          </div>
-          <div class="quiz-option" onclick="answer(0,1,true,'Correct. Inflation (2–4% in Indonesia) erodes your real purchasing power faster than typical savings account interest rates of 1–2%.')">
-            <div class="quiz-radio"></div>Inflation erodes purchasing power faster than interest earned
-          </div>
-          <div class="quiz-option" onclick="answer(0,2,false,'Bank accounts are actually insured in most countries — this is not the primary concern for long-term savings.')">
-            <div class="quiz-radio"></div>Banks can go bankrupt at any time
+            <div class="step-title">CoinMarketCap & TradingView</div>
+            <div class="step-desc">Track prices and learn to read basic charts. Free tools, widely used, no account required to start.</div>
           </div>
         </div>
-        <div class="quiz-feedback" id="qf-0"></div>
-      </div>
-
-      <div class="quiz-card">
-        <div class="quiz-q">2. Which of these best describes Dollar Cost Averaging (DCA)?</div>
-        <div class="quiz-options">
-          <div class="quiz-option" onclick="answer(1,0,false,'Timing the market is the opposite of DCA — and evidence shows professionals consistently fail to do it reliably.')">
-            <div class="quiz-radio"></div>Buying more when prices are low and selling when high
-          </div>
-          <div class="quiz-option" onclick="answer(1,1,false,'Investing a lump sum once is a valid strategy, but it\'s not DCA and carries more timing risk.')">
-            <div class="quiz-radio"></div>Investing a large lump sum when you feel confident
-          </div>
-          <div class="quiz-option" onclick="answer(1,2,true,'Correct. DCA removes the need to time the market by investing consistently regardless of price, averaging your cost basis over time.')">
-            <div class="quiz-radio"></div>Investing a fixed amount at regular intervals regardless of price
-          </div>
-        </div>
-        <div class="quiz-feedback" id="qf-1"></div>
-      </div>
-
-      <div class="quiz-card">
-        <div class="quiz-q">3. Why is Indodax useful for BSJ teachers specifically?</div>
-        <div class="quiz-options">
-          <div class="quiz-option" onclick="answer(2,0,true,'Correct. Indodax accepts IDR bank transfers directly, making it the easiest bridge between a rupiah salary and crypto investments.')">
-            <div class="quiz-radio"></div>It accepts IDR bank transfers, bridging rupiah salary to crypto
-          </div>
-          <div class="quiz-option" onclick="answer(2,1,false,'Binance actually has lower trading fees than Indodax for most assets.')">
-            <div class="quiz-radio"></div>It has lower fees than Binance for all assets
-          </div>
-          <div class="quiz-option" onclick="answer(2,2,false,'Indodax is an Indonesian exchange — it does not offer US stock trading.')">
-            <div class="quiz-radio"></div>It allows you to buy US stocks in IDR
-          </div>
-        </div>
-        <div class="quiz-feedback" id="qf-2"></div>
-      </div>
-
-      <div class="quiz-card">
-        <div class="quiz-q">4. When should you move crypto to a hardware wallet?</div>
-        <div class="quiz-options">
-          <div class="quiz-option" onclick="answer(3,0,false,'Hardware wallets are not needed for very small amounts — exchanges are fine for getting started.')">
-            <div class="quiz-radio"></div>From your very first purchase
-          </div>
-          <div class="quiz-option" onclick="answer(3,1,true,'Correct. Once you hold significant value (around $5,000+), the risk of exchange hacks or account issues justifies the added security of cold storage.')">
-            <div class="quiz-radio"></div>Once holdings exceed ~$5,000 in value
-          </div>
-          <div class="quiz-option" onclick="answer(3,2,false,'Never is the worst answer here — exchange risk is real and significant holdings should eventually move to cold storage.')">
-            <div class="quiz-radio"></div>Never — exchanges are always safer
-          </div>
-        </div>
-        <div class="quiz-feedback" id="qf-3"></div>
-      </div>
-
-      <div class="quiz-card">
-        <div class="quiz-q">5. Which network should you use when transferring USDT from Indodax to Binance?</div>
-        <div class="quiz-options">
-          <div class="quiz-option" onclick="answer(4,0,false,'ERC20 (Ethereum network) works but has significantly higher gas fees than TRC20 for USDT transfers.')">
-            <div class="quiz-radio"></div>ERC20 (Ethereum network)
-          </div>
-          <div class="quiz-option" onclick="answer(4,1,true,'Correct. TRC20 (Tron network) has the lowest fees for USDT transfers — typically less than $1. Always verify the receiving address supports TRC20.')">
-            <div class="quiz-radio"></div>TRC20 (Tron network) — lowest fees
-          </div>
-          <div class="quiz-option" onclick="answer(4,2,false,'BEP20 is the Binance Smart Chain network — it works but you must ensure both exchanges support it, which is not always the case with Indodax.')">
-            <div class="quiz-radio"></div>BEP20 (Binance Smart Chain)
-          </div>
-        </div>
-        <div class="quiz-feedback" id="qf-4"></div>
       </div>
 
     </div>
-    <div class="bottom-nav">
-      <button class="btn-nav btn-back" onclick="back()">← Back</button>
-      <div class="page-indicator">7 / 7</div>
-      <button class="btn-nav btn-complete bsj-btn bsj-btn-primary" id="complete-btn" onclick="complete()" disabled>Complete Course ✓</button>
+    <div class="module-footer">
+      <button class="btn btn-outline" onclick="goTo(3)">← Previous</button>
+      <button class="btn btn-complete" id="complete-4" onclick="markComplete(4)">Mark Complete ✓</button>
     </div>
-  </div>
+  </section>
 
   <!-- COMPLETION -->
-  <div class="section-page" id="page-complete">
-    <div class="completion-screen">
-      <div class="completion-icon">🎓</div>
-      <div class="completion-title">Course Complete</div>
-      <div class="completion-sub">You've completed the Financial Onboarding. You now have the foundations to start investing confidently. Remember: start small, stay consistent, and never invest money you can't afford to lose.</div>
-      <div class="score-display" id="final-score">—</div>
-      <div class="score-label">Quiz Score</div>
-      <br/><br/>
-      <button class="btn-nav btn-next bsj-btn bsj-btn-primary" onclick="restartCourse()" style="margin-top:16px">← Start Over</button>
+  <section id="completion">
+    <div class="completion-badge">🏆</div>
+    <h1>Congratulations</h1>
+    <p>You have completed the BSJ Invest Smarter onboarding. You now have the foundational knowledge to begin building your financial future.</p>
+    <div class="cert-box">
+      <h3>Certificate of Completion</h3>
+      <div class="cert-name" id="cert-name">BSJ Teacher</div>
+      <p>has completed the Invest Smarter Financial Onboarding Programme<br/>British School Jakarta · 2025</p>
     </div>
-  </div>
+    <button class="btn btn-primary" onclick="window.print()">🖨 Print Certificate</button>
+    &nbsp;
+    <button class="btn btn-outline" onclick="restartCourse()">↩ Restart Course</button>
+  </section>
 
-</div>
-</div>
+</main>
 
 <script>
-let currentPage = 0;
-const totalPages = 7;
-const completed = new Array(totalPages).fill(false);
-const quizAnswers = new Array(5).fill(null);
-const quizData = new Array(5).fill(null);
-let quizCorrect = 0;
+// ===== STATE =====
+const TOTAL = 5;
+let currentModule = 0;
+let completed = JSON.parse(localStorage.getItem('bsj_invest_completed') || '[]');
+let checks = JSON.parse(localStorage.getItem('bsj_invest_checks') || '[]');
 
-// ── Mobile sidebar ─────────────────────────────────────────────────────────────
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sidebar-overlay').classList.toggle('open');
+// ===== INIT =====
+window.addEventListener('load', () => {
+  restoreState();
+  updateCalc();
+  updateProgress();
+});
+
+function restoreState() {
+  // restore nav completed states
+  completed.forEach(i => {
+    document.getElementById('nav-'+i)?.classList.add('completed');
+    const btn = document.getElementById('complete-'+i);
+    if (btn) { btn.textContent = 'Completed ✓'; btn.classList.add('done'); }
+  });
+  // restore checklist
+  checks.forEach(id => {
+    const el = document.getElementById('ci-'+id);
+    if (el) el.classList.add('done');
+  });
+  // check if all done
+  if (completed.length === TOTAL) showCompletion();
 }
 
-// ── Navigation ─────────────────────────────────────────────────────────────────
-function goTo(page) {
-  document.querySelectorAll('.section-page').forEach(p => p.classList.remove('active'));
+// ===== NAVIGATION =====
+function goTo(idx) {
+  document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('module-'+idx)?.classList.add('active');
+  document.getElementById('nav-'+idx)?.classList.add('active');
+  document.getElementById('main')?.scrollTo(0,0);
+  window.scrollTo(0,0);
+  currentModule = idx;
+  closeSidebar();
+}
 
-  if (page === 'complete') {
-    document.getElementById('page-complete').classList.add('active');
-    saveProgress('complete');
-    return;
+function markComplete(idx) {
+  if (!completed.includes(idx)) {
+    completed.push(idx);
+    localStorage.setItem('bsj_invest_completed', JSON.stringify(completed));
   }
-
-  document.getElementById('page-' + page).classList.add('active');
-  const navEl = document.getElementById('nav-' + page);
-  if (navEl) navEl.classList.add('active');
-  currentPage = page;
-  window.scrollTo(0, 0);
-
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('open');
-
-  saveProgress(page);
-}
-
-function next() {
-  completed[currentPage] = true;
+  document.getElementById('nav-'+idx)?.classList.add('completed');
+  const btn = document.getElementById('complete-'+idx);
+  if (btn) { btn.textContent = 'Completed ✓'; btn.classList.add('done'); }
   updateProgress();
-  if (currentPage < totalPages - 1) goTo(currentPage + 1);
-}
-
-function back() {
-  if (currentPage > 0) goTo(currentPage - 1);
-}
-
-function complete() {
-  completed[currentPage] = true;
-  updateProgress();
-  document.getElementById('final-score').textContent = quizCorrect + '/5';
-  goTo('complete');
-}
-
-function restartCourse() {
-  completed.fill(false);
-  quizAnswers.fill(null);
-  quizData.fill(null);
-  quizCorrect = 0;
-  try {
-    localStorage.removeItem('invest_completed');
-    localStorage.removeItem('invest_quiz_data');
-    localStorage.removeItem('invest_quiz_correct');
-    localStorage.removeItem('invest_page');
-  } catch(e) {}
-  document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('correct','wrong','disabled'));
-  document.querySelectorAll('.quiz-feedback').forEach(f => { f.className = 'quiz-feedback'; f.textContent = ''; });
-  document.getElementById('complete-btn').disabled = true;
-  updateProgress();
-  goTo(0);
+  if (completed.length === TOTAL) {
+    setTimeout(showCompletion, 600);
+  } else if (idx < TOTAL-1) {
+    setTimeout(() => goTo(idx+1), 400);
+  }
 }
 
 function updateProgress() {
-  const done = completed.filter(Boolean).length;
-  const pct = Math.round((done / totalPages) * 100);
-  document.getElementById('progress-bar').style.width = pct + '%';
+  const pct = Math.round((completed.length / TOTAL) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('progress-pct').textContent = pct + '%';
-  completed.forEach((c, i) => {
-    const nav = document.getElementById('nav-' + i);
-    const check = document.getElementById('check-' + i);
-    if (c && nav && check) {
-      nav.classList.add('completed');
-      check.textContent = '✓';
-    }
-  });
 }
 
-// ── Quiz ───────────────────────────────────────────────────────────────────────
-function answer(qIndex, optIndex, isCorrect, feedback) {
-  if (quizData[qIndex] !== null) return;
-  quizData[qIndex] = { optIndex, isCorrect, feedback };
-  quizAnswers[qIndex] = optIndex;
-  if (isCorrect) quizCorrect++;
-  applyQuizAnswer(qIndex);
-  saveProgress(currentPage);
-  if (quizData.every(a => a !== null)) document.getElementById('complete-btn').disabled = false;
+function showCompletion() {
+  document.querySelectorAll('.module').forEach(m => m.style.display = 'none');
+  document.getElementById('completion').style.display = 'flex';
 }
 
-function applyQuizAnswer(qIndex) {
-  const data = quizData[qIndex];
-  if (!data) return;
-  const cards = document.querySelectorAll('.quiz-card');
-  if (!cards[qIndex]) return;
-  cards[qIndex].querySelectorAll('.quiz-option').forEach((opt, i) => {
-    opt.classList.add('disabled');
-    if (i === data.optIndex) opt.classList.add(data.isCorrect ? 'correct' : 'wrong');
-  });
-  const fb = document.getElementById('qf-' + qIndex);
-  if (fb) { fb.textContent = data.feedback; fb.className = 'quiz-feedback show ' + (data.isCorrect ? 'correct' : 'wrong'); }
+function restartCourse() {
+  completed = [];
+  checks = [];
+  localStorage.removeItem('bsj_invest_completed');
+  localStorage.removeItem('bsj_invest_checks');
+  document.getElementById('completion').style.display = 'none';
+  document.querySelectorAll('.module').forEach(m => m.style.display = '');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('completed'));
+  document.querySelectorAll('.check-item').forEach(c => c.classList.remove('done'));
+  document.querySelectorAll('.btn-complete').forEach(b => { b.textContent = 'Mark Complete ✓'; b.classList.remove('done'); });
+  goTo(0);
+  updateProgress();
 }
 
-function restoreQuizState() {
-  quizData.forEach((data, i) => { if (data) applyQuizAnswer(i); });
-  if (quizData.every(a => a !== null)) document.getElementById('complete-btn').disabled = false;
+// ===== PLATFORM TABS =====
+function switchTab(el, panel) {
+  document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.platform-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-'+panel)?.classList.add('active');
 }
 
-// ── localStorage ───────────────────────────────────────────────────────────────
-function saveProgress(page) {
-  try {
-    localStorage.setItem('invest_completed', JSON.stringify(completed));
-    localStorage.setItem('invest_quiz_data', JSON.stringify(quizData));
-    localStorage.setItem('invest_quiz_correct', String(quizCorrect));
-    localStorage.setItem('invest_page', String(page));
-  } catch(e) {}
+// ===== QUIZ =====
+function selectOpt(el, qid, isCorrect) {
+  el.closest('.quiz-options').querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  const fb = document.getElementById(qid+'-fb');
+  if (fb) fb.classList.add('show');
 }
 
-function loadProgress() {
-  try {
-    const c = localStorage.getItem('invest_completed');
-    if (c) JSON.parse(c).forEach((v, i) => { if (i < completed.length) completed[i] = v; });
-
-    const q = localStorage.getItem('invest_quiz_data');
-    if (q) JSON.parse(q).forEach((v, i) => {
-      if (i < quizData.length) { quizData[i] = v; if (v) quizAnswers[i] = v.optIndex; }
-    });
-
-    const qc = localStorage.getItem('invest_quiz_correct');
-    if (qc) quizCorrect = parseInt(qc) || 0;
-
-    updateProgress();
-    restoreQuizState();
-
-    const savedPage = localStorage.getItem('invest_page');
-    if (savedPage === 'complete') {
-      document.getElementById('final-score').textContent = quizCorrect + '/5';
-      goTo('complete');
-    } else if (savedPage && savedPage !== '0') {
-      const p = parseInt(savedPage);
-      if (!isNaN(p) && p > 0 && p < totalPages) goTo(p);
-    }
-  } catch(e) {}
+// ===== CHECKLIST =====
+function toggleCheck(el, id) {
+  el.classList.toggle('done');
+  if (el.classList.contains('done')) {
+    if (!checks.includes(id)) checks.push(id);
+  } else {
+    checks = checks.filter(c => c !== id);
+  }
+  localStorage.setItem('bsj_invest_checks', JSON.stringify(checks));
 }
 
-window.addEventListener('load', loadProgress);
+// ===== CALCULATOR =====
+const ALLOCATIONS = {
+  conservative: [
+    { label: 'Global ETFs (VT / SCHD)', color: '#3a9e6f', pct: 50 },
+    { label: 'Bitcoin', color: '#c8952a', pct: 10 },
+    { label: 'Income ETFs (SCHD)', color: '#3b82f6', pct: 20 },
+    { label: 'Cash buffer', color: '#6b6b78', pct: 20 }
+  ],
+  moderate: [
+    { label: 'Global ETFs (VT / QQQ)', color: '#3a9e6f', pct: 40 },
+    { label: 'Bitcoin', color: '#c8952a', pct: 20 },
+    { label: 'Income ETFs', color: '#3b82f6', pct: 20 },
+    { label: 'Cash buffer', color: '#6b6b78', pct: 10 },
+    { label: 'Flexible / opportunities', color: '#9b6cb7', pct: 10 }
+  ],
+  aggressive: [
+    { label: 'Global ETFs (QQQ)', color: '#3a9e6f', pct: 30 },
+    { label: 'Bitcoin', color: '#c8952a', pct: 35 },
+    { label: 'Altcoins (ETH, SOL)', color: '#e8b84b', pct: 20 },
+    { label: 'Income ETFs', color: '#3b82f6', pct: 10 },
+    { label: 'Cash buffer', color: '#6b6b78', pct: 5 }
+  ]
+};
+
+function updateCalc() {
+  const amt = parseFloat(document.getElementById('monthly-usd').value) || 500;
+  const profile = document.getElementById('risk-profile').value;
+  const allocs = ALLOCATIONS[profile];
+  const display = document.getElementById('alloc-display');
+  display.innerHTML = allocs.map(a => `
+    <div class="alloc-row">
+      <span class="alloc-label">${a.label}</span>
+      <div class="alloc-track">
+        <div class="alloc-fill" style="width:${a.pct}%;background:${a.color}"></div>
+      </div>
+      <span class="alloc-amount">$${(amt * a.pct / 100).toFixed(0)}</span>
+    </div>`).join('');
+}
+
+// ===== MOBILE SIDEBAR =====
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
 </script>
-
 </body>
 </html>
