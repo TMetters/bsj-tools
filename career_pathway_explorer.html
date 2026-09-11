@@ -227,14 +227,6 @@ body{background:var(--bg);min-height:100vh;}
           <div class="hdr-sub">IBDP Career Explorer · UK · Australia · Europe · USA</div>
         </div>
       </div>
-      <button class="btn-ghost" onclick="toggleApi()">⚙ API Key</button>
-    </div>
-  </div>
-  <div class="api-bar" id="api-bar">
-    <div class="api-inner">
-      <input type="password" id="api-key" placeholder="sk-ant-api03-…" autocomplete="off"/>
-      <button class="btn-teal bsj-btn bsj-btn-primary" onclick="saveKey()">Save</button>
-      <span class="api-note">Saved in your browser only</span>
     </div>
   </div>
 </header>
@@ -463,9 +455,6 @@ let allResults = [];
 
 // ===== INIT: BUILD SUBJECT ROWS =====
 window.addEventListener('load', () => {
-  const k = localStorage.getItem('anthropic_api_key');
-  if (k) document.getElementById('api-key').value = k;
-
   Object.entries(GROUPS).forEach(([gid, gdata]) => {
     const el = document.getElementById('s' + gid);
     if (!el) return;
@@ -487,14 +476,6 @@ function buildRow(name, hasHL, color, gid) {
     <div class="lvl-btns">${hlBtn}${slBtn}${slTag}</div>
   </div>`;
 }
-
-// ===== API KEY =====
-function toggleApi() { document.getElementById('api-bar').classList.toggle('open'); }
-function saveKey() {
-  const k = document.getElementById('api-key').value.trim();
-  if (k) { localStorage.setItem('anthropic_api_key', k); document.getElementById('api-bar').classList.remove('open'); }
-}
-function getKey() { return document.getElementById('api-key').value.trim() || localStorage.getItem('anthropic_api_key') || ''; }
 
 // ===== TOGGLES =====
 function toggleR(el) {
@@ -599,7 +580,6 @@ Only include region keys for: ${selRegions.join(',')}. Remove other region keys 
 
 // ===== EXPLORE: PARALLEL =====
 async function runExplore() {
-  if (!getKey()) { alert('Add your Anthropic API key via the ⚙ button.'); return; }
   if (!selItems.length || !selRegions.length) return;
 
   document.getElementById('pg-sel').classList.remove('active');
@@ -669,13 +649,10 @@ async function runExplore() {
 }
 
 async function callApi(item) {
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+  const resp = await fetch('/api/claude', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': getKey(),
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
