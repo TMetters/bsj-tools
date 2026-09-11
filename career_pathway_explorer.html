@@ -574,6 +574,14 @@ function buildPrompt(item) {
     degreeTarget ? `Student already knows they want to study: ${degreeTarget} — prioritise pathways leading to this` : '',
   ].filter(Boolean).join('. ');
 
+  const regionTemplates = {
+    uk: `"uk":{"universities":["","",""],"employers":["","",""],"salary_entry":"£X–£Y","salary_mid":"£X–£Y"}`,
+    au: `"au":{"universities":["","",""],"employers":["","",""],"salary_entry":"A$X–A$Y","salary_mid":"A$X–A$Y"}`,
+    eu: `"eu":{"universities":["","",""],"employers":["","",""],"salary_entry":"€X–€Y","salary_mid":"€X–€Y"}`,
+    us: `"us":{"universities":["","",""],"employers":["","",""],"salary_entry":"$X–$Y","salary_mid":"$X–$Y"}`,
+  };
+  const regionsJson = selRegions.map(r => regionTemplates[r]).join(',');
+
   return `You are an honest, direct careers advisor for a 17-year-old international student completing the IBDP at British School Jakarta, Indonesia. He is researching universities across: ${regions}.
 
 Generate career pathways for: "${item}"
@@ -584,7 +592,7 @@ Write for a 17-year-old boy — direct, honest, specific. Not corporate. Not gen
 If the input is a specific IB subject with HL or SL, factor in the level — HL subjects open more doors for competitive degrees.
 
 Return ONLY valid compact JSON (no markdown, no extra text):
-{"subject":"${item}","careers":[{"title":"","description":"2 honest sentences. Real, not corporate.","outlook":"Excellent|Good|Moderate|Varies","needs_degree":true,"degree_note":"If false, explain the alternative route. If true, empty string.","ib_requirements":"Specific IB points/subject requirements","degrees":["","",""],"day_in_life":"3 vivid honest sentences — a typical Tuesday. Not glamourised.","honest_bit":"The catch, the reality, or the trade-off most people don't say.","do_it_now":[{"icon":"🎯","text":"Something specific to do THIS WEEK"},{"icon":"📚","text":"A specific resource, channel, book, or community"},{"icon":"💡","text":"One thing to add to CAS or EE to signal interest to universities"}],"regions":{"uk":{"universities":["","",""],"employers":["","",""],"salary_entry":"£X–£Y","salary_mid":"£X–£Y"},"au":{"universities":["","",""],"employers":["","",""],"salary_entry":"A$X–A$Y","salary_mid":"A$X–A$Y"},"eu":{"universities":["","",""],"employers":["","",""],"salary_entry":"€X–€Y","salary_mid":"€X–€Y"},"us":{"universities":["","",""],"employers":["","",""],"salary_entry":"$X–$Y","salary_mid":"$X–$Y"}},"apprenticeship_uk":false,"apprenticeship_note":""}]}
+{"subject":"${item}","careers":[{"title":"","description":"2 honest sentences. Real, not corporate.","outlook":"Excellent|Good|Moderate|Varies","needs_degree":true,"degree_note":"If false, explain the alternative route. If true, empty string.","ib_requirements":"Specific IB points/subject requirements","degrees":["","",""],"day_in_life":"3 vivid honest sentences — a typical Tuesday. Not glamourised.","honest_bit":"The catch, the reality, or the trade-off most people don't say.","do_it_now":[{"icon":"🎯","text":"Something specific to do THIS WEEK"},{"icon":"📚","text":"A specific resource, channel, book, or community"},{"icon":"💡","text":"One thing to add to CAS or EE to signal interest to universities"}],"regions":{${regionsJson}},"apprenticeship_uk":false,"apprenticeship_note":""}]}
 
 Only include region keys for: ${selRegions.join(',')}. Remove other region keys entirely.`;
 }
