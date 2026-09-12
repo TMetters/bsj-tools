@@ -556,10 +556,10 @@ function buildPrompt(item) {
   ].filter(Boolean).join('. ');
 
   const regionTemplates = {
-    uk: `"uk":{"universities":["","",""],"employers":["","",""],"salary_entry":"£X–£Y","salary_mid":"£X–£Y"}`,
-    au: `"au":{"universities":["","",""],"employers":["","",""],"salary_entry":"A$X–A$Y","salary_mid":"A$X–A$Y"}`,
-    eu: `"eu":{"universities":["","",""],"employers":["","",""],"salary_entry":"€X–€Y","salary_mid":"€X–€Y"}`,
-    us: `"us":{"universities":["","",""],"employers":["","",""],"salary_entry":"$X–$Y","salary_mid":"$X–$Y"}`,
+    uk: `"uk":{"universities":["","","","",""],"employers":["","",""],"salary_entry":"£X–£Y","salary_mid":"£X–£Y"}`,
+    au: `"au":{"universities":["","","","",""],"employers":["","",""],"salary_entry":"A$X–A$Y","salary_mid":"A$X–A$Y"}`,
+    eu: `"eu":{"universities":["","","","",""],"employers":["","",""],"salary_entry":"€X–€Y","salary_mid":"€X–€Y"}`,
+    us: `"us":{"universities":["","","","",""],"employers":["","",""],"salary_entry":"$X–$Y","salary_mid":"$X–$Y"}`,
   };
   const regionsJson = selRegions.map(r => regionTemplates[r]).join(',');
 
@@ -570,7 +570,7 @@ Full student context: ${context}
 
 Write for a 17-year-old boy — direct, honest, specific. Not corporate. Not generic. Mention if a career is actually competitive or oversubscribed. Be real.
 
-For each career's university list per region: include a range of selectivity — at least one highly selective institution, one solid mid-tier option, and one accessible or less well-known university that is genuinely strong for that specific field. Prioritise course quality and career fit over overall institutional prestige. Do not increase the number of universities — keep the existing count per region, but diversify the selectivity range.
+For each career's university list per region: return 5 universities. Include at least one highly selective institution, one solid mid-tier option, and two additional accessible options — universities with lower entry requirements (points/grades) that still offer a genuinely solid course for that specific career. Prioritise course quality and career fit over overall institutional prestige.
 
 If the input is a specific IB subject with HL or SL, factor in the level — HL subjects open more doors for competitive degrees.
 
