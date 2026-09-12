@@ -737,11 +737,8 @@ function renderCard(c) {
   </div>`;
 
   const schHtml = `<div class="now-items">
-    ${selRegions.includes('uk') ? `<div class="now-item"><div class="now-icon">🇬🇧</div><div class="now-text"><strong>UK:</strong> Check <a href="https://www.chevening.org" target="_blank" style="color:var(--teal)">Chevening Scholarships</a>, university-specific bursaries on each institution's financial support page, and the <a href="https://www.scholarship-search.org.uk" target="_blank" style="color:var(--teal)">Scholarship Search UK</a> database.</div></div>` : ''}
-    ${selRegions.includes('au') ? `<div class="now-item"><div class="now-icon">🇦🇺</div><div class="now-text"><strong>Australia:</strong> Explore <a href="https://www.australiaawards.gov.au" target="_blank" style="color:var(--teal)">Australia Awards</a> and each university's international student scholarship page — search "[university name] international scholarship".</div></div>` : ''}
-    ${selRegions.includes('eu') ? `<div class="now-item"><div class="now-icon">🇪🇺</div><div class="now-text"><strong>Europe:</strong> Explore <a href="https://erasmus-plus.ec.europa.eu" target="_blank" style="color:var(--teal)">Erasmus+</a>, <a href="https://www.daad.de/en/" target="_blank" style="color:var(--teal)">DAAD (Germany)</a>, and <a href="https://www.studyinholland.nl/finances/scholarships" target="_blank" style="color:var(--teal)">Holland Scholarships</a>.</div></div>` : ''}
-    ${selRegions.includes('us') ? `<div class="now-item"><div class="now-icon">🇺🇸</div><div class="now-text"><strong>USA:</strong> Search <a href="https://collegeboard.org/scholarship-search" target="_blank" style="color:var(--teal)">College Board Scholarship Search</a> and each university's financial aid page. Many US universities offer merit aid — always check the Common App portal.</div></div>` : ''}
-    <div class="now-item"><div class="now-icon">💡</div><div class="now-text"><strong>Tip:</strong> Always go directly to the university's official website for the most accurate and up-to-date scholarship information. Search "[university name] scholarships for international students".</div></div>
+    <div class="now-item"><div class="now-icon">🌍</div><div class="now-text"><strong>Global:</strong> <a href="https://globalscholarships.com/" target="_blank" rel="noopener" style="color:var(--teal)">Global Scholarships</a></div></div>
+    <div class="now-item"><div class="now-icon">🇬🇧</div><div class="now-text"><strong>UK:</strong> <a href="https://www.chevening.org/" target="_blank" rel="noopener" style="color:var(--teal)">Chevening Scholarships</a></div></div>
   </div>`;
 
   return `
