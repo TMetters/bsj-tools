@@ -207,11 +207,33 @@ body{background:var(--bg);min-height:100vh;}
 .legend-text{font-size:0.78rem;color:var(--text-dim);line-height:1.3;white-space:nowrap;}
 .legend-text strong{color:var(--text);font-weight:700;}
 
+/* CHOICE SCREEN */
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:720px;margin:0 auto;}
+.choice-card{background:var(--white);border:2px solid var(--border);border-radius:16px;padding:32px 28px;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s;text-align:center;}
+.choice-card:hover{border-color:var(--teal);box-shadow:0 8px 24px rgba(0,153,214,0.12);}
+.choice-icon{font-size:2.4rem;margin-bottom:14px;}
+.choice-title{font-size:1.15rem;font-weight:800;color:var(--indigo);margin-bottom:10px;letter-spacing:-0.01em;}
+.choice-desc{font-size:0.84rem;color:var(--text-dim);line-height:1.65;font-weight:400;}
+
+/* FIT FLOW */
+.fit-action-bar{position:sticky;bottom:0;background:var(--white);border-top:1.5px solid var(--border);padding:14px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px;z-index:100;}
+.fit-count{font-size:0.84rem;color:var(--text-dim);font-weight:500;}
+.fit-results{display:flex;flex-direction:column;gap:14px;margin-top:4px;}
+.fit-card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:20px 22px;display:flex;gap:16px;align-items:flex-start;}
+.fit-rank{background:var(--indigo);color:var(--white);font-size:0.78rem;font-weight:800;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fit-body{flex:1;min-width:0;}
+.fit-title{font-size:1.05rem;font-weight:800;color:var(--indigo);margin-bottom:6px;}
+.fit-reason{font-size:0.88rem;color:var(--text-dim);line-height:1.6;margin-bottom:10px;}
+.fit-meta{display:flex;flex-wrap:wrap;gap:7px;}
+.fit-tag{font-size:0.75rem;font-weight:600;color:var(--text-dim);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:4px 9px;}
+.fit-loading{text-align:center;padding:60px 20px;color:var(--text-dim);font-size:0.93rem;}
+
 @media(max-width:640px){
-  .hdr-inner,.sel,.res,.action-bar{padding-left:16px;padding-right:16px;}
+  .hdr-inner,.sel,.res,.action-bar,.fit-action-bar{padding-left:16px;padding-right:16px;}
   .sel-hero h1{font-size:1.7rem;}
   .careers-grid,.subj-grid{grid-template-columns:1fr;}
   .sal-grid{grid-template-columns:1fr 1fr;}
+  .choice-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -231,10 +253,33 @@ body{background:var(--bg);min-height:100vh;}
   </div>
 </header>
 
+<!-- PAGE 0: CHOICE -->
+<div class="page active" id="pg-choice">
+<div class="sel">
+  <div class="sel-hero">
+    <h1>What could <em>you</em> do?</h1>
+    <p>Choose how you want to explore your options.</p>
+  </div>
+  <div class="choice-grid">
+    <div class="choice-card" onclick="showPage('pg-sel')">
+      <div class="choice-icon">📚</div>
+      <div class="choice-title">Explore by Subject</div>
+      <div class="choice-desc">Pick your IB subjects and interests — we'll map out real careers across four countries with salaries, universities, and more.</div>
+    </div>
+    <div class="choice-card" onclick="showPage('pg-fit-sel')">
+      <div class="choice-icon">🎯</div>
+      <div class="choice-title">Explore My Best Fit Career</div>
+      <div class="choice-desc">Tell us your subjects, how long you'll study, and what you want from a career — we'll rank the careers that genuinely suit you best.</div>
+    </div>
+  </div>
+</div>
+</div>
+
 <!-- PAGE 1: SELECTION -->
-<div class="page active" id="pg-sel">
+<div class="page" id="pg-sel">
 <div class="sel">
 
+  <div style="margin-bottom:16px;"><button class="btn-ghost" style="background:transparent;border-color:rgba(13,34,64,0.18);color:var(--text-dim);font-size:0.78rem;" onclick="showPage('pg-choice')">← Back</button></div>
   <div class="sel-hero">
     <h1>What could <em>you</em> do?</h1>
     <p>Select your IB subjects at HL or SL, add your interests, and we'll map out real careers across four countries.</p>
@@ -368,6 +413,72 @@ body{background:var(--bg);min-height:100vh;}
 </div>
 </div>
 
+<!-- PAGE FIT-SEL: BEST FIT INPUT -->
+<div class="page" id="pg-fit-sel">
+<div class="sel">
+  <div style="margin-bottom:16px;"><button class="btn-ghost" style="background:transparent;border-color:rgba(13,34,64,0.18);color:var(--text-dim);font-size:0.78rem;" onclick="showPage('pg-choice')">← Back</button></div>
+  <div class="sel-hero">
+    <h1>Find my <em>best fit</em> career</h1>
+    <p>Select your subjects, set your priorities — we'll rank the careers that genuinely suit you.</p>
+  </div>
+
+  <!-- REGIONS -->
+  <div class="sec-head"><div class="sec-dot" style="background:var(--teal)"></div>Where do you want to live and work?</div>
+  <div class="region-row">
+    <div class="r-chip on" data-r="uk" onclick="toggleFitR(this)">🇬🇧 UK</div>
+    <div class="r-chip on" data-r="au" onclick="toggleFitR(this)">🇦🇺 Australia</div>
+    <div class="r-chip on" data-r="eu" onclick="toggleFitR(this)">🇪🇺 Europe</div>
+    <div class="r-chip on" data-r="us" onclick="toggleFitR(this)">🇺🇸 USA</div>
+  </div>
+
+  <!-- STUDY LENGTH -->
+  <div class="sec-head"><div class="sec-dot" style="background:var(--amber)"></div>How many years are you willing to study?</div>
+  <div class="region-row" id="fit-study-row">
+    <div class="r-chip" data-years="3" onclick="setFitStudy(this)">3 years</div>
+    <div class="r-chip on" data-years="5" onclick="setFitStudy(this)">5 years</div>
+    <div class="r-chip" data-years="7+" onclick="setFitStudy(this)">7+ years</div>
+  </div>
+
+  <!-- SALARY PRIORITY -->
+  <div class="sec-head"><div class="sec-dot" style="background:var(--green)"></div>What matters more to you about salary?</div>
+  <div class="region-row" id="fit-salary-row">
+    <div class="r-chip" data-sal="sooner" onclick="setFitSalary(this)">Higher earning sooner</div>
+    <div class="r-chip on" data-sal="long-term" onclick="setFitSalary(this)">Higher long-term ceiling</div>
+  </div>
+
+  <!-- SUBJECTS -->
+  <div class="sec-head"><div class="sec-dot" style="background:#7c3aed"></div>Group 1 — Studies in Language & Literature</div>
+  <div class="subj-grid" id="fsg1"></div>
+  <div class="sec-head"><div class="sec-dot" style="background:#0284c7"></div>Group 2 — Language Acquisition</div>
+  <div class="subj-grid" id="fsg2"></div>
+  <div class="sec-head"><div class="sec-dot" style="background:#d97706"></div>Group 3 — Individuals & Societies</div>
+  <div class="subj-grid" id="fsg3"></div>
+  <div class="sec-head"><div class="sec-dot" style="background:#059669"></div>Group 4 — Sciences</div>
+  <div class="subj-grid" id="fsg4"></div>
+  <div class="sec-head"><div class="sec-dot" style="background:#0d9488"></div>Group 5 — Mathematics</div>
+  <div class="subj-grid" id="fsg5"></div>
+  <div class="sec-head"><div class="sec-dot" style="background:#db2777"></div>Group 6 — The Arts</div>
+  <div class="subj-grid" id="fsg6"></div>
+
+  <div style="height:80px"></div>
+</div>
+<div class="fit-action-bar">
+  <div class="fit-count" id="fit-sel-count">Select your subjects above to get started</div>
+  <button class="btn-go bsj-btn bsj-btn-primary" id="fit-go-btn" onclick="runFitExplore()" disabled>Find My Best Fit →</button>
+</div>
+</div>
+
+<!-- PAGE FIT-RES: BEST FIT RESULTS -->
+<div class="page" id="pg-fit-res">
+<div class="res">
+  <div class="res-hdr">
+    <button class="btn-back" onclick="showPage('pg-fit-sel')">← Back</button>
+    <div class="res-title">Your Best Fit Careers</div>
+  </div>
+  <div id="fit-res-content"></div>
+</div>
+</div>
+
 <!-- PAGE 2: RESULTS -->
 <div class="page" id="pg-res">
 <div class="res">
@@ -456,20 +567,21 @@ let allResults = [];
 // ===== INIT: BUILD SUBJECT ROWS =====
 window.addEventListener('load', () => {
   Object.entries(GROUPS).forEach(([gid, gdata]) => {
-    const el = document.getElementById('s' + gid);
-    if (!el) return;
+    const el  = document.getElementById('s'  + gid);
+    const fel = document.getElementById('fs' + gid);
     gdata.subjects.forEach(([name, hasHL]) => {
-      el.insertAdjacentHTML('beforeend', buildRow(name, hasHL, gdata.color, gid));
+      if (el)  el.insertAdjacentHTML('beforeend',  buildRow(name, hasHL, gdata.color, gid));
+      if (fel) fel.insertAdjacentHTML('beforeend', buildRow(name, hasHL, gdata.color, gid, 'togFitLevel'));
     });
   });
 });
 
-function buildRow(name, hasHL, color, gid) {
+function buildRow(name, hasHL, color, gid, handler = 'togLevel') {
   const safeName = name.replace(/'/g,'&#39;');
   const hlBtn = hasHL
-    ? `<button class="lvl-btn" data-name="${safeName} HL" data-color="${color}" onclick="togLevel(this)">HL</button>`
+    ? `<button class="lvl-btn" data-name="${safeName} HL" data-color="${color}" onclick="${handler}(this)">HL</button>`
     : '';
-  const slBtn = `<button class="lvl-btn" data-name="${safeName} SL" data-color="${color}" onclick="togLevel(this)">SL</button>`;
+  const slBtn = `<button class="lvl-btn" data-name="${safeName} SL" data-color="${color}" onclick="${handler}(this)">SL</button>`;
   const slTag = !hasHL ? `<span class="sl-only-tag">SL only</span>` : '';
   return `<div class="subj-row" id="row-${gid}-${name.replace(/\W+/g,'_')}">
     <span class="subj-name">${name}</span>
@@ -885,6 +997,143 @@ function extractCareers(s) {
     } catch(e) { /* skip incomplete career */ }
   }
   return careers;
+}
+
+// ===== BEST FIT FLOW =====
+let fitSelItems      = [];
+let fitSelRegions    = ['uk','au','eu','us'];
+let fitStudyYears    = '5';
+let fitSalaryPriority = 'long-term';
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function toggleFitR(el) {
+  el.classList.toggle('on');
+  const r = el.dataset.r;
+  fitSelRegions = fitSelRegions.includes(r) ? fitSelRegions.filter(x => x !== r) : [...fitSelRegions, r];
+  updateFitBtn();
+}
+
+function setFitStudy(el) {
+  document.querySelectorAll('#fit-study-row .r-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  fitStudyYears = el.dataset.years;
+}
+
+function setFitSalary(el) {
+  document.querySelectorAll('#fit-salary-row .r-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  fitSalaryPriority = el.dataset.sal;
+}
+
+function togFitLevel(btn) {
+  const name  = btn.dataset.name;
+  const color = btn.dataset.color;
+  btn.classList.toggle('on');
+  if (btn.classList.contains('on')) {
+    if (btn.textContent === 'HL') {
+      btn.style.background = color; btn.style.borderColor = color; btn.style.color = '#fff';
+    } else {
+      btn.style.background = color + '22'; btn.style.borderColor = color; btn.style.color = color;
+    }
+    if (!fitSelItems.includes(name)) fitSelItems.push(name);
+    btn.closest('.subj-row').classList.add('any-on');
+  } else {
+    btn.style.background = ''; btn.style.borderColor = ''; btn.style.color = '';
+    fitSelItems = fitSelItems.filter(s => s !== name);
+    const row = btn.closest('.subj-row');
+    if (!row.querySelector('.lvl-btn.on')) row.classList.remove('any-on');
+  }
+  updateFitBtn();
+}
+
+function updateFitBtn() {
+  const ok = fitSelItems.length > 0 && fitSelRegions.length > 0;
+  document.getElementById('fit-go-btn').disabled = !ok;
+  const sc = document.getElementById('fit-sel-count');
+  sc.innerHTML = fitSelItems.length === 0
+    ? 'Select your subjects above to get started'
+    : `<strong>${fitSelItems.length}</strong> subject${fitSelItems.length > 1 ? 's' : ''} selected`;
+}
+
+function buildFitPrompt() {
+  const rNames = {uk:'United Kingdom',au:'Australia',eu:'Europe (Germany, Netherlands, France — English-taught where possible)',us:'United States'};
+  const regionStr = fitSelRegions.map(r => rNames[r]).join(', ');
+  const studyStr  = fitStudyYears === '3' ? '3 years (undergraduate only)' : fitStudyYears === '5' ? 'up to 5 years (postgraduate or professional)' : '7 or more years (long professional training, e.g. medicine, law, academia)';
+  const salStr    = fitSalaryPriority === 'sooner' ? 'Higher earning sooner — prioritise careers with strong entry-level salaries and shorter training' : 'Higher long-term ceiling — willing to invest in longer training for significantly higher long-term earnings';
+
+  return `You are an honest, direct careers advisor for a 17-year-old IBDP student at British School Jakarta, Indonesia.
+
+Student profile:
+- IB subjects and interests: ${fitSelItems.join(', ')}
+- Preferred countries to live and work: ${regionStr}
+- Years of study willing to commit: ${studyStr}
+- Salary priority: ${salStr}
+
+Return a ranked shortlist of 6–8 careers that (a) are genuinely supported by this student's IB subjects and (b) best match their study-length, salary, and location priorities. Rank best-fit first. Be honest — if a career is competitive or rarely pays well early, say so in the fit_reason. No generated URLs. No markdown.
+
+Return ONLY valid compact JSON:
+{"careers":[{"title":"","fit_reason":"One sentence — why this fits THIS student's stated priorities specifically.","years_study":3,"entry_salary":"salary range at entry level in their preferred region(s)","longterm_salary":"long-term salary ceiling in their preferred region(s)","strongest_in":"which of the student's selected countries this career is strongest in"}]}`;
+}
+
+async function runFitExplore() {
+  if (!fitSelItems.length || !fitSelRegions.length) return;
+  showPage('pg-fit-res');
+  document.getElementById('fit-res-content').innerHTML = '<div class="fit-loading"><div class="mini-spin"></div><p>Finding your best-fit careers…</p></div>';
+  try {
+    const resp = await fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 3000,
+        system: buildFitPrompt(),
+        messages: [{ role: 'user', content: 'Generate the ranked career shortlist.' }]
+      })
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.error?.message || `API error ${resp.status}`);
+    }
+    const data   = await resp.json();
+    const raw    = data.content.map(b => b.text || '').join('');
+    const clean  = raw.replace(/```json|```/g, '').trim();
+    const parsed = repairAndParse(clean);
+    renderFitResults(parsed);
+  } catch(e) {
+    document.getElementById('fit-res-content').innerHTML = `<div class="err-box">Could not load results: ${esc(e.message)}</div>`;
+  }
+}
+
+function renderFitResults(data) {
+  const careers = data.careers || [];
+  if (!careers.length) {
+    document.getElementById('fit-res-content').innerHTML = '<div class="err-box">No careers returned. Try adding more subjects.</div>';
+    return;
+  }
+  let html = '<div class="fit-results">';
+  careers.forEach((c, i) => {
+    html += `
+    <div class="fit-card">
+      <div class="fit-rank">#${i + 1}</div>
+      <div class="fit-body">
+        <div class="fit-title">${esc(c.title)}</div>
+        <div class="fit-reason">${esc(c.fit_reason)}</div>
+        <div class="fit-meta">
+          <span class="fit-tag">📅 ${c.years_study} yr${c.years_study !== 1 ? 's' : ''} study</span>
+          <span class="fit-tag">💷 Entry: ${esc(c.entry_salary)}</span>
+          <span class="fit-tag">📈 Long-term: ${esc(c.longterm_salary)}</span>
+          <span class="fit-tag">🌍 Strongest: ${esc(c.strongest_in)}</span>
+        </div>
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('fit-res-content').innerHTML = html;
 }
 
 function doExport() {
